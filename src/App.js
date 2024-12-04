@@ -7,8 +7,8 @@ import CalendarPage from "./pages/calendar/CalendarPage";
 import LoginPage from "./pages/login/LoginPage";
 import MainPage from "./pages/main/MainPage";
 import NicknamePage from "./pages/nickname/NicknamePage";
-import AddPage from "./pages/register/Add/AddPage";
-import SuccessPage from "./pages/register/Success/SuccessPage";
+import AddPage from "./pages/register/add/AddPage";
+import SuccessPage from "./pages/register/success/SuccessPage";
 
 function App() {
   return (
