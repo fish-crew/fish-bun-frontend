@@ -2,13 +2,13 @@ import "./styles/App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import BookPage from "./pages/book/BookPage";
-import CalendarPage from "./pages/calendar/CalendarPage";
-import LoginPage from "./pages/login/LoginPage";
-import MainPage from "./pages/main/MainPage";
+import BookPage from "./pages/Book/BookPage";
+import CalendarPage from "./pages/Calendar/CalendarPage";
+import LoginPage from "./pages/Login/LoginPage";
+import MainPage from "./pages/Main/MainPage";
 import NicknamePage from "./pages/Nickname/NicknamePage";
-import AddPage from "./pages/register/add/AddPage";
-import SuccessPage from "./pages/register/success/SuccessPage";
+import AddPage from "./pages/Register/Add/AddPage";
+import SuccessPage from "./pages/Register/Success/SuccessPage";
 
 function App() {
   return (
