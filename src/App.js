@@ -12,7 +12,7 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App flex flex-col h-screen justify-between">
       <BrowserRouter>
         <Header />
         <Routes>
