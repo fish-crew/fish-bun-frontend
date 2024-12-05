@@ -9,7 +9,8 @@ import MainPage from "./pages/main/MainPage";
 import NicknamePage from "./pages/nickname/NicknamePage";
 import AddPage from "./pages/register/add/AddPage";
 import SuccessPage from "./pages/register/success/SuccessPage";
-import ReportPage from "./pages/register/report/ReportPage";
+import ReportPage from './pages/register/report/ReportPage'
+
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/nicknamePage" element={<NicknamePage />} />
           <Route path="/register/addPage" element={<AddPage />} />
           <Route path="/register/successPage" element={<SuccessPage />} />
+          <Route path="/register/reportPage" element={<ReportPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
