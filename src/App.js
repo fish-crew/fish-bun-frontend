@@ -11,9 +11,10 @@ import AddPage from "./pages/register/add/AddPage";
 import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from './pages/register/report/ReportPage'
 
+
 function App() {
   return (
-    <div className="App flex flex-col h-screen justify-between">
+    <div className="App flex flex-col h-[100dvh] justify-between">
       <BrowserRouter>
         <Header />
         <Routes>
