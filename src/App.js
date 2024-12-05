@@ -15,18 +15,15 @@ function App() {
     <div className="App flex flex-col h-screen justify-between">
       <BrowserRouter>
         <Header />
-        {/* Routes를 감싸는 div에 flex-grow 적용 */}
-        <div className="flex-grow">
-          <Routes>
-            <Route path="/main" element={<MainPage />} />
-            <Route path="/bookPage" element={<BookPage />} />
-            <Route path="/calendarPage" element={<CalendarPage />} />
-            <Route path="/loginPage" element={<LoginPage />} />
-            <Route path="/nicknamePage" element={<NicknamePage />} />
-            <Route path="/register/addPage" element={<AddPage />} />
-            <Route path="/register/successPage" element={<SuccessPage />} />
-          </Routes>
-        </div>
+        <Routes>
+          <Route path="/main" element={<MainPage />} />
+          <Route path="/bookPage" element={<BookPage />} />
+          <Route path="/calendarPage" element={<CalendarPage />} />
+          <Route path="/loginPage" element={<LoginPage />} />
+          <Route path="/nicknamePage" element={<NicknamePage />} />
+          <Route path="/register/addPage" element={<AddPage />} />
+          <Route path="/register/successPage" element={<SuccessPage />} />
+        </Routes>
         <Footer />
       </BrowserRouter>
     </div>
