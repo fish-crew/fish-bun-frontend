@@ -3,12 +3,13 @@
 }
 
 :global(.react-calendar__month-view__weekdays__weekday abbr) {
-  @apply no-underline;
+  @apply no-underline text-sm;
   /* 요일 스타일 */
+  
 }
 
 :global(.react-calendar__tile) {
-  @apply h-[70px] max-h-full flex justify-center items-start;
+  @apply h-[70px] max-h-full flex justify-center items-start text-base;
   /* 날짜 셀 스타일 */
 }
 
@@ -23,5 +24,10 @@
 
 :global(.react-calendar__navigation__label__labelText) {
   @apply text-lg font-bold;
+  /* 텍스트 스타일 */
+}
+
+:global(.react-calendar__month-view__days__day--weekend) {
+  @apply text-black;
   /* 텍스트 스타일 */
 }
