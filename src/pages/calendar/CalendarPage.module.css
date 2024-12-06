@@ -1,4 +1,16 @@
+:global(.react-calendar) {
+  @apply bg-orange-50 rounded-xl shadow-md w-full min-w-[300px] max-w-[600px] h-full max-h-[530px];
+  /* 캘린더의 가로 폭은 반응형, 최대 폭은 600px */
+  /* aspect-ratio: 1 / 1.6; */
+  /* 가로:세로 비율을 1:1.6으로 설정 */
+}
+
 :global(.react-calendar__month-view__weekdays__weekday abbr) {
   @apply no-underline;
-  /* Tailwind로 밑줄 제거 */
+  /* 요일 스타일 */
+}
+
+:global(.react-calendar__tile) {
+  @apply h-[70px] max-h-full flex items-center justify-center;
+  /* 날짜 셀 스타일 */
 }
