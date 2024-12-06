@@ -9,7 +9,7 @@ function CalendarPage() {
   const [value, setValue] = useState(new Date());
 
   // 서버에서 가져올 데이터 지금은 예시
-  const specialDates = ["2024-12-03", "2024-12-04", "2024-12-10", "2024-12-15"];
+  const specialDates = ["2024-12-30", "2024-12-07", "2024-12-01", "2024-12-15"];
 
 
   const handleDateChange = (date) => {
@@ -46,7 +46,7 @@ function CalendarPage() {
                 if (specialDates.includes(dateString)) {
                   return (
                     <div className="flex justify-center">
-                      <img src={calBunImage} alt="Special" className="w-8 h-8" />
+                      <img src={calBunImage} alt="Special" className="w-6 h-6" />
                     </div>
                   );
                 }
@@ -57,7 +57,7 @@ function CalendarPage() {
         </div>
         <div className="text-lg items-center m-6">
           이번달은 <span className="text-orange-500 font-bold">{specialDates.length}</span>마리의 붕어빵을 먹었어요!
-          </div>
+        </div>
       </div>
     </div>
   );
