@@ -39,3 +39,11 @@
 :global(.react-calendar__tile--now abbr) {
   @apply bg-orange-300 rounded-full text-black font-bold w-[25px] h-[25px];
 }
+
+:global(.react-calendar__tile:enabled:hover),
+:global(.react-calendar__tile:enabled:focus),
+:global(.react-calendar__tile--active) {
+  @apply bg-blue-200 text-black rounded-lg;
+  @apply transition-all duration-150 ease-in-out;
+  /* 애니메이션 효과 추가 */
+}
