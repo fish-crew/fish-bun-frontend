@@ -1,0 +1,4 @@
+:global(.react-calendar__month-view__weekdays__weekday abbr) {
+  @apply no-underline;
+  /* Tailwind로 밑줄 제거 */
+}
