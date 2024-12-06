@@ -9,7 +9,7 @@
 }
 
 :global(.react-calendar__tile) {
-  @apply h-[70px] max-h-full flex justify-center items-start text-base;
+  @apply h-[70px] max-h-full flex items-center text-base flex-col;
   /* 날짜 셀 스타일 */
 }
 
