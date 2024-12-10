@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import diaryPhotoBox from "../../assets/diaryPhotoBox.png";
 import diaryLine from "../../assets/diaryLine.png";
+import bun from '../../assets/bun.png'
 
 function DetailsPage() {
   const { id } = useParams(); // 경로에서 id 가져오기
@@ -34,8 +35,22 @@ function DetailsPage() {
       </div>
 
       <div className="flex flex-col px-6 flex-grow justify-start w-full">
-        <div className="flex justify-center h-[30dvh]">
-          <img src={diaryPhotoBox} alt="diaryPhotoBox" />
+        <div className="relative flex justify-center items-center h-[30dvh] w-full">
+          {/* 테두리 이미지 */}
+          <img
+            src={diaryPhotoBox}
+            alt="diaryPhotoBox"
+            className="absolute w-full h-full object-contain pointer-events-none"
+          />
+
+          {/* 가운데 배치할 이미지 */}
+          <div className="relative w-full h-full flex justify-center items-center">
+            <img
+              src={bun} // 가운데 배치할 이미지 경로
+              alt="bunImage"
+              className="w-[70%] h-[70%] object-contain"
+            />
+          </div>
         </div>
 
         {/* 텍스트와 선 */}
@@ -59,7 +74,7 @@ function DetailsPage() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 
