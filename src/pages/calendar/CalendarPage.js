@@ -37,7 +37,7 @@ function CalendarPage() {
   return (
     <div className="flex flex-col w-full h-screen overflow-auto">
       <div>
-        <div className="text-2xl items-center m-6">붕어 탐험일지</div>
+        <div className="text-title items-center m-3">붕어 탐험일지</div>
         <div className="grow-0 items-start justify-center mx-6">
           <img src={diaryLine} alt="Special" className="w-full" />
           <Calendar
@@ -73,7 +73,7 @@ function CalendarPage() {
           />
           <img src={diaryLine} alt="Special" className="w-full" />
         </div>
-        <div className="text-lg items-center m-6">
+        <div className="text-sz25 items-center m-6">
           이번달은 <span className="text-orange-500 font-bold">{dateArray.length}</span>마리의 붕어빵을 먹었어요!
         </div>
       </div>
