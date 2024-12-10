@@ -10,6 +10,7 @@ import NicknamePage from "./pages/nickname/NicknamePage";
 import AddPage from "./pages/register/add/AddPage";
 import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from './pages/register/report/ReportPage'
+import DetailPage from "./pages/detail/DetailPage";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/register/addPage" element={<AddPage />} />
           <Route path="/register/successPage" element={<SuccessPage />} />
           <Route path="/register/reportPage" element={<ReportPage />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
         </Routes>
         <Footer />
       </BrowserRouter>
