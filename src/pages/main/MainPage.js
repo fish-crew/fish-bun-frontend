@@ -3,6 +3,10 @@ import bunFrameFilled from "../../assets/bun-frame-filled.png";
 import bunFrame from "../../assets/bun-frame.png";
 import goToRegisterBtn from "../../assets/goToRegisterBtn.png";
 import React, { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import calendarImg from "../../assets/calendar.png";
+import captureImg from "../../assets/capture.png";
+import bookImg from "../../assets/open-book.png";
 
 function FishFrame() {
   const frameRef = useRef(null);
@@ -90,9 +94,17 @@ function FishFrame() {
 }
 
 function Main() {
+  const navigate = useNavigate();
+
+  const goToCalendar = () => {
+    navigate("/CalendarPage");
+  };
+  const goToBook = () => {
+    navigate("/BookPage");
+  };
+
   return (
-    <div className="flex flex-grow flex-col justify-between">
-      <div></div>
+    <div className="flex flex-grow flex-col justify-center relative">
       <div className="mid-area">
         <div>
           <div className="text-sm">
@@ -105,9 +117,26 @@ function Main() {
             일 동안 붕어빵을 먹었어요!
           </div>
         </div>
+        <FishFrame />
       </div>
-      <FishFrame />
-      <div className="btn-area">버튼들 들어갈 영역</div>
+
+      <div className="btn-area w-full flex flex-col items-end absolute bottom-0">
+        <button className="m-1.5 mr-2 rounded-full bg-amber-500 w-[6dvh] h-[6dvh]">
+          <img src={captureImg} alt="icon" className="p-2.5" />
+        </button>
+        <button
+          className="m-1.5 mr-2 rounded-full bg-amber-500 w-[6dvh] h-[6dvh]"
+          onClick={goToCalendar}
+        >
+          <img src={calendarImg} alt="icon" className="p-2.5" />
+        </button>
+        <button
+          className="m-1.5 mr-2 mb-4 rounded-full bg-amber-500 w-[6dvh] h-[6dvh]"
+          onClick={goToBook}
+        >
+          <img src={bookImg} alt="icon" className="p-2.5" />
+        </button>
+      </div>
     </div>
   );
 }
