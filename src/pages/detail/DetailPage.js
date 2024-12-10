@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import diaryPhotoBox from "../../assets/diaryPhotoBox.png";
+import diaryPhotoBox from "../../assets/diaryphotoBox.png";
 import diaryLine from "../../assets/diaryLine.png";
 import bun from '../../assets/bun.png'
 
