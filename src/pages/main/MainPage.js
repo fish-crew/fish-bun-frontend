@@ -78,7 +78,7 @@ function FishFrame() {
                   }px) rotate(${-angle}deg)`,
                 }}
               >
-                <p className="text-center text-2xl font-bold text-[#2a2523]">
+                <p className="text-center text-sz40 font-bold text-[#2a2523]">
                   {day}
                 </p>
               </div>
@@ -150,12 +150,12 @@ function Main() {
     <div className="flex flex-grow flex-col justify-center relative">
       <div className="mid-area">
         <div>
-          <div className="text-sm">
+          <div className="text-sz20">
             <span className="text-point-color font-semibold">Lv.1</span>
             <span className="ps-1">미니붕어</span>
           </div>
-          <div className="text-3xl font-bold py-1">사용자 이름</div>
-          <div className="text-sm">
+          <div className="text-title font-bold py-1">사용자 이름</div>
+          <div className="text-sz20">
             이번달은 <span className="text-point-color font-semibold">13</span>
             일 동안 붕어빵을 먹었어요!
           </div>
