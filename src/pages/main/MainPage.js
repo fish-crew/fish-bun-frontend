@@ -1,9 +1,11 @@
+import React, { useRef, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import html2canvas from "html2canvas";
+
 import bunFrameEmpty from "../../assets/bun-frame-empty.png";
 import bunFrameFilled from "../../assets/bun-frame-filled.png";
 import bunFrame from "../../assets/bun-frame.png";
 import goToRegisterBtn from "../../assets/goToRegisterBtn.png";
-import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import calendarImg from "../../assets/calendar.png";
 import captureImg from "../../assets/capture.png";
 import bookImg from "../../assets/open-book.png";
@@ -103,6 +105,38 @@ function Main() {
     navigate("/BookPage");
   };
 
+  const handleCaptureAndDownload = async () => {
+    try {
+      // 캡처 대상 설정
+      const element = document.body;
+
+      // html2canvas로 캡처
+      const canvas = await html2canvas(element);
+      const dataURL = canvas.toDataURL("image/png");
+
+      // 현재 날짜와 시간 가져오기
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const date = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+
+      // 파일 이름 포맷팅
+      const fileName = `bunlog-${year}-${month}-${date}-${hours}-${minutes}.png`;
+
+      // 다운로드 링크 생성
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = fileName;
+      link.click();
+    } catch (error) {
+      console.error("캡처 오류:", error);
+      alert("이미지 캡처 중 오류가 발생했습니다.");
+    }
+  };
+
   return (
     <div className="flex flex-grow flex-col justify-center relative">
       <div className="mid-area">
@@ -121,7 +155,10 @@ function Main() {
       </div>
 
       <div className="btn-area w-full flex flex-col items-end absolute bottom-0">
-        <button className="m-1.5 mr-2 rounded-full bg-amber-500 w-[6dvh] h-[6dvh]">
+        <button
+          className="m-1.5 mr-2 rounded-full bg-amber-500 w-[6dvh] h-[6dvh]"
+          onClick={handleCaptureAndDownload}
+        >
           <img src={captureImg} alt="icon" className="p-2.5" />
         </button>
         <button
