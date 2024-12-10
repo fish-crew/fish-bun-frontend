@@ -11,6 +11,12 @@ import captureImg from "../../assets/capture.png";
 import bookImg from "../../assets/open-book.png";
 
 function FishFrame() {
+  const navigate = useNavigate();
+
+  const goToAdd = () => {
+    navigate("/register/addPage");
+  };
+
   const frameRef = useRef(null);
   const [radius, setRadius] = useState(0);
   const [imageSize, setImageSize] = useState(0);
@@ -79,7 +85,10 @@ function FishFrame() {
             </React.Fragment>
           );
         })}
-        <button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+        <button
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          onClick={goToAdd}
+        >
           <img
             src={goToRegisterBtn}
             alt="icon"
