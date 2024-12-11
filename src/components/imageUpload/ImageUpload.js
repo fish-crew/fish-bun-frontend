@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import addPicBtn from "../../assets/addPicBtn.png";
 
 function ImageUpload() {
   const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기
@@ -8,7 +9,9 @@ function ImageUpload() {
     const file = e.target.files[0]; // 선택한 파일
 
     if (!file) {
-      alert("파일을 선택하지 못했습니다. 사진 보관함 또는 카메라 권한을 확인해주세요.");
+      alert(
+        "파일을 선택하지 못했습니다. 사진 보관함 또는 카메라 권한을 확인해주세요."
+      );
       return;
     }
 
@@ -28,40 +31,43 @@ function ImageUpload() {
   };
 
   return (
-    <div className="w-64 h-64 flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded-lg bg-white">
+    <div className="w-72 h-32 flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded-lg bg-white drop-shadow-xlRedLight">
       {imagePreview ? (
-        <div className="w-full h-full relative">
+        <div className="w-full h-full flex justify-center">
           {/* 미리보기 이미지 */}
           <img
             src={imagePreview}
             alt="Uploaded Preview"
-            className="w-full h-full object-cover rounded-lg"
+            className="h-full rounded-lg"
           />
           {/* 삭제 버튼 */}
           <button
             onClick={resetFileInput} // 초기화 함수 호출
-            className="absolute top-2 right-2 bg-red-500 text-white rounded-full pl-0.5 w-6 h-6"
+            className="absolute top-2 right-2 text-white rounded-full pl-0.5 w-6 h-6"
           >
-            X
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6 bg-[#630000] rounded-full p-0.5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
       ) : (
-        <label htmlFor="image-upload" className="flex flex-col items-center cursor-pointer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-13 w-13 text-gray-400"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth="1"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-            />
-          </svg>
-          <p className="mt-2 text-gray-600 text-sz25">사진을 추가해주세요</p>
+        <label
+          htmlFor="image-upload"
+          className="flex flex-col h-32 items-center cursor-pointer p-4"
+        >
+          <img src={addPicBtn} alt="icon" className="pl-3 h-20" />
+          <p className="text-gray-400 text-sz25">사진을 추가해주세요</p>
         </label>
       )}
       <input

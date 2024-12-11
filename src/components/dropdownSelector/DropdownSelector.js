@@ -26,18 +26,17 @@ function DropdownSelector({ options, onSelect }) {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative w-64 mt-4">
+    <div ref={dropdownRef} className="relative w-72 mt-4">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full border rounded p-2 text-sz30 bg-white text-left"
+        className="w-full rounded-full p-1 text-sz30 bg-[#630000] text-left"
       >
-        <div className="flex items-center justify-between">
-          <span>
-            붕어빵 선택
-          </span>
+        <div className="flex items-center rounded-full justify-between text-white">
+          <span className="w-full text-center">붕어빵 선택</span>
           <span
-            className={`absolute right-4 top-1/2 transform -translate-y-1/2 transition-transform ${isOpen ? "rotate-180" : "rotate-0"
-              }`}
+            className={`absolute right-4 top-1/2 transform -translate-y-1/2 transition-transform ${
+              isOpen ? "rotate-180" : "rotate-0"
+            }`}
           >
             ▼
           </span>
@@ -49,7 +48,7 @@ function DropdownSelector({ options, onSelect }) {
             <li
               key={index}
               onClick={() => handleSelect(option)}
-              className="p-2 hover:bg-gray-200 cursor-pointer text-sz30 border-b last:border-b-0"
+              className="p-2 hover:bg-gray-200 cursor-pointer text-sz25 border-b last:border-b-0 text-left"
             >
               {option}
             </li>

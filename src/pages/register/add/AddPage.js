@@ -1,10 +1,29 @@
 import React, { useState } from "react";
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
+import checkPattern from "../../../assets/checkPattern.png";
 
 const AddPage = () => {
   const [selectedOptions, setSelectedOptions] = useState({}); // 선택된 옵션 객체
-  const flavors = ["피자 붕어빵", "두부 붕어빵", "타코야끼 붕어빵", "팥붕어", "슈크림 붕어", "두부 붕어빵", "타코야끼 붕어빵", "팥붕어", "슈크림 붕어", "두부 붕어빵", "타코야끼 붕어빵", "팥붕어", "슈크림 붕어", "두부 붕어빵", "타코야끼타코야끼 붕어빵", "팥붕어", "슈크림 붕어"]; // 드롭다운 옵션
+  const flavors = [
+    "피자 붕어빵",
+    "두부 붕어빵",
+    "타코야끼 붕어빵",
+    "팥붕어",
+    "슈크림 붕어",
+    "두부 붕어빵",
+    "타코야끼 붕어빵",
+    "팥붕어",
+    "슈크림 붕어",
+    "두부 붕어빵",
+    "타코야끼 붕어빵",
+    "팥붕어",
+    "슈크림 붕어",
+    "두부 붕어빵",
+    "타코야끼타코야끼 붕어빵",
+    "팥붕어",
+    "슈크림 붕어",
+  ]; // 드롭다운 옵션
 
   const handleOptionSelect = (option) => {
     setSelectedOptions((prevOptions) => {
@@ -75,64 +94,113 @@ const AddPage = () => {
     }
   };
 
-
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-100 min-h-screen overflow-auto">
-      <div className="text-center text-title font-bold mb-4">사진을 추가해주세요</div>
-      <div className="text-center text-sz25 font-bold mb-4">등록은 하루에 한번만 가능합니다.</div>
+    <div
+      className="flex flex-col items-center p-6 bg-gray-100 overflow-auto relative w-full h-full bg-cover bg-center"
+      style={{
+        backgroundImage: `url(${checkPattern})`,
+      }}
+    >
+      <div className="text-center text-title font-medium text-white drop-shadow-title drop-shadow-xlRed">
+        사진을 추가해주세요
+      </div>
+      <div className="text-center text-sz25 mb-4 text-white drop-shadow-smRed">
+        등록은 하루에 한번만 가능합니다.
+      </div>
+      <div className="flex flex-col flex-grow overflow-y-auto w-full items-center">
+        {/* 이미지 업로드 컴포넌트 */}
+        <ImageUpload />
 
-      {/* 이미지 업로드 컴포넌트 */}
-      <ImageUpload />
+        {/* 드롭다운 선택 컴포넌트 */}
+        <DropdownSelector options={flavors} onSelect={handleOptionSelect} />
 
-      {/* 드롭다운 선택 컴포넌트 */}
-      <DropdownSelector options={flavors} onSelect={handleOptionSelect} />
+        {/* 선택된 옵션 표시 */}
+        <div className="mt-4 w-72">
+          <div className="space-y-1">
+            {Object.keys(selectedOptions).map((option) => (
+              <div
+                key={option}
+                className="flex items-center justify-between p-2 border rounded-md bg-white shadow"
+              >
+                <span className="text-sz25 font-medium w-60 break-normal">
+                  {option}
+                </span>
 
-      {/* 선택된 옵션 표시 */}
-      <div className="mt-4">
-        <div className="text-lg font-bold mb-4 text-left">선택된 붕어빵</div>
-        <div className="space-y-4">
-          {Object.keys(selectedOptions).map((option) => (
-            <div
-              key={option}
-              className="flex items-center justify-between p-2 border rounded-md bg-white shadow"
-            >
-              <span className="text-lg font-medium">{option}</span>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {/* 수량 감소 버튼 */}
+                <div className="flex items-center justify-end w-40">
+                  <div className="flex items-center gap-2">
+                    {/* 수량 감소 버튼 */}
+                    <button
+                      onClick={() => handleQuantityChange(option, -1)}
+                      className="items-center justify-center border rounded-full mx-2 font-bold"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6 p-1"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M5 12h14"
+                        />
+                      </svg>
+                    </button>
+                    {/* 수량 표시 */}
+                    <span className="text-sz25">{selectedOptions[option]}</span>
+                    {/* 수량 증가 버튼 */}
+                    <button
+                      onClick={() => handleQuantityChange(option, 1)}
+                      className="items-center justify-center border rounded-full mx-2 font-bold "
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="size-6 p-1"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M12 4.5v15m7.5-7.5h-15"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  {/* 삭제 버튼 */}
                   <button
-                    onClick={() => handleQuantityChange(option, -1)}
-                    className="px-2 py-1 border rounded mx-4"
+                    onClick={() => handleRemoveOption(option)}
+                    className="w-6 h-6 rounded-full flex items-center justify-center ml-1 pl-0.5"
                   >
-                    -
-                  </button>
-                  {/* 수량 표시 */}
-                  <span className="text-lg">{selectedOptions[option]}</span>
-                  {/* 수량 증가 버튼 */}
-                  <button
-                    onClick={() => handleQuantityChange(option, 1)}
-                    className="px-2 py-1 border rounded mx-4"
-                  >
-                    +
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="size-5 text-gray-600"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                      />
+                    </svg>
                   </button>
                 </div>
-                {/* 삭제 버튼 */}
-                <button
-                  onClick={() => handleRemoveOption(option)}
-                  className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 ml-1 pl-0.5"
-                >
-                  X
-                </button>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
       {/* 제출 버튼 */}
       <button
-        className="mt-4 bg-orange-500 hover:bg-blue-600 text-white font-medium py-2 px-6 rounded-lg"
+        className="mt-4 bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
         onClick={handleSubmit}
       >
         확인
