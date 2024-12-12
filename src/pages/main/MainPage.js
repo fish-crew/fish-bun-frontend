@@ -6,9 +6,9 @@ import bunFrameEmpty from "../../assets/bun-frame-empty.png";
 import bunFrameFilled from "../../assets/bun-frame-filled.png";
 import bunFrame from "../../assets/bun-frame.png";
 import goToRegisterBtn from "../../assets/goToRegisterBtn.png";
-import calendarImg from "../../assets/calendar.png";
-import captureImg from "../../assets/capture.png";
-import bookImg from "../../assets/open-book.png";
+import calendarImg from "../../assets/calendarBtn.png";
+import captureImg from "../../assets/captureBtn.png";
+import bookImg from "../../assets/captureBtn.png";
 
 function FishFrame() {
   const navigate = useNavigate();
