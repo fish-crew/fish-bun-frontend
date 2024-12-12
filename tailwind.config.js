@@ -39,6 +39,11 @@ module.exports = {
           "2px 2px 4px rgba(85, 0, 0, 0.5)",
           "-2px -2px 4px rgba(85, 0, 0, 0.5)",
         ],
+        smGray: [
+          "0 0 2px rgb(50, 0, 0, 0.1)",
+          "2px 2px 4px rgba(50, 50, 50, 0.2)",
+          "-2px -2px 4px rgba(50, 0, 0, 0.2)",
+        ],
       },
     },
   },
