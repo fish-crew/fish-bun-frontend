@@ -9,7 +9,8 @@ import goToRegisterBtn from "../../assets/goToRegisterBtn.png";
 import menuBtn from "../../assets/menuBtn.png";
 import calendarBtn from "../../assets/calendarBtn.png";
 import captureBtn from "../../assets/captureBtn.png";
-import bookImg from "../../assets/captureBtn.png";
+import bookBtn from "../../assets/bookBtn.png";
+import btnBg from "../../assets/btnBg.png";
 import checkPattern from "../../assets/checkPattern.png";
 import bulbFull from "../../assets/bulbFull.png";
 import glitter from "../../assets/glitter.png";
@@ -71,7 +72,7 @@ function FishFrame() {
                     width: `${imageSize}px`,
                     height: `${imageSize}px`,
                   }}
-                  className="object-cover"
+                  className="object-cover drop-shadow-smGray"
                 />
               </div>
               {/* <div
@@ -90,7 +91,7 @@ function FishFrame() {
           );
         })}
         <button
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
           onClick={goToAdd}
         >
           <img
@@ -110,6 +111,12 @@ function FishFrame() {
 
 function Main() {
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // 메뉴 상태
+
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  const closeMenu = () => {
+    setIsMenuOpen(false); // 메뉴 닫기
+  };
 
   const goToCalendar = () => {
     navigate("/CalendarPage");
@@ -173,19 +180,68 @@ function Main() {
         </div>
         <FishFrame />
       </div>
-      <div className="btn-area w-full flex flex-col items-end absolute bottom-0">
-        <button
-          className="m-1.5 mr-2 w-[12dvh]"
-          onClick={handleCaptureAndDownload}
-        >
-          <img src={captureBtn} alt="icon" className="p-2.5" />
-        </button>
-        <button className="m-1.5 mr-2 w-[12dvh]" onClick={goToCalendar}>
-          <img src={calendarBtn} alt="icon" className="p-2.5" />
-        </button>
-        <button className="m-1.5 mr-2 mb-4 w-[12dvh]" onClick={goToBook}>
-          <img src={bookImg} alt="icon" className="p-2.5" />
-        </button>
+      <div className="btn-area w-full flex flex-col items-end absolute bottom-0 h-full justify-end">
+        {!isMenuOpen && (
+          <button className="w-[12dvh] m-[2dvh]" onClick={toggleMenu}>
+            <img src={menuBtn} alt="icon" className="drop-shadow-smGray" />
+          </button>
+        )}
+        {isMenuOpen && (
+          <div
+            className="w-full flex flex-col items-end justify-end bg-black bg-opacity-50 h-full z-20"
+            onClick={closeMenu}
+          >
+            <div
+              className="flex flex-col space-y-4 justify-end m-[2dvh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="w-[12dvh] mx-auto drop-shadow-smGray"
+                onClick={handleCaptureAndDownload}
+              >
+                <img src={captureBtn} alt="capture button" className="" />
+              </button>
+              <button
+                className="w-[12dvh] mx-auto drop-shadow-smGray"
+                onClick={goToCalendar}
+              >
+                <img src={calendarBtn} alt="calendar button" className="" />
+              </button>
+              <button
+                className="w-[12dvh] mx-auto drop-shadow-smGray"
+                onClick={goToBook}
+              >
+                <img src={bookBtn} alt="book button" className="" />
+              </button>
+              <button
+                className="relative w-[7dvh] h-[7dvh] flex items-center justify-center ms-auto drop-shadow-smGray"
+                onClick={closeMenu}
+              >
+                {/* 배경 이미지 */}
+                <img
+                  src={btnBg}
+                  alt="capture button"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {/* SVG 아이콘 */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="text-white z-10 size-8"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
