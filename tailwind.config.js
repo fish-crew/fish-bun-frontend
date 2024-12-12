@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "point-color": "#E54731",
+        "point-color": "#650000",
       },
       spacing: {
         dvh: "100dvh",
@@ -14,6 +14,7 @@ module.exports = {
         kyoboHand: ["KyoboHand", "sans-serif"],
       },
       fontSize: {
+        name: "6dvh",
         title: "5dvh",
         sz25: "2.5dvh",
         sz30: "3dvh",
@@ -37,6 +38,11 @@ module.exports = {
           "0 0 2px rgba(85, 0, 0, 1)",
           "2px 2px 4px rgba(85, 0, 0, 0.5)",
           "-2px -2px 4px rgba(85, 0, 0, 0.5)",
+        ],
+        smGray: [
+          "0 0 2px rgb(50, 0, 0, 0.1)",
+          "2px 2px 4px rgba(50, 50, 50, 0.2)",
+          "-2px -2px 4px rgba(50, 0, 0, 0.2)",
         ],
       },
     },

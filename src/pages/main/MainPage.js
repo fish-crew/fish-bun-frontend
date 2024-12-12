@@ -6,9 +6,14 @@ import bunFrameEmpty from "../../assets/bun-frame-empty.png";
 import bunFrameFilled from "../../assets/bun-frame-filled.png";
 import bunFrame from "../../assets/bun-frame.png";
 import goToRegisterBtn from "../../assets/goToRegisterBtn.png";
-import calendarImg from "../../assets/calendarBtn.png";
-import captureImg from "../../assets/captureBtn.png";
-import bookImg from "../../assets/captureBtn.png";
+import menuBtn from "../../assets/menuBtn.png";
+import calendarBtn from "../../assets/calendarBtn.png";
+import captureBtn from "../../assets/captureBtn.png";
+import bookBtn from "../../assets/bookBtn.png";
+import btnBg from "../../assets/btnBg.png";
+import checkPattern from "../../assets/checkPattern.png";
+import bulbFull from "../../assets/bulbFull.png";
+import glitter from "../../assets/glitter.png";
 
 function FishFrame() {
   const navigate = useNavigate();
@@ -27,8 +32,8 @@ function FishFrame() {
   const calculateSizes = () => {
     if (frameRef.current) {
       const frameWidth = frameRef.current.offsetWidth;
-      setRadius(frameWidth / 3.3);
-      setImageSize(frameWidth / 3.8);
+      setRadius(frameWidth / 3.8);
+      setImageSize(frameWidth / 3.9);
     }
   };
 
@@ -39,7 +44,7 @@ function FishFrame() {
   }, []);
 
   return (
-    <div className="p-8">
+    <div className="">
       <div ref={frameRef} className="frame-area relative w-full aspect-[1/1]">
         <div
           className="absolute top-0 left-0 w-full h-full bg-center bg-cover"
@@ -67,10 +72,10 @@ function FishFrame() {
                     width: `${imageSize}px`,
                     height: `${imageSize}px`,
                   }}
-                  className="object-cover"
+                  className="object-cover drop-shadow-smGray"
                 />
               </div>
-              <div
+              {/* <div
                 className="absolute top-1/2 left-1/2"
                 style={{
                   transform: `${baseTransform} translate(${
@@ -81,12 +86,12 @@ function FishFrame() {
                 <p className="text-center text-sz40 font-bold text-[#2a2523]">
                   {day}
                 </p>
-              </div>
+              </div> */}
             </React.Fragment>
           );
         })}
         <button
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
           onClick={goToAdd}
         >
           <img
@@ -106,6 +111,12 @@ function FishFrame() {
 
 function Main() {
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // 메뉴 상태
+
+  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+  const closeMenu = () => {
+    setIsMenuOpen(false); // 메뉴 닫기
+  };
 
   const goToCalendar = () => {
     navigate("/CalendarPage");
@@ -147,41 +158,90 @@ function Main() {
   };
 
   return (
-    <div className="flex flex-grow flex-col justify-center relative">
-      <div className="mid-area">
-        <div>
-          <div className="text-sz20">
+    <div
+      className="flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
+      style={{
+        backgroundImage: `url(${bulbFull}), url(${glitter}), url(${checkPattern})`,
+      }}
+    >
+      <div className="mid-area mb-8">
+        <div className="text-[#fffed6]">
+          {/* <div className="text-sz20">
             <span className="text-point-color font-semibold">Lv.1</span>
             <span className="ps-1">미니붕어</span>
+          </div> */}
+          <div className="text-name font-bold pt-1 drop-shadow-xlRedLight">
+            사용자 이름
           </div>
-          <div className="text-title font-bold py-1">사용자 이름</div>
-          <div className="text-sz20">
-            이번달은 <span className="text-point-color font-semibold">13</span>
-            일 동안 붕어빵을 먹었어요!
+          <div className="text-sz20 drop-shadow-smRed">
+            이번달은 <span className="font-semibold">13</span>일 동안 붕어빵을
+            먹었어요!
           </div>
         </div>
         <FishFrame />
       </div>
-
-      <div className="btn-area w-full flex flex-col items-end absolute bottom-0">
-        <button
-          className="m-1.5 mr-2 rounded-full bg-amber-500 w-[6dvh] h-[6dvh]"
-          onClick={handleCaptureAndDownload}
-        >
-          <img src={captureImg} alt="icon" className="p-2.5" />
-        </button>
-        <button
-          className="m-1.5 mr-2 rounded-full bg-amber-500 w-[6dvh] h-[6dvh]"
-          onClick={goToCalendar}
-        >
-          <img src={calendarImg} alt="icon" className="p-2.5" />
-        </button>
-        <button
-          className="m-1.5 mr-2 mb-4 rounded-full bg-amber-500 w-[6dvh] h-[6dvh]"
-          onClick={goToBook}
-        >
-          <img src={bookImg} alt="icon" className="p-2.5" />
-        </button>
+      <div className="btn-area w-full flex flex-col items-end absolute bottom-0 h-full justify-end">
+        {!isMenuOpen && (
+          <button className="w-[12dvh] m-[2dvh]" onClick={toggleMenu}>
+            <img src={menuBtn} alt="icon" className="drop-shadow-smGray" />
+          </button>
+        )}
+        {isMenuOpen && (
+          <div
+            className="w-full flex flex-col items-end justify-end bg-black bg-opacity-50 h-full z-20"
+            onClick={closeMenu}
+          >
+            <div
+              className="flex flex-col space-y-4 justify-end m-[2dvh]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="w-[12dvh] mx-auto drop-shadow-smGray"
+                onClick={handleCaptureAndDownload}
+              >
+                <img src={captureBtn} alt="capture button" className="" />
+              </button>
+              <button
+                className="w-[12dvh] mx-auto drop-shadow-smGray"
+                onClick={goToCalendar}
+              >
+                <img src={calendarBtn} alt="calendar button" className="" />
+              </button>
+              <button
+                className="w-[12dvh] mx-auto drop-shadow-smGray"
+                onClick={goToBook}
+              >
+                <img src={bookBtn} alt="book button" className="" />
+              </button>
+              <button
+                className="relative w-[7dvh] h-[7dvh] flex items-center justify-center ms-auto drop-shadow-smGray"
+                onClick={closeMenu}
+              >
+                {/* 배경 이미지 */}
+                <img
+                  src={btnBg}
+                  alt="capture button"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {/* SVG 아이콘 */}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="text-white z-10 size-8"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
