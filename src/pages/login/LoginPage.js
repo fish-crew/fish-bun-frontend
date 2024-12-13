@@ -8,11 +8,13 @@ function Login() {
       style={{ backgroundImage: `url(${loginIllust})` }}
     >
       <button className="flex justify-center absolute bottom-[15%] w-[80%] drop-shadow-smGray">
-        <img
-          src={kakaoLoginImg}
-          alt="카카오 로그인 버튼"
-          className="h-full object-cover"
-        />
+        <a href="/api/oauth2/authorization/kakao">
+          <img
+            src={kakaoLoginImg}
+            alt="카카오 로그인 버튼"
+            className="w-full h-full object-cover"
+          />
+        </a>
       </button>
     </div>
   );
