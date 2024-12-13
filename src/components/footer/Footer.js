@@ -1,15 +1,18 @@
 function Footer() {
   return (
-    <div className="">
-      <div class="w-[728px] h-[90px] mx-auto bg-gray-200">
+    <div className="w-full py-4 flex justify-center items-center bg-blue-600">
+      <div className="ads-container w-full max-w-md h-24 flex justify-center items-center">
         <ins
           className="adsbygoogle block"
-          style={{ display: "block", width: "728px", height: "90px" }}
-          data-ad-client="ca-pub-xxxxxxxxxx"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-xxxxxxxxxxxx"
           data-ad-slot="xxxxxxxxxx"
-        ></ins>
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        >
+          광고 삽입 위치
+        </ins>
       </div>
-      <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
     </div>
   );
 }
