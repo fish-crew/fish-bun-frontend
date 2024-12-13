@@ -12,6 +12,7 @@ import captureBtn from "../../assets/captureBtn.png";
 import bookBtn from "../../assets/bookBtn.png";
 import btnBg from "../../assets/btnBg.png";
 import checkPattern from "../../assets/checkPattern.png";
+import bulbBtm from "../../assets/bulbBtm.png";
 import bulbFull from "../../assets/bulbFull.png";
 import glitter from "../../assets/glitter.png";
 
@@ -33,7 +34,7 @@ function FishFrame() {
     if (frameRef.current) {
       const frameWidth = frameRef.current.offsetWidth;
       setRadius(frameWidth / 3.8);
-      setImageSize(frameWidth / 3.9);
+      setImageSize(frameWidth / 4.15);
     }
   };
 
@@ -47,7 +48,7 @@ function FishFrame() {
     <div className="">
       <div ref={frameRef} className="frame-area relative w-full aspect-[1/1]">
         <div
-          className="absolute top-0 left-0 w-full h-full bg-center bg-cover"
+          className="absolute top-0 left-0 w-full h-full bg-center bg-cover drop-shadow-smGray"
           style={{ backgroundImage: `url(${bunFrame})` }}
         ></div>
         {weekDays.map((day, index) => {
@@ -164,6 +165,9 @@ function Main() {
         backgroundImage: `url(${bulbFull}), url(${glitter}), url(${checkPattern})`,
       }}
     >
+      <div className="w-full absolute bottom-0">
+        <img src={bulbBtm} alt="bulb bottom" className="" />
+      </div>
       <div className="mid-area mb-8">
         <div className="text-[#fffed6]">
           {/* <div className="text-sz20">
