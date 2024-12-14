@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
 import checkPattern from "../../../assets/checkPattern.png";
@@ -51,6 +52,7 @@ const AddPage = () => {
   };
 
   //서버로 보내기 (나중에 수정)
+  const navigate = useNavigate();
   const handleSubmit = async () => {
     if (!Object.keys(selectedOptions).length) {
       alert("옵션을 선택해주세요.");
@@ -92,6 +94,8 @@ const AddPage = () => {
       console.error("전송 중 오류:", error);
       alert("전송 중 오류가 발생했습니다.");
     }
+
+    navigate(`/register/successPage`);
   };
 
   return (
