@@ -1,0 +1,25 @@
+:global(.slick-prev:before),
+:global(.slick-next:before) {
+  color: #650000 !important; /* 화살표 색상 강제 변경 */
+}
+
+:global(.slick-prev:before) {
+  padding-right: 0.5em;
+}
+
+:global(.slick-next:before) {
+  padding-left: 0.5em;
+}
+
+:global(.slick-slider) {
+  padding-bottom: 3em;
+}
+
+:global(.carousel ul) {
+  display: flex;
+  justify-content: center; /* 수평 정렬 */
+  align-items: center; /* 수직 정렬 */
+  height: 100px; /* 필요에 따라 조정 */
+  flex-grow: 1;
+  align-items: end;
+}
