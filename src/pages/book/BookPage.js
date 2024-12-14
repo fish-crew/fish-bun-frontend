@@ -90,17 +90,17 @@ function BookPage() {
 
       {/* 배경과 캐러셀 */}
       <div
-        className="w-full flex flex-col flex-grow bg-cover"
+        className="w-full flex flex-col flex-grow bg-cover whitespace-nowrap"
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
-        <div className="w-full text-sz45 text-center pt-3">
+        <div className="w-full text-sz45 md:text-sz40 text-center pt-3">
           <span className="whitespace-nowrap text-point-color">{nickname}</span>
           의 붕어 도감
         </div>
 
         {/* 캐러셀 */}
-        <div className="flex flex-col flex-grow px-10 pb-10 pt-5 justify-between carousel">
-          <div className={styles.container}>
+        <div className="flex flex-col flex-grow px-9 justify-between carousel">
+          <div className="{styles.container} flex flex-col flex-grow">
             <Slider {...settings}>
               {chunkedFlavors.map((page, pageIndex) => (
                 <div
@@ -122,7 +122,9 @@ function BookPage() {
                           alt={fish.flavor}
                           className="w-[75%] aspect-[1/1]"
                         />
-                        <span>{fish.flavor}</span>
+                        <span className="whitespace-pre-wrap">
+                          {fish.flavor}
+                        </span>
                       </div>
                     ))}
                   </div>

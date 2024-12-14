@@ -41,18 +41,18 @@ function CalendarPage() {
   };
 
   return (
-    <div className="w-full flex-grow flex flex-col">
+    <div className="w-full flex-grow flex flex-col overflow-y-auto">
       <div className="w-full h-max">
         <img src={paperOnCheckT} alt="상단 배너" />
       </div>
       <div
-        className="w-full flex flex-col flex-grow bg-cover px-3 overflow-y-auto"
+        className="w-full flex flex-col flex-grow bg-cover px-3 pb-3 "
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
         <div className="w-full text-sz45 text-center pt-3 text-point-color">
           붕어 탐험 일지
         </div>
-        <div className="flex-grow items-start justify-center">
+        <div className="flex flex-col flex-grow items-center justify-around">
           <img src={diaryLine} alt="Special" className="w-full" />
           <Calendar
             //locale="en"
@@ -101,9 +101,12 @@ function CalendarPage() {
               return null;
             }}
           />
-          <img src={diaryLine} alt="Special" className="w-full" />
+          <div className="pb-3">
+            {" "}
+            <img src={diaryLine} alt="Special" className="w-full" />
+          </div>
         </div>
-        <div className="text-sz25 items-center my-6">
+        <div className="text-sz25 items-center">
           이번달은{" "}
           <span className="text-orange-500 font-bold">{dateArray.length}</span>
           마리의 붕어빵을 먹었어요!
