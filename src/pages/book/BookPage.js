@@ -73,7 +73,7 @@ function BookPage() {
 
   const colctedFish = [1, 2, 4, 6, 10]; // 수집된 붕어빵 ID
 
-  const nickname = "붕어빵빵빵이 탐험대";
+  const nickname = "붕어빵 탐험대";
 
   // 붕어빵 데이터를 9개씩 나누기
   const chunkedFlavors = [];
@@ -82,7 +82,7 @@ function BookPage() {
   }
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full flex-grow flex flex-col">
       {/* 상단 이미지 */}
       <div className="w-full h-max">
         <img src={paperOnCheckT} alt="상단 배너" />
@@ -120,7 +120,7 @@ function BookPage() {
                         <img
                           src={require(`../../assets/flavorIcons/${fish.id}.png`)}
                           alt={fish.flavor}
-                          className="h-16 w-16"
+                          className="w-[75%] aspect-[1/1]"
                         />
                         <span>{fish.flavor}</span>
                       </div>
