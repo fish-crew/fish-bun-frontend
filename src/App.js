@@ -1,10 +1,17 @@
 import "./styles/App.css";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import BookPage from "./pages/book/BookPage";
 import CalendarPage from "./pages/calendar/CalendarPage";
 import LoginPage from "./pages/login/LoginPage";
+import LoadingPage from "./pages/loading/loadingPage";
 import MainPage from "./pages/main/MainPage";
 import NicknamePage from "./pages/nickname/NicknamePage";
 import AddPage from "./pages/register/add/AddPage";
@@ -21,23 +28,30 @@ function App() {
 }
 
 function AppContent() {
-  const location = useLocation(); // useLocation은 BrowserRouter 내부에서만 동작
+  const location = useLocation(); // 현재 경로를 확인하기 위한 useLocation 사용
 
   return (
     <div className="App flex flex-col h-[100dvh] justify-between">
+      {/* 공통 Header */}
       <Header />
+      {/* 라우트 설정 */}
       <Routes>
+        <Route path="/" element={<Navigate to="/loadingPage" replace />} />
+        <Route path="/loadingPage" element={<LoadingPage />} />
+        <Route path="/loginPage" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/bookPage" element={<BookPage />} />
         <Route path="/calendarPage" element={<CalendarPage />} />
-        <Route path="/loginPage" element={<LoginPage />} />
         <Route path="/nicknamePage" element={<NicknamePage />} />
         <Route path="/register/addPage" element={<AddPage />} />
         <Route path="/register/successPage" element={<SuccessPage />} />
         <Route path="/register/reportPage" element={<ReportPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
-      {location.pathname !== "/loginPage" && <Footer />}
+
+      {!["/loginPage", "/loadingPage"].includes(location.pathname) && (
+        <Footer />
+      )}
     </div>
   );
 }
