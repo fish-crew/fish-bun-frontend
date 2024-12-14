@@ -49,7 +49,7 @@
 :global(.react-calendar__tile:enabled:hover),
 :global(.react-calendar__tile:enabled:focus),
 :global(.react-calendar__tile--active) {
-  @apply text-black rounded-lg bg-blue-100;
+  @apply text-black rounded-lg bg-[#6500007f];
   @apply transition-all duration-150 ease-in-out;
   /* 애니메이션 효과 추가 */
 }
