@@ -6,8 +6,9 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import findMessage from '../../../assets/findMessage.png';
 import foundedBun from '../../../assets/foundedBun.png';
-import unknownBunMessage from '../../../assets/unknownBunMessage.png'
-import paperOnCheckB from '../../../assets/paperOnCheckB.jpg'
+import unknownBunMessage from '../../../assets/unknownBunMessage.png';
+import paperOnCheckT from "../../../assets/paperOnCheckT.jpg";
+import paperOnCheckB from '../../../assets/paperOnCheckB.jpg';
 
 function SuccessPage() {
   const navigate = useNavigate();
@@ -31,17 +32,22 @@ function SuccessPage() {
   };
 
   return (
-    <div
-      className="w-full flex flex-col flex-grow bg-cover px-3 pb-3 "
-      style={{ backgroundImage: `url(${paperOnCheckB})` }}
-    >
-      <div className="flex flex-col justify-start items-center w-full h-full overflow-auto">
-        <img
-          src={findMessage}
-          alt="findMessage"
-          className="w-30 h-[10dvh] mt-9 mb-5"
-        />
-        <div className="relative justify-center w-full overflow-hidden mb-9">
+    <div className="flex flex-col justify-start items-center w-full h-full overflow-auto">
+      <div className="w-full h-max">
+        <img src={paperOnCheckT} alt="상단 배너" />
+      </div>
+      <div
+        className="w-full flex flex-col flex-grow bg-cover px-3 pb-3 "
+        style={{ backgroundImage: `url(${paperOnCheckB})` }}
+      >
+        <div className="flex justify-center items-center">
+          <img
+            src={findMessage}
+            alt="findMessage"
+            className="h-[17dvh] pt-9 pb-5"
+          />
+        </div>
+        <div className="relative justify-center w-full overflow-hidden mb-5">
           {/* Swiper 슬라이더 */}
           <Swiper
             //spaceBetween={10} // 슬라이드 간의 간격
