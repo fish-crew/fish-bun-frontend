@@ -84,21 +84,23 @@ function SuccessPage() {
           </Swiper>
         </div>
         {/* 미확인 붕어빵 있을 때 버튼 다르게게 */}
-        {fishBreadData.map(item => item.name).includes('미확인 붕어빵') ? (
-          <button
-            className="mt-4 bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
-            onClick={handleReport}
-          >
-            제보하기
-          </button>
-        ) : (
-          <button
-            className="mt-4 bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
-            onClick={handleConfirm}
-          >
-            확인
-          </button>
-        )}
+        <div className="flex justify-center">
+          {fishBreadData.map(item => item.name).includes('미확인 붕어빵') ? (
+            <button
+              className=" bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+              onClick={handleReport}
+            >
+              제보하기
+            </button>
+          ) : (
+            <button
+              className="mt-4 bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+              onClick={handleConfirm}
+            >
+              확인
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
