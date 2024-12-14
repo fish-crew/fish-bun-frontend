@@ -12,14 +12,46 @@
 }
 
 :global(.slick-slider) {
-  padding-bottom: 3em;
+  /* padding-bottom: 2em; */
 }
 
 :global(.carousel ul) {
   display: flex;
   justify-content: center; /* 수평 정렬 */
   align-items: center; /* 수직 정렬 */
-  height: 100px; /* 필요에 따라 조정 */
   flex-grow: 1;
   align-items: end;
+}
+
+:global(.slick-slider) {
+  position: relative;
+  display: flex;
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -khtml-user-select: none;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
+  flex-direction: column;
+  justify-content: space-around;
+  position: relative;
+  flex-grow: 1;
+}
+
+:global(.slick-dots) {
+  position: unset;
+  bottom: unset;
+  display: block;
+  width: 100%;
+  padding: 0;
+  padding-bottom: 1em;
+  margin: 0;
+  list-style: none;
+  text-align: center;
+}
+
+:global(.slick-prev),
+:global(.slick-next) {
+  top: 40%;
 }
