@@ -1,10 +1,10 @@
 :global(.react-calendar) {
-  @apply rounded-xl w-full min-w-[300px] max-w-[600px] h-full max-h-[550dvh] bg-[url('../../assets/bg-paperptexture.jpg')] border-none font-hakgyo;
+  @apply rounded-xl w-full max-w-[600px] h-full border-none font-hakgyo bg-[transparent];
 }
 
-:global(.react-calendar__viewContainer) {
+/* :global(.react-calendar__viewContainer) {
   @apply mb-3;
-}
+} */
 
 :global(.react-calendar__month-view__weekdays__weekday abbr) {
   @apply no-underline text-sz30;
@@ -12,7 +12,7 @@
 }
 
 :global(.react-calendar__tile) {
-  @apply h-[8dvh] max-h-full flex items-center text-sz25 flex-col;
+  @apply h-[7dvh] max-h-full flex items-center justify-center text-sz25 flex-col;
   /* 날짜 셀 스타일 */
 }
 
@@ -34,22 +34,22 @@
 }
 
 :global(.react-calendar__month-view__days__day--weekend) {
-  @apply text-black;
+  @apply text-black flex justify-center;
   /* 텍스트 스타일 */
 }
 
 :global(.react-calendar__tile--now) {
-  @apply bg-transparent;
+  @apply bg-transparent bg-[#94302f] rounded-lg;
 }
 
 :global(.react-calendar__tile--now abbr) {
-  @apply bg-orange-300 rounded-full text-black font-bold w-[3dvh] h-[3dvh];
+  @apply rounded-full text-white font-bold w-[3dvh] h-[3dvh];
 }
 
 :global(.react-calendar__tile:enabled:hover),
 :global(.react-calendar__tile:enabled:focus),
 :global(.react-calendar__tile--active) {
-  @apply bg-blue-200 text-black rounded-lg;
+  @apply text-black rounded-lg bg-blue-100;
   @apply transition-all duration-150 ease-in-out;
   /* 애니메이션 효과 추가 */
 }
