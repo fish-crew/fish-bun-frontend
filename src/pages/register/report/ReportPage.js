@@ -29,6 +29,11 @@ function ReportPage() {
     navigate('/main');
   };
 
+  const handleClose = () => {
+    //메인 페이지로 네비게이트
+    navigate('/main');
+  };
+
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full h-max">
@@ -38,6 +43,26 @@ function ReportPage() {
         className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
+        {/* 닫기 버튼 */}
+        <button
+          onClick={handleClose}
+          className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-red-300 hover:bg-gray-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6 text-gray-600"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
         <div className="absolute top-[30%]">
           <input
             type="text"
