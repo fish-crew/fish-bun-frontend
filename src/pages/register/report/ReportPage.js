@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import paperOnCheckB from '../../../assets/paperOnCheckB.jpg';
-import paperOnBlueCheckT from '../../../assets/paperOnBlueCheckT.jpg';
-import diaryLineBlue from '../../../assets/diaryLineBlue.png'
+import { useNavigate } from "react-router-dom";
+import paperOnCheckB from "../../../assets/paperOnCheckB.jpg";
+import paperOnCheckT from "../../../assets/paperOnCheckT.jpg";
+import diaryLine from "../../../assets/diaryLine.png";
 
 function ReportPage() {
   const navigate = useNavigate();
@@ -26,27 +26,27 @@ function ReportPage() {
 
     //메인 페이지로 네비게이트
     alert("제보가 완료되었습니다.\n감사합니다.");
-    navigate('/main');
+    navigate("/main");
   };
 
   const handleClose = () => {
     //메인 페이지로 네비게이트
-    navigate('/main');
+    navigate("/main");
   };
 
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full h-max">
-        <img src={paperOnBlueCheckT} alt="상단 배너" />
+        <img src={paperOnCheckT} alt="상단 배너" />
       </div>
       <div
-        className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
+        className="w-full flex flex-col flex-grow justify-around bg-cover whitespace-nowrap p-6 items-center relative"
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
         {/* 닫기 버튼 */}
         <button
           onClick={handleClose}
-          className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-red-300 hover:bg-gray-300"
+          className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ function ReportPage() {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="w-6 h-6 text-gray-600"
+            className="w-6 h-6 text-white stroke-[3px]"
           >
             <path
               strokeLinecap="round"
@@ -63,35 +63,35 @@ function ReportPage() {
             />
           </svg>
         </button>
-        <div className="absolute top-[30%]">
+        <div className="w-full">
           <input
             type="text"
             name="newBungeobbangsName"
             placeholder="뿡어빵 이름을 입력하세요."
             onChange={handleInputChange}
-            className="text-sz40 bg-transparent outline-none w-80 py-5"
+            className="text-sz40 bg-transparent outline-none w-80 py-2"
             style={{
-              border: 'none',
-              borderBottom: '2px solid transparent',
-              backgroundImage: `url(${diaryLineBlue})`,
-              backgroundRepeat: 'no-repeat',
-              backgroundPosition: 'bottom left',
-              backgroundSize: '100% auto',
-              textAlign: 'center',
+              border: "none",
+              borderBottom: "2px solid transparent",
+              backgroundImage: `url(${diaryLine})`,
+              backgroundRepeat: "no-repeat",
+              backgroundPosition: "bottom left",
+              backgroundSize: "100% auto",
+              textAlign: "center",
             }}
           />
           <div className="text-sz25 text-gray-700 pt-1">
-            이름은 쉼표로 구분해주세요!<br />
+            이름은 쉼표로 구분해주세요!
+            <br />
             ex) 팥 붕어빵, 슈크림 붕어빵
           </div>
-          <button
-            className="mt-20 bg-[#505985] {/*hover:text-[#505985]*/} text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
-            // hover 안한 이유는 공백 입력 되었을 때 확인 글자 사라짐
-            onClick={handleSubmit}
-          >
-            확인
-          </button>
         </div>
+        <button
+          className="mt-4 bg-[#650000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+          onClick={handleSubmit}
+        >
+          확인
+        </button>
       </div>
     </div>
   );
