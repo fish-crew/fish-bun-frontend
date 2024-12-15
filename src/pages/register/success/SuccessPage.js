@@ -32,7 +32,7 @@ function SuccessPage() {
   };
 
   return (
-    <div className="flex flex-col justify-start items-center w-full h-full overflow-auto">
+    <div className="flex flex-col justify-around items-center w-full h-full overflow-auto">
       <div className="w-full h-max">
         <img src={paperOnCheckT} alt="상단 배너" />
       </div>
@@ -77,7 +77,14 @@ function SuccessPage() {
                     />
                   </div>
                   {item.name === "미확인 붕어빵" ? (
-                    <div className="mt-5 w-72">
+                    <div
+                      className="pt-5 w-72"
+                      style={{
+                        visibility: activeIndex === index ? "visible" : "hidden", // 활성 슬라이드만 보이도록 설정
+                        opacity: activeIndex === index ? 1 : 0, // 부드러운 전환을 위해 투명도 추가
+                        transition: "opacity 0.3s ease-in-out, visibility 0.3s ease-in-out", // 전환 효과
+                      }}
+                    >
                       <img
                         src={unknownBunMessage}
                         alt="미확인 붕어빵"
@@ -85,8 +92,19 @@ function SuccessPage() {
                       />
                     </div>
                   ) : (
-                    <div className="mt-5 text-center text-sz40">
-                      {item.name}
+                    <div
+                      className="pt-5 w-72"
+                      style={{
+                        visibility: activeIndex === index ? "visible" : "hidden", // 활성 슬라이드만 보이도록 설정
+                        opacity: activeIndex === index ? 1 : 0, // 부드러운 전환을 위해 투명도 추가
+                        transition: "opacity 0.3s ease-in-out, visibility 0.3s ease-in-out", // 전환 효과
+                      }}
+                    >
+                      <img
+                        src={unknownBunMessage}
+                        alt="미확인 붕어빵"
+                        className="w-full h-[10dvh]"
+                      />
                     </div>
                   )}
                 </div>
@@ -95,21 +113,22 @@ function SuccessPage() {
           </Swiper>
         </div>
         <div className="flex justify-center">
-          {fishBreadData.map((item) => item.name).includes("미확인 붕어빵") ? (
+          {fishBreadData[activeIndex]?.name === "미확인 붕어빵" ? (
             <button
-              className="bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+              className="bg-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
               onClick={handleReport}
             >
               제보하기
             </button>
           ) : (
             <button
-              className="mt-4 bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+              className="bg-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
               onClick={handleConfirm}
             >
               확인
             </button>
           )}
+
         </div>
       </div>
     </div>
