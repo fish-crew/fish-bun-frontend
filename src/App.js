@@ -6,6 +6,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
+import "animate.css";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import BookPage from "./pages/book/BookPage";
