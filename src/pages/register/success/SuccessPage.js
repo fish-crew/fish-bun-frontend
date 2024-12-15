@@ -37,7 +37,7 @@ function SuccessPage() {
         <img src={paperOnCheckT} alt="상단 배너" />
       </div>
       <div
-        className="w-full flex flex-col flex-grow bg-cover px-3 pb-3 "
+        className="w-full flex flex-col flex-grow bg-cover pb-3 "
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
         <div className="flex justify-center items-center">
