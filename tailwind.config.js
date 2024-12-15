@@ -16,6 +16,7 @@ module.exports = {
       fontSize: {
         name: "6dvh",
         title: "5dvh",
+        sz22: "2.2dvh",
         sz25: "2.5dvh",
         sz30: "3dvh",
         sz35: "3.5dvh",
