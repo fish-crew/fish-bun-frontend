@@ -40,15 +40,39 @@ function CalendarPage() {
     }
   };
 
+  const handleClose = () => {
+    //메인 페이지로 네비게이트
+    navigate("/main");
+  };
+
   return (
     <div className="w-full flex-grow flex flex-col overflow-y-auto">
       <div className="w-full h-max">
         <img src={paperOnCheckT} alt="상단 배너" />
       </div>
       <div
-        className="w-full flex flex-col flex-grow bg-cover px-3 pb-3 "
+        className="w-full flex flex-col flex-grow bg-cover px-3 pb-3 relative"
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
+        <button
+          onClick={handleClose}
+          className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6 text-white stroke-[3px]"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
         <div className="w-full text-sz45 text-center pt-3 text-point-color">
           붕어 탐험 일지
         </div>
