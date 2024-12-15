@@ -30,7 +30,7 @@ function BookPage() {
   const navigate = useNavigate();
   const handleClose = () => {
     //메인 페이지로 네비게이트
-    navigate("/calendarPage");
+    navigate("/main");
   };
 
   const settings = {
