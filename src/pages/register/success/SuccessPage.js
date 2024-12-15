@@ -8,6 +8,7 @@ import findMessage from "../../../assets/findMessage.png";
 import paperOnCheckT from "../../../assets/paperOnCheckT.jpg";
 import paperOnCheckB from "../../../assets/paperOnCheckB.jpg";
 import unknownBunMessage from "../../../assets/unknownBunMessage.png";
+import notYet from "../../../assets/flavorIcons/notYet.png";
 
 function SuccessPage() {
   const navigate = useNavigate();
@@ -23,6 +24,12 @@ function SuccessPage() {
     { id: 24, flavor: "미니 붕어빵", iconCode: "mini", seq: 5 },
     { id: 25, flavor: "김치 붕어빵", iconCode: "kimchi", seq: 6 },
     { id: 39, flavor: "미확인 붕어빵", iconCode: "unknown", seq: 0 },
+    {
+      id: 38,
+      flavor: "타코야끼 붕어빵",
+      iconCode: "tako",
+      seq: 19,
+    },
   ].sort((a, b) => a.seq - b.seq); // seq 값 기준으로 오름차순 정렬
 
   const handleReport = () => {
@@ -94,7 +101,13 @@ function SuccessPage() {
                 <div className="flex flex-col items-center w-40">
                   <div className="w-48 h-48 md:w-52 md:h-52 bg-transparent rounded-lg flex items-center justify-center overflow-visible">
                     <img
-                      src={require(`../../../assets/flavorIcons/${item.iconCode}.png`)}
+                      src={(() => {
+                        try {
+                          return require(`../../../assets/flavorIcons/${item.iconCode}.png`);
+                        } catch {
+                          return notYet;
+                        }
+                      })()}
                       alt={item.flavor}
                       className={`w-full h-full object-contain ${
                         activeIndex === index && animationTrigger
@@ -103,6 +116,7 @@ function SuccessPage() {
                       }`} // 활성 슬라이드의 이미지에만 애니메이션 클래스 추가
                     />
                   </div>
+
                   <div
                     className="pt-5 w-72 relative"
                     style={{
