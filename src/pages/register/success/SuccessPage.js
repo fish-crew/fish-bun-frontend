@@ -16,10 +16,10 @@ function SuccessPage() {
 
   const fishBreadData = [
     { id: 1, name: "미확인 붕어빵" },
-    { id: 2, name: "달콤한 붕어빵" },
-    { id: 3, name: "초코 붕어빵" },
-    { id: 1, name: "미확인 붕어빵" },
-    { id: 2, name: "달콤한 붕어빵" },
+    { id: 2, name: "블루베리 크림치즈 붕어빵" },
+    { id: 3, name: "팥 붕어빵" },
+    { id: 1, name: "슈크림 붕어빵" },
+    { id: 2, name: "피자 붕어빵" },
     { id: 3, name: "초코 붕어빵" },
   ];
 
@@ -69,16 +69,16 @@ function SuccessPage() {
                 }}
               >
                 <div className="flex flex-col items-center w-40">
-                  <div className="w-52 h-52 bg-transparent rounded-lg flex items-center justify-center">
+                  <div className="w-52 h-52 md:w-56 md:h-56 bg-transparent rounded-lg flex items-center justify-center">
                     <img
                       src={foundedBun}
                       alt="findMessage"
-                      className="w-52 h-52"
+                      className="w-52 h-52 md:w-56 md:h-56"
                     />
                   </div>
                   {item.name === "미확인 붕어빵" ? (
                     <div
-                      className="pt-5 w-72"
+                      className="pt-5 w-72 relative"
                       style={{
                         visibility:
                           activeIndex === index ? "visible" : "hidden", // 활성 슬라이드만 보이도록 설정
@@ -87,15 +87,26 @@ function SuccessPage() {
                           "opacity 0.3s ease-in-out, visibility 0.3s ease-in-out", // 전환 효과
                       }}
                     >
+                      <div
+                        className="whitespace-nowrap text-white absolute text-sz30 font-bold font-kyoboHand"
+                        style={{
+                          top: "58%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          textAlign: "center",
+                        }}
+                      >
+                        {fishBreadData[activeIndex]?.name || "이름 없음"}
+                      </div>
                       <img
                         src={unknownBunMessage}
                         alt="미확인 붕어빵"
-                        className="w-full h-[10dvh]"
+                        className="w-full h-auto"
                       />
                     </div>
                   ) : (
                     <div
-                      className="pt-5 w-72"
+                      className="pt-5 w-72 relative"
                       style={{
                         visibility:
                           activeIndex === index ? "visible" : "hidden", // 활성 슬라이드만 보이도록 설정
@@ -104,10 +115,21 @@ function SuccessPage() {
                           "opacity 0.3s ease-in-out, visibility 0.3s ease-in-out", // 전환 효과
                       }}
                     >
+                      <div
+                        className="whitespace-nowrap text-white absolute text-sz30 font-bold font-kyoboHand"
+                        style={{
+                          top: "58%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          textAlign: "center",
+                        }}
+                      >
+                        {fishBreadData[activeIndex]?.name || "이름 없음"}
+                      </div>
                       <img
                         src={unknownBunMessage}
                         alt="미확인 붕어빵"
-                        className="w-full h-[10dvh]"
+                        className="w-full h-auto"
                       />
                     </div>
                   )}
@@ -119,7 +141,7 @@ function SuccessPage() {
         <div className="flex justify-center">
           {fishBreadData[activeIndex]?.name === "미확인 붕어빵" ? (
             <button
-              className="bg-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+              className="bg-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz30 tracking-[.25em]"
               onClick={handleReport}
             >
               제보하기
