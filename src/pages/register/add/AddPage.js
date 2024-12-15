@@ -113,7 +113,7 @@ const AddPage = () => {
       <div >
         <button
           onClick={handleClose}
-          className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
+          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
