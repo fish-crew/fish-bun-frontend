@@ -37,17 +37,17 @@ function SuccessPage() {
         <img src={paperOnCheckT} alt="상단 배너" />
       </div>
       <div
-        className="w-full flex flex-col flex-grow bg-cover pb-3"
+        className="w-full flex flex-col flex-grow bg-cover justify-around"
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center h-[9dvh]">
           <img
             src={findMessage}
             alt="findMessage"
-            className="h-[17dvh] pt-9 pb-5 animate__animated animate__tada"
+            className="animate__animated animate__tada h-full w-auto"
           />
         </div>
-        <div className="relative justify-center w-full overflow-hidden mb-5">
+        <div className="relative justify-center w-full overflow-hidden">
           {/* Swiper 슬라이더 */}
           <Swiper
             slidesPerView="auto"
@@ -69,20 +69,22 @@ function SuccessPage() {
                 }}
               >
                 <div className="flex flex-col items-center w-40">
-                  <div className="w-60 h-60 bg-transparent rounded-lg flex items-center justify-center">
+                  <div className="w-52 h-52 bg-transparent rounded-lg flex items-center justify-center">
                     <img
                       src={foundedBun}
                       alt="findMessage"
-                      className="w-60 h-60"
+                      className="w-52 h-52"
                     />
                   </div>
                   {item.name === "미확인 붕어빵" ? (
                     <div
                       className="pt-5 w-72"
                       style={{
-                        visibility: activeIndex === index ? "visible" : "hidden", // 활성 슬라이드만 보이도록 설정
+                        visibility:
+                          activeIndex === index ? "visible" : "hidden", // 활성 슬라이드만 보이도록 설정
                         opacity: activeIndex === index ? 1 : 0, // 부드러운 전환을 위해 투명도 추가
-                        transition: "opacity 0.3s ease-in-out, visibility 0.3s ease-in-out", // 전환 효과
+                        transition:
+                          "opacity 0.3s ease-in-out, visibility 0.3s ease-in-out", // 전환 효과
                       }}
                     >
                       <img
@@ -95,9 +97,11 @@ function SuccessPage() {
                     <div
                       className="pt-5 w-72"
                       style={{
-                        visibility: activeIndex === index ? "visible" : "hidden", // 활성 슬라이드만 보이도록 설정
+                        visibility:
+                          activeIndex === index ? "visible" : "hidden", // 활성 슬라이드만 보이도록 설정
                         opacity: activeIndex === index ? 1 : 0, // 부드러운 전환을 위해 투명도 추가
-                        transition: "opacity 0.3s ease-in-out, visibility 0.3s ease-in-out", // 전환 효과
+                        transition:
+                          "opacity 0.3s ease-in-out, visibility 0.3s ease-in-out", // 전환 효과
                       }}
                     >
                       <img
@@ -128,7 +132,6 @@ function SuccessPage() {
               확인
             </button>
           )}
-
         </div>
       </div>
     </div>
