@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import paperOnCheckT from "../../assets/paperOnBlueCheckT.jpg";
 import paperOnCheckB from "../../assets/paperOnCheckB.jpg";
-import style from "./NicknamePage.module.css"; // 올바른 import
+import style from "./NicknamePage.module.css";
 
 function NicknamePage() {
+  const navigate = useNavigate();
+
   const [nickname, setNickname] = useState("");
 
   const handleInputChange = (e) => {
@@ -31,6 +34,11 @@ function NicknamePage() {
     alert("입력 값 제출(api 연결 후 삭제)");
   };
 
+  const handleClose = () => {
+    //메인 페이지로 네비게이트
+    navigate("/main");
+  };
+
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full h-max">
@@ -38,9 +46,28 @@ function NicknamePage() {
       </div>
 
       <div
-        className="w-full flex flex-col flex-grow justify-around bg-cover whitespace-nowrap p-6 items-center"
+        className="w-full flex flex-col flex-grow justify-around bg-cover whitespace-nowrap p-6 items-center relative"
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
+        <button
+          onClick={handleClose}
+          className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#505985] hover:bg-gray-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="currentColor"
+            className="w-6 h-6 text-white stroke-[3px]"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
         <div className="w-full">
           <input
             type="text"
@@ -56,7 +83,7 @@ function NicknamePage() {
         </div>
 
         <button
-          className="mt-4 bg-[#505985] hover:text-[#505985] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+          className="mt-4 bg-[#505985] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
           onClick={handleSubmit}
         >
           확인
