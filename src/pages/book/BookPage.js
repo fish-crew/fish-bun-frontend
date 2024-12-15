@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
+import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import paperOnCheckT from "../../assets/paperOnCheckT.jpg";
@@ -26,6 +27,11 @@ function CustomArrow(props) {
 
 function BookPage() {
   const [activeIndex, setActiveIndex] = useState(0); // 현재 활성화된 캐러셀 인덱스 상태 관리
+  const navigate = useNavigate();
+  const handleClose = () => {
+    //메인 페이지로 네비게이트
+    navigate("/calendarPage");
+  };
 
   const settings = {
     dots: true,
@@ -83,12 +89,28 @@ function BookPage() {
 
   return (
     <div className="w-full flex-grow flex flex-col">
-      {/* 상단 이미지 */}
       <div className="w-full h-max">
         <img src={paperOnCheckT} alt="상단 배너" />
       </div>
-
-      {/* 배경과 캐러셀 */}
+      <button
+        onClick={handleClose}
+        className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-6 h-6 text-white stroke-[3px]"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
       <div
         className="w-full flex flex-col flex-grow bg-cover whitespace-nowrap"
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
