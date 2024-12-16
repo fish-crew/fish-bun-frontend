@@ -6,6 +6,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
+import React from "react";
 import "animate.css";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -20,6 +21,23 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 
+// WebP 감지 로직
+const detectWebP = () => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src =
+      "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoCAAEAAQAcJaQAA3AA/v3AgAA=";
+  });
+};
+
+(async () => {
+  const isWebPSupported = await detectWebP();
+  const className = isWebPSupported ? "webp" : "no-webp";
+  document.documentElement.classList.add(className);
+})();
+
 function App() {
   return (
     <BrowserRouter>
@@ -29,13 +47,11 @@ function App() {
 }
 
 function AppContent() {
-  const location = useLocation(); // 현재 경로를 확인하기 위한 useLocation 사용
+  const location = useLocation();
 
   return (
     <div className="App flex flex-col h-[100dvh] justify-between">
-      {/* 공통 Header */}
       <Header />
-      {/* 라우트 설정 */}
       <Routes>
         <Route path="/" element={<Navigate to="/loadingPage" replace />} />
         <Route path="/loadingPage" element={<LoadingPage />} />
@@ -49,7 +65,6 @@ function AppContent() {
         <Route path="/register/reportPage" element={<ReportPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
-
       {!["/loginPage", "/loadingPage"].includes(location.pathname) && (
         <Footer />
       )}
