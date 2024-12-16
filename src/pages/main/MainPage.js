@@ -128,11 +128,21 @@ function Main() {
 
   const handleCaptureAndDownload = async () => {
     try {
+      setIsMenuOpen(false); // 메뉴 닫기
+
       // 캡처 대상 설정
-      const element = document.body;
+      const element = document.querySelector(".main-area");
+
+      // 캡처 제외할 요소 숨기기
+      const btnArea = document.querySelector(".btn-area");
+      if (btnArea) btnArea.style.display = "none";
 
       // html2canvas로 캡처
       const canvas = await html2canvas(element);
+
+      // 숨긴 요소 복원
+      if (btnArea) btnArea.style.display = ""; // 원래 상태로 복원
+
       const dataURL = canvas.toDataURL("image/png");
 
       // 현재 날짜와 시간 가져오기
@@ -145,7 +155,7 @@ function Main() {
       const seconds = String(now.getSeconds()).padStart(2, "0");
 
       // 파일 이름 포맷팅
-      const fileName = `bunlog-${year}-${month}-${date}-${hours}-${minutes}.png`;
+      const fileName = `bunlog-${year}-${month}-${date}-${hours}-${minutes}-${seconds}.png`;
 
       // 다운로드 링크 생성
       const link = document.createElement("a");
@@ -154,13 +164,13 @@ function Main() {
       link.click();
     } catch (error) {
       console.error("캡처 오류:", error);
-      alert("이미지 캡처 중 오류가 발생했습니다.");
+      alert("화면 캡처 중 오류가 발생했습니다.");
     }
   };
 
   return (
     <div
-      className="flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
+      className="main-area flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
       style={{
         backgroundImage: `url(${bulbFull}), url(${glitter}), url(${checkPattern})`,
       }}
@@ -224,7 +234,7 @@ function Main() {
                 {/* 배경 이미지 */}
                 <img
                   src={btnBg}
-                  alt="capture button"
+                  alt="close button"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 {/* SVG 아이콘 */}
@@ -235,6 +245,7 @@ function Main() {
                   strokeWidth="1.5"
                   stroke="currentColor"
                   className="text-white z-10 size-8"
+                  alt="close svg"
                 >
                   <path
                     strokeLinecap="round"
