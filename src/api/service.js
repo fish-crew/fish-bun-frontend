@@ -5,7 +5,7 @@ import axiosInstance from './axiosInstance';
 export async function fetchUserData() {
     try {
         const response = await axiosInstance.get(
-            '/fish-bun/user-info'
+            '/fish-bun/user/info'
         );
         return response.data;
     } catch (error) {
@@ -17,7 +17,7 @@ export async function fetchUserData() {
 export async function fetchMainPageData() {
     try {
         const response = await axiosInstance.get(
-            'fish-bun/main'
+            '/fish-bun/main'
         );
         return response.data;
     } catch (error) {
@@ -29,7 +29,7 @@ export async function fetchMainPageData() {
 export async function fetchRegisterSuccessPageData(id) {
     try {
         const response = await axiosInstance.get(
-            `fish-bun/register-success/${id}` //아직 api 없음
+            `/fish-bun/register-success/${id}` //아직 api 없음
         );
         return response.data;
     } catch (error) {
@@ -41,7 +41,7 @@ export async function fetchRegisterSuccessPageData(id) {
 export async function fetchAllBunFlavorsData() {
     try {
         const response = await axiosInstance.get(
-            'fish-bun/flavors'
+            '/fish-bun/flavors'
         );
         return response.data;
     } catch (error) {
@@ -53,7 +53,7 @@ export async function fetchAllBunFlavorsData() {
 export async function fetchBookPageData() {
     try {
         const response = await axiosInstance.get(
-            'fish-bun/book/user'
+            '/fish-bun/book/user'
         );
         return response.data;
     } catch (error) {
@@ -65,7 +65,7 @@ export async function fetchBookPageData() {
 export async function fetchCalendarPageData() {
     try {
         const response = await axiosInstance.get(
-            'fish-bun/calendar'
+            '/fish-bun/calendar'
         );
         return response.data;
     } catch (error) {
@@ -77,7 +77,7 @@ export async function fetchCalendarPageData() {
 export async function fetchDetailPageData(id) {
     try {
         const response = await axiosInstance.get(
-            `fish-bun/calendar/detail/${id}`
+            `/fish-bun/calendar/detail/${id}`
         );
         return response.data;
     } catch (error) {
