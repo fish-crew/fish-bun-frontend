@@ -16,7 +16,59 @@ import bulbBtm from "../../assets/bulbBtm.png";
 import bulbFull from "../../assets/bulbFull.png";
 import glitter from "../../assets/glitter.png";
 
+import { fetchUserData, fetchMainPageData } from '../../api/service.js'
+
 function FishFrame() {
+  // 서버에서 userInfo 데이터 받아오기
+  const [userInfoData, setUserInfoData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!userInfoData) {
+          const data = await fetchUserData();
+          setUserInfoData(data);
+        }
+      } catch (error) {
+        console.error('데이터 가져오기 실패:', error);
+        alert('서버로부터 데이터를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // // userInfoData 업데이트될 때 로그 출력
+  // useEffect(() => {
+  //   if (userInfoData) {
+  //     console.log("받아온 데이터:", userInfoData);
+  //   }
+  // }, [userInfoData]);
+
+  // 서버에서 main 데이터 받아오기
+  const [mainData, setMainData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchMainPageData();
+        setMainData(data);
+      } catch (error) {
+        console.error('데이터 가져오기 실패:', error);
+        alert('서버로부터 데이터를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // userInfoData 업데이트될 때 로그 출력
+  useEffect(() => {
+    if (mainData) {
+      console.log("받아온 데이터:", mainData);
+    }
+  }, [mainData]);
+
   const navigate = useNavigate();
 
   const goToAdd = () => {
