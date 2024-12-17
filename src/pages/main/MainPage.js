@@ -21,7 +21,6 @@ import { fetchUserData, fetchMainPageData } from '../../api/service.js'
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
   const [userInfoData, setUserInfoData] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -70,16 +69,24 @@ function FishFrame() {
     fetchData();
   }, []);
 
-  // userInfoData 업데이트될 때 로그 출력
-  useEffect(() => {
-    if (mainData) {
-      console.log("받아온 데이터:", mainData);
-    }
-  }, [mainData]);
-
   const navigate = useNavigate();
+  const today = new Date();
+  const dayMapping = {
+    0: "일",
+    1: "월",
+    2: "화",
+    3: "수",
+    4: "목",
+    5: "금",
+    6: "토",
+  };
+  const todayKorean = dayMapping[today.getDay()]; // 오늘 요일 (한국어)
 
   const goToAdd = () => {
+    if (eatenDays.includes(todayKorean)) {
+      alert("오늘은 이미 붕어빵을 등록하셨습니다!");
+      return;
+    }
     navigate("/register/addPage");
   };
 
@@ -88,7 +95,6 @@ function FishFrame() {
   const [imageSize, setImageSize] = useState(0);
 
   const weekDays = ["화", "수", "목", "금", "토", "일", "월"];
-  const eatenDays = ["월", "수", "목"];
 
   const calculateSizes = () => {
     if (frameRef.current) {
