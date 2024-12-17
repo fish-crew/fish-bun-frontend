@@ -3,9 +3,7 @@ import { getCookie } from './cookie'; // 쿠키 읽기 유틸리티 함수
 
 // Axios 인스턴스 생성
 const axiosInstance = axios.create({
-    // baseURL: 'http://localhost:8080', // API 기본 URL
-    baseURL: '/api', // ㄹㅇ
-    //baseURL: '/api', // 상대 경로 사용 proxy 사용용
+    baseURL: 'https://bunglog.me/api', // API 기본 URL
     timeout: 10000, // 요청 제한 시간
     withCredentials: true, // 쿠키를 포함한 요청 허용
 });
