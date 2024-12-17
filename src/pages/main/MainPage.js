@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
-
-import goToRegisterBtn from "../../assets/goToRegisterBtn.png";
+import styles from "./MainPage.module.css";
 
 import { fetchUserData, fetchMainPageData } from "../../api/service.js";
 
@@ -241,13 +240,30 @@ function Main() {
     fetchData();
   }, []);
 
+  const randomDuration = () => {
+    return `${Math.random() * 1 + 1}s`; // 1초에서 4초 사이 랜덤 시간
+  };
+
   return (
     <div
       className="main-area flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
       style={{
-        backgroundImage: `url(/assets/webp/bulbFull.webp), url(/assets/webp/glitter.webp), url(/assets/webp/checkPattern.webp)`,
+        backgroundImage: `url(/assets/webp/glitter.webp), url(/assets/webp/checkPattern.webp)`,
       }}
     >
+      <div
+        className={`w-full absolute top-0 w-[88%] absolute ${styles["soft-blink"]}`}
+      >
+        <img src="/assets/webp/bulbTopBlur.webp" alt="bulb bottom" />
+      </div>
+      <div className="w-full absolute top-0">
+        <img src="/assets/webp/bulbTop.webp" alt="bulb bottom" />
+      </div>
+      <div
+        className={`w-full absolute bottom-0 w-[88%] absolute ${styles["soft-blink"]}`}
+      >
+        <img src="/assets/webp/bulbBtmBlur.webp" alt="bulb bottom" />
+      </div>
       <div className="w-full absolute bottom-0">
         <img src="/assets/webp/bulbBtm.webp" alt="bulb bottom" />
       </div>

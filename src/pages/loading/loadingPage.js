@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import styles from "./loadingPage.module.css";
 
-// 우선 로드 이미지
 const bgBlue = "/assets/webp/bgBlue.webp";
 
-// 이미지 목록 반환
 const getImageList = () => {
   return [
     "/assets/webp/bgBlue.webp",
@@ -24,7 +23,6 @@ const getImageList = () => {
   ];
 };
 
-// 이미지 미리 로드 함수
 const preloadImages = (images) => {
   return Promise.all(
     images.map((src) => {
@@ -38,7 +36,6 @@ const preloadImages = (images) => {
   );
 };
 
-// 단일 이미지 우선 로드 함수
 const preloadSingleImage = (src) => {
   return new Promise((resolve) => {
     const img = new Image();
@@ -53,30 +50,23 @@ function LoadingPage() {
 
   useEffect(() => {
     const images = getImageList();
-    const minimumDelay = new Promise((resolve) => setTimeout(resolve, 2000)); // 최소 2초 유지
+    const minimumDelay = new Promise((resolve) => setTimeout(resolve, 2000));
 
-    // 1. bgBlue 우선 로드
     preloadSingleImage(bgBlue)
-      .then(() => {
-        // 2. 나머지 이미지 비동기 로드
-        return Promise.all([preloadImages(images), minimumDelay]);
-      })
+      .then(() => Promise.all([preloadImages(images), minimumDelay]))
       .then(() => {
         console.log("All images loaded successfully!");
-        navigate("/loginPage"); // 페이지 이동
+        navigate("/loginPage");
       })
       .catch((error) => {
         console.error("Error loading images:", error);
-        navigate("/loginPage");
       });
   }, [navigate]);
 
   return (
     <div
       className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
-      style={{
-        backgroundImage: `url(${bgBlue})`,
-      }}
+      style={{ backgroundImage: `url(${bgBlue})` }}
     >
       <div className="w-full absolute top-[12%] px-14">
         <img
@@ -101,7 +91,18 @@ function LoadingPage() {
         />
       </div>
       <div
-        className="w-[88%] absolute animate__animated animate__fadeIn animate__delay-1s"
+        className={`w-[88%] absolute ${styles["soft-blink"]}`}
+        style={{
+          top: "52%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          textAlign: "center",
+        }}
+      >
+        <img src="/assets/webp/starsBlur.webp" alt="별빛" />
+      </div>
+      <div
+        className="w-[88%] absolute z-10"
         style={{
           top: "52%",
           left: "50%",
