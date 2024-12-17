@@ -59,7 +59,7 @@ function NicknamePage() {
         <div className="w-full">
           <input
             type="text"
-            className={`${style["custom-input"]} w-72 text-sz40 py-2`}
+            className={`${style["custom-input"]} w-72 text-sz35 py-2`}
             placeholder="닉네임을 입력하세요"
             value={nickname}
             onChange={handleInputChange}

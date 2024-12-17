@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import paperOnCheckB from "../../../assets/paperOnCheckB.jpg";
-import paperOnCheckT from "../../../assets/paperOnCheckT.jpg";
-import diaryLine from "../../../assets/diaryLine.png";
 
-import { postReportData } from '../../../api/service.js'
+import { postReportData } from "../../../api/service.js";
 
 function ReportPage() {
   const navigate = useNavigate();
@@ -50,11 +47,11 @@ function ReportPage() {
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full h-max">
-        <img src={paperOnCheckT} alt="상단 배너" />
+        <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>
       <div
         className="w-full flex flex-col flex-grow justify-around bg-cover whitespace-nowrap p-6 items-center relative"
-        style={{ backgroundImage: `url(${paperOnCheckB})` }}
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
       >
         {/* 닫기 버튼 */}
         <button
@@ -82,11 +79,11 @@ function ReportPage() {
             name="newBungeobbangsName"
             placeholder="뿡어빵 이름을 입력하세요."
             onChange={handleInputChange}
-            className="text-sz40 bg-transparent outline-none w-80 py-2"
+            className="text-sz35 bg-transparent outline-none w-80 py-2"
             style={{
               border: "none",
               borderBottom: "2px solid transparent",
-              backgroundImage: `url(${diaryLine})`,
+              backgroundImage: "url('/assets/webp/diaryLine.webp')",
               backgroundRepeat: "no-repeat",
               backgroundPosition: "bottom left",
               backgroundSize: "100% auto",
