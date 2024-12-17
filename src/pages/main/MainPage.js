@@ -16,10 +16,77 @@ import bulbBtm from "../../assets/bulbBtm.png";
 import bulbFull from "../../assets/bulbFull.png";
 import glitter from "../../assets/glitter.png";
 
+import { fetchUserData, fetchMainPageData } from '../../api/service.js'
+
 function FishFrame() {
+  // 서버에서 userInfo 데이터 받아오기
+  const [userInfoData, setUserInfoData] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!userInfoData) {
+          const data = await fetchUserData();
+          setUserInfoData(data);
+        }
+      } catch (error) {
+        console.error('데이터 가져오기 실패:', error);
+        alert('서버로부터 데이터를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  //서버에서 main 페이지에 사용할 코드 받아오기
+  const [eatenDays, setEatenDays] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchMainPageData(); // 서버 데이터 가져오기
+
+        // 요일 매핑 객체
+        const dayMapping = {
+          Sunday: "일",
+          Monday: "월",
+          Tuesday: "화",
+          Wednesday: "수",
+          Thursday: "목",
+          Friday: "금",
+          Saturday: "토",
+        };
+
+        // 영어 요일을 한국어로 변환
+        const convertedDays = response.data.daysInWeek.map((day) => dayMapping[day]);
+
+        // 상태 업데이트
+        setEatenDays(convertedDays);
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const navigate = useNavigate();
+  const today = new Date();
+  const dayMapping = {
+    0: "일",
+    1: "월",
+    2: "화",
+    3: "수",
+    4: "목",
+    5: "금",
+    6: "토",
+  };
+  const todayKorean = dayMapping[today.getDay()]; // 오늘 요일 (한국어)
 
   const goToAdd = () => {
+    if (eatenDays.includes(todayKorean)) {
+      alert("오늘은 이미 붕어빵을 등록하셨습니다!");
+      return;
+    }
     navigate("/register/addPage");
   };
 
@@ -28,7 +95,6 @@ function FishFrame() {
   const [imageSize, setImageSize] = useState(0);
 
   const weekDays = ["화", "수", "목", "금", "토", "일", "월"];
-  const eatenDays = ["월", "수", "목"];
 
   const calculateSizes = () => {
     if (frameRef.current) {
@@ -168,6 +234,23 @@ function Main() {
     }
   };
 
+  //서버에서 데이터 받아오기기
+  const [monthlyCount, setMonthlyCount] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchMainPageData(); // 서버 데이터 가져오기
+        const monthlyCnt = response.data.monthlyCount;
+        setMonthlyCount(monthlyCnt);
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div
       className="main-area flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
@@ -188,7 +271,7 @@ function Main() {
             사용자 이름
           </div>
           <div className="text-sz20 drop-shadow-smRed">
-            이번달은 <span className="font-semibold">13</span>일 동안 붕어빵을
+            이번달은 붕어빵을 <span className="font-semibold">{monthlyCount}</span>번
             먹었어요!
           </div>
         </div>
