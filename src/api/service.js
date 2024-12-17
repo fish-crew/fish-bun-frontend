@@ -118,11 +118,11 @@ export async function postRegisterData(registerData) {
     }
 }
 
-export async function postReportData(reportData) {
+export async function postReportData(flavors) {
     try {
         const response = await axiosInstance.post(
             '/fish-bun/report', // API 엔드포인트
-            reportData // 요청 본문에 전달할 데이터
+            { flavors } // 요청 본문에 전달할 데이터
         );
         return response.data;
     } catch (error) {
