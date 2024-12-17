@@ -29,19 +29,7 @@ export async function fetchMainPageData() {
 export async function fetchRegisterSuccessPageData(id) {
     try {
         const response = await axiosInstance.get(
-            `/fish-bun/register-success/${id}` //아직 api 없음
-        );
-        return response.data;
-    } catch (error) {
-        console.error('데이터 요청 실패:', error);
-        throw error;
-    }
-}
-
-export async function fetchAllBunFlavorsData() {
-    try {
-        const response = await axiosInstance.get(
-            '/fish-bun/flavors'
+            `/fish-bun/detail/save-success/${id}` //아직 api 없음
         );
         return response.data;
     } catch (error) {
@@ -62,10 +50,10 @@ export async function fetchBookPageData() {
     }
 }
 
-export async function fetchCalendarPageData() {
+export async function fetchCalendarPageData(date) {
     try {
         const response = await axiosInstance.get(
-            '/fish-bun/calendar'
+            `/fish-bun/calendar/${date}`
         );
         return response.data;
     } catch (error) {
@@ -86,12 +74,24 @@ export async function fetchDetailPageData(id) {
     }
 }
 
+export async function fetchFlavorData() {
+    try {
+        const response = await axiosInstance.get(
+            '/fish-bun/flavors'
+        );
+        return response.data;
+    } catch (error) {
+        console.error('데이터 요청 실패:', error);
+        throw error;
+    }
+}
+
 //post
-export async function postNickNameAddData(nickName) {
+export async function postNickNameAddData(nickname) {
     try {
         const response = await axiosInstance.post(
-            '/fish-bun/nickName', // API 엔드포인트
-            nickName // 요청 본문에 전달할 데이터
+            '/fish-bun/user/set-nickname', // API 엔드포인트
+            { nickname } // 객체 형태로 데이터 전달
         );
         return response.data;
     } catch (error) {
@@ -103,8 +103,13 @@ export async function postNickNameAddData(nickName) {
 export async function postRegisterData(registerData) {
     try {
         const response = await axiosInstance.post(
-            '/fish-bun/register', // API 엔드포인트
-            registerData // 요청 본문에 전달할 데이터
+            '/fish-bun/detail/save', // API 엔드포인트
+            registerData, // FormData 객체
+            {
+                headers: {
+                    // Content-Type 설정 생략 가능: Axios가 자동으로 처리
+                },
+            }
         );
         return response.data;
     } catch (error) {
