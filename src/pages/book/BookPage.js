@@ -45,7 +45,7 @@ function BookPage() {
       if (i === activeIndex) {
         return (
           <img
-            src="/assets/webp/activeDotImage.webp"
+            src="/assets/webp/dots.webp"
             alt={`Dot ${i + 1}`}
             className={styles.activeDot}
           />
