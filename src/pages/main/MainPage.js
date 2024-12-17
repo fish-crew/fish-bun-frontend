@@ -271,7 +271,7 @@ function Main() {
             사용자 이름
           </div>
           <div className="text-sz20 drop-shadow-smRed">
-            이번달은 <span className="font-semibold">{monthlyCount}</span>일 동안 붕어빵을
+            이번달은 붕어빵을 <span className="font-semibold">{monthlyCount}</span>번
             먹었어요!
           </div>
         </div>
