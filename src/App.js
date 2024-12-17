@@ -45,7 +45,7 @@ function AppContent() {
         <Route path="/calendarPage" element={<CalendarPage />} />
         <Route path="/nicknamePage" element={<NicknamePage />} />
         <Route path="/register/addPage" element={<AddPage />} />
-        <Route path="/register/successPage" element={<SuccessPage />} />
+        <Route path="/register/successPage/:id" element={<SuccessPage />} />
         <Route path="/register/reportPage" element={<ReportPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
