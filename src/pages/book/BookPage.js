@@ -3,10 +3,7 @@ import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import paperOnCheckT from "../../assets/paperOnCheckT.jpg";
-import paperOnCheckB from "../../assets/paperOnCheckB.jpg";
 import styles from "./BookPage.module.css";
-import activeDotImage from "../../assets/dots.png"; // 활성화된 dot 이미지
 
 function CustomArrow(props) {
   const { className, style, onClick } = props;
@@ -48,7 +45,7 @@ function BookPage() {
       if (i === activeIndex) {
         return (
           <img
-            src={activeDotImage}
+            src="/assets/webp/dots.webp"
             alt={`Dot ${i + 1}`}
             className={styles.activeDot}
           />
@@ -90,7 +87,7 @@ function BookPage() {
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full h-max">
-        <img src={paperOnCheckT} alt="상단 배너" />
+        <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>
       <button
         onClick={handleClose}
@@ -113,7 +110,7 @@ function BookPage() {
       </button>
       <div
         className="w-full flex flex-col flex-grow bg-cover whitespace-nowrap"
-        style={{ backgroundImage: `url(${paperOnCheckB})` }}
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
       >
         <div className="w-full text-sz45 md:text-sz40 text-center pt-3">
           <span className="whitespace-nowrap text-point-color">{nickname}</span>
@@ -140,7 +137,7 @@ function BookPage() {
                         }`}
                       >
                         <img
-                          src={require(`../../assets/flavorIcons/${fish.id}.png`)}
+                          src={`/assets/webp/flavorIcons/${fish.id}.webp`}
                           alt={fish.flavor}
                           className="w-[75%] aspect-[1/1]"
                         />

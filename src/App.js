@@ -6,6 +6,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import "animate.css";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -20,25 +21,47 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 
+// WebP 감지 로직
+const detectWebP = () => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src =
+      "data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoCAAEAAQAcJaQAA3AA/v3AgAA=";
+  });
+};
+
 function App() {
+  const [isWebPSupported, setIsWebPSupported] = useState(false);
+
+  useEffect(() => {
+    detectWebP().then((supported) => {
+      setIsWebPSupported(supported);
+      const className = supported ? "webp" : "no-webp";
+      document.documentElement.classList.add(className);
+    });
+  }, []);
+
   return (
     <BrowserRouter>
-      <AppContent />
+      <AppContent isWebPSupported={isWebPSupported} />
     </BrowserRouter>
   );
 }
 
-function AppContent() {
-  const location = useLocation(); // 현재 경로를 확인하기 위한 useLocation 사용
+function AppContent({ isWebPSupported }) {
+  const location = useLocation();
 
   return (
     <div className="App flex flex-col h-[100dvh] justify-between">
-      {/* 공통 Header */}
       <Header />
-      {/* 라우트 설정 */}
       <Routes>
         <Route path="/" element={<Navigate to="/loadingPage" replace />} />
-        <Route path="/loadingPage" element={<LoadingPage />} />
+        <Route
+          path="/loadingPage"
+          element={<LoadingPage isWebPSupported={isWebPSupported} />}
+        />
         <Route path="/loginPage" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/bookPage" element={<BookPage />} />
@@ -49,7 +72,6 @@ function AppContent() {
         <Route path="/register/reportPage" element={<ReportPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
       </Routes>
-
       {!["/loginPage", "/loadingPage"].includes(location.pathname) && (
         <Footer />
       )}

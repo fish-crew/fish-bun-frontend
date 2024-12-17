@@ -4,13 +4,8 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import styles from "./CalendarPage.module.css"; // CSS 모듈 불러오기
-import calBunImage from "../../assets/cal-bun.png";
-import calBunEmpty from "../../assets/cal-bun-empty.png";
-import diaryLine from "../../assets/diaryLine.png";
-import paperOnCheckT from "../../assets/paperOnCheckT.jpg";
-import paperOnCheckB from "../../assets/paperOnCheckB.jpg";
 
-import { fetchCalendarPageData } from '../../api/service.js'
+import { fetchCalendarPageData } from "../../api/service.js";
 
 function CalendarPage() {
   const [value, setValue] = useState(new Date());
@@ -42,8 +37,8 @@ function CalendarPage() {
         setMonthlyCount(formattedDates.length);
         setEatenCount(eatenCnt);
       } catch (error) {
-        console.error('데이터 가져오기 실패:', error);
-        alert('서버로부터 데이터를 가져오는 데 실패했습니다.');
+        console.error("데이터 가져오기 실패:", error);
+        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
       }
     };
 
@@ -54,7 +49,7 @@ function CalendarPage() {
     const formattedDate = moment(date).format("YYYY-MM-DD");
     setValue(formattedDate);
     const selectedDate = specialDates.find(
-      (item) => item.date.split('T')[0] === formattedDate
+      (item) => item.date.split("T")[0] === formattedDate
     );
     console.log("선택된 날짜:", selectedDate);
     if (selectedDate) {
@@ -70,7 +65,7 @@ function CalendarPage() {
   return (
     <div className="w-full flex-grow flex flex-col overflow-y-auto">
       <div className="w-full h-max">
-        <img src={paperOnCheckT} alt="상단 배너" />
+        <img src="/assets/WebP/paperOnCheckT.webp" alt="상단 배너" />
       </div>
       <button
         onClick={handleClose}
@@ -93,13 +88,17 @@ function CalendarPage() {
       </button>
       <div
         className="w-full flex flex-col flex-grow bg-cover px-3 pb-3"
-        style={{ backgroundImage: `url(${paperOnCheckB})` }}
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
       >
         <div className="w-full text-sz45 text-center pt-3 text-point-color">
           붕어 탐험 일지
         </div>
         <div className="flex flex-col flex-grow items-center justify-around">
-          <img src={diaryLine} alt="Special" className="w-full" />
+          <img
+            src="/assets/WebP/diaryLine.webp"
+            alt="Special"
+            className="w-full"
+          />
           <Calendar
             //locale="en"
             onChange={handleDateChange}
@@ -126,7 +125,7 @@ function CalendarPage() {
                   return (
                     <div className="flex justify-center">
                       <img
-                        src={calBunImage}
+                        src="/assets/WebP/cal-bun.webp"
                         alt="Special"
                         className="w-[75%] aspect-[1/1]"
                       />
@@ -136,7 +135,7 @@ function CalendarPage() {
                   return (
                     <div className="flex justify-center">
                       <img
-                        src={calBunEmpty}
+                        src="/assets/WebP/cal-bun-empty.webp"
                         alt="Special"
                         className="w-[75%] aspect-[1/1]"
                       />
@@ -149,13 +148,18 @@ function CalendarPage() {
           />
           <div className="pb-3">
             {" "}
-            <img src={diaryLine} alt="Special" className="w-full" />
+            <img
+              src="/assets/WebP/diaryLine.webp"
+              alt="Special"
+              className="w-full"
+            />
           </div>
         </div>
         <div className="text-sz22 items-center">
           이번달은{" "}
           <span className="text-orange-500 font-bold">{monthlyCount}</span>번,{" "}
-          <span className="text-orange-500 font-bold">{eatenCount}</span>마리의 붕어빵을 먹었어요!
+          <span className="text-orange-500 font-bold">{eatenCount}</span>마리의
+          붕어빵을 먹었어요!
         </div>
       </div>
     </div>

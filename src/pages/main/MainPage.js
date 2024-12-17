@@ -2,21 +2,9 @@ import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 
-import bunFrameEmpty from "../../assets/bun-frame-empty.png";
-import bunFrameFilled from "../../assets/bun-frame-filled.png";
-import bunFrame from "../../assets/bun-frame.png";
 import goToRegisterBtn from "../../assets/goToRegisterBtn.png";
-import menuBtn from "../../assets/menuBtn.png";
-import calendarBtn from "../../assets/calendarBtn.png";
-import captureBtn from "../../assets/captureBtn.png";
-import bookBtn from "../../assets/bookBtn.png";
-import btnBg from "../../assets/btnBg.png";
-import checkPattern from "../../assets/checkPattern.png";
-import bulbBtm from "../../assets/bulbBtm.png";
-import bulbFull from "../../assets/bulbFull.png";
-import glitter from "../../assets/glitter.png";
 
-import { fetchUserData, fetchMainPageData } from '../../api/service.js'
+import { fetchUserData, fetchMainPageData } from "../../api/service.js";
 
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
@@ -29,8 +17,8 @@ function FishFrame() {
           setUserInfoData(data);
         }
       } catch (error) {
-        console.error('데이터 가져오기 실패:', error);
-        alert('서버로부터 데이터를 가져오는 데 실패했습니다.');
+        console.error("데이터 가져오기 실패:", error);
+        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
       }
     };
 
@@ -56,7 +44,9 @@ function FishFrame() {
         };
 
         // 영어 요일을 한국어로 변환
-        const convertedDays = response.data.daysInWeek.map((day) => dayMapping[day]);
+        const convertedDays = response.data.daysInWeek.map(
+          (day) => dayMapping[day]
+        );
 
         // 상태 업데이트
         setEatenDays(convertedDays);
@@ -115,14 +105,14 @@ function FishFrame() {
       <div ref={frameRef} className="frame-area relative w-full aspect-[1/1]">
         <div
           className="absolute top-0 left-0 w-full h-full bg-center bg-cover drop-shadow-smGray"
-          style={{ backgroundImage: `url(${bunFrame})` }}
+          style={{ backgroundImage: `url(/assets/webp/bun-frame.webp)` }}
         ></div>
         {weekDays.map((day, index) => {
           const angle = (360 / weekDays.length) * index;
           const baseTransform = `translate(-50%, -50%) rotate(${angle}deg)`;
           const imageSrc = eatenDays.includes(day)
-            ? bunFrameFilled
-            : bunFrameEmpty;
+            ? "/assets/webp/bun-frame-filled.webp"
+            : "/assets/webp/bun-frame-empty.webp";
 
           return (
             <React.Fragment key={day}>
@@ -162,7 +152,7 @@ function FishFrame() {
           onClick={goToAdd}
         >
           <img
-            src={goToRegisterBtn}
+            src="/assets/webp/goToRegisterBtn.webp"
             alt="icon"
             className="p-2"
             style={{
@@ -255,11 +245,11 @@ function Main() {
     <div
       className="main-area flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
       style={{
-        backgroundImage: `url(${bulbFull}), url(${glitter}), url(${checkPattern})`,
+        backgroundImage: `url(/assets/webp/bulbFull.webp), url(/assets/webp/glitter.webp), url(/assets/webp/checkPattern.webp)`,
       }}
     >
       <div className="w-full absolute bottom-0">
-        <img src={bulbBtm} alt="bulb bottom" className="" />
+        <img src="/assets/webp/bulbBtm.webp" alt="bulb bottom" />
       </div>
       <div className="mid-area mb-8">
         <div className="text-[#fffed6]">
@@ -271,8 +261,8 @@ function Main() {
             사용자 이름
           </div>
           <div className="text-sz20 drop-shadow-smRed">
-            이번달은 붕어빵을 <span className="font-semibold">{monthlyCount}</span>번
-            먹었어요!
+            이번달은 붕어빵을{" "}
+            <span className="font-semibold">{monthlyCount}</span>번 먹었어요!
           </div>
         </div>
         <FishFrame />
@@ -280,7 +270,11 @@ function Main() {
       <div className="btn-area w-full flex flex-col items-end absolute bottom-0 h-full justify-end">
         {!isMenuOpen && (
           <button className="w-[12dvh] m-[2dvh]" onClick={toggleMenu}>
-            <img src={menuBtn} alt="icon" className="drop-shadow-smGray" />
+            <img
+              src="/assets/webp/menuBtn.webp"
+              alt="menu"
+              className="drop-shadow-smGray"
+            />
           </button>
         )}
         {isMenuOpen && (
@@ -296,19 +290,31 @@ function Main() {
                 className="w-[12dvh] mx-auto drop-shadow-smGray"
                 onClick={handleCaptureAndDownload}
               >
-                <img src={captureBtn} alt="capture button" className="" />
+                <img
+                  src="/assets/webp/captureBtn.webp"
+                  alt="capture button"
+                  className=""
+                />
               </button>
               <button
                 className="w-[12dvh] mx-auto drop-shadow-smGray"
                 onClick={goToCalendar}
               >
-                <img src={calendarBtn} alt="calendar button" className="" />
+                <img
+                  src="/assets/webp/calendarBtn.webp"
+                  alt="calendar button"
+                  className=""
+                />
               </button>
               <button
                 className="w-[12dvh] mx-auto drop-shadow-smGray"
                 onClick={goToBook}
               >
-                <img src={bookBtn} alt="book button" className="" />
+                <img
+                  src="/assets/webp/bookBtn.webp"
+                  alt="book button"
+                  className=""
+                />
               </button>
               <button
                 className="relative w-[7dvh] h-[7dvh] flex items-center justify-center ms-auto drop-shadow-smGray"
@@ -316,7 +322,7 @@ function Main() {
               >
                 {/* 배경 이미지 */}
                 <img
-                  src={btnBg}
+                  src="/assets/webp/btnBg.webp"
                   alt="close button"
                   className="absolute inset-0 w-full h-full object-cover"
                 />

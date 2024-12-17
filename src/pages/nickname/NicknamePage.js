@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import paperOnCheckT from "../../assets/paperOnBlueCheckT.jpg";
-import paperOnCheckB from "../../assets/paperOnCheckB.jpg";
 import style from "./NicknamePage.module.css";
 
-import { postNickNameAddData } from '../../api/service.js'
+import { postNickNameAddData } from "../../api/service.js";
 
 function NicknamePage() {
   const navigate = useNavigate();
@@ -51,17 +49,17 @@ function NicknamePage() {
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full h-max">
-        <img src={paperOnCheckT} alt="상단 배너" />
+        <img src="/assets/webp/paperOnBlueCheckT.webp" alt="상단 배너" />
       </div>
 
       <div
         className="w-full flex flex-col flex-grow justify-around bg-cover whitespace-nowrap p-6 items-center"
-        style={{ backgroundImage: `url(${paperOnCheckB})` }}
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
       >
         <div className="w-full">
           <input
             type="text"
-            className={`${style["custom-input"]} w-72 text-title py-2`}
+            className={`${style["custom-input"]} w-72 text-sz35 py-2`}
             placeholder="닉네임을 입력하세요"
             value={nickname}
             onChange={handleInputChange}

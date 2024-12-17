@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
-import checkPattern from "../../../assets/checkPattern.png";
 
-import { fetchFlavorData, postRegisterData } from '../../../api/service.js'
+import { fetchFlavorData, postRegisterData } from "../../../api/service.js";
 
 const AddPage = () => {
   const [selectedOptions, setSelectedOptions] = useState({}); // 선택된 옵션 객체
@@ -20,14 +19,20 @@ const AddPage = () => {
         setFlavors(flavorsData); // 상태에 전체 데이터 저장
 
         // "미확인 붕어빵" 분리
-        const unknownFlavor = flavorsData.find((item) => item.flavor === "미확인 붕어빵");
-        const filteredFlavors = flavorsData.filter((item) => item.flavor !== "미확인 붕어빵");
+        const unknownFlavor = flavorsData.find(
+          (item) => item.flavor === "미확인 붕어빵"
+        );
+        const filteredFlavors = flavorsData.filter(
+          (item) => item.flavor !== "미확인 붕어빵"
+        );
 
         // seq 기준 정렬
         const sortedFlavors = filteredFlavors.sort((a, b) => a.seq - b.seq);
 
         // 마지막에 "미확인 붕어빵" 추가
-        const finalFlavors = unknownFlavor ? [...sortedFlavors, unknownFlavor] : sortedFlavors;
+        const finalFlavors = unknownFlavor
+          ? [...sortedFlavors, unknownFlavor]
+          : sortedFlavors;
 
         // flavor 값만 추출
         const flavorNames = finalFlavors.map((item) => item.flavor);
@@ -40,7 +45,6 @@ const AddPage = () => {
 
     getFlavors();
   }, []);
-
 
   const handleOptionSelect = (option) => {
     setSelectedOptions((prevOptions) => {
@@ -86,14 +90,16 @@ const AddPage = () => {
     formData.append("picture", imageFile);
 
     // 선택된 옵션 변환
-    const flavorsToSend = Object.keys(selectedOptions).map((optionName) => {
-      const flavor = flavors.find((flavor) => flavor.flavor === optionName); // flavorId 찾기
-      if (!flavor) {
-        console.error(`Flavor not found for option: ${optionName}`);
-        return null;
-      }
-      return { flavorId: flavor.id, count: selectedOptions[optionName] };
-    }).filter(Boolean); // null 값 제거
+    const flavorsToSend = Object.keys(selectedOptions)
+      .map((optionName) => {
+        const flavor = flavors.find((flavor) => flavor.flavor === optionName); // flavorId 찾기
+        if (!flavor) {
+          console.error(`Flavor not found for option: ${optionName}`);
+          return null;
+        }
+        return { flavorId: flavor.id, count: selectedOptions[optionName] };
+      })
+      .filter(Boolean); // null 값 제거
 
     // 옵션 데이터를 JSON으로 변환 후 FormData에 추가
     formData.append("flavors", JSON.stringify(flavorsToSend));
@@ -116,7 +122,6 @@ const AddPage = () => {
     }
   };
 
-
   const handleClose = () => {
     //메인 페이지로 네비게이트
     navigate("/main");
@@ -125,11 +130,9 @@ const AddPage = () => {
   return (
     <div
       className="flex flex-col items-center justify-around p-6 bg-gray-100 overflow-auto relative w-full h-full bg-cover bg-center"
-      style={{
-        backgroundImage: `url(${checkPattern})`,
-      }}
+      style={{ backgroundImage: "url('/assets/webp/checkPattern.webp')" }}
     >
-      <div >
+      <div>
         <button
           onClick={handleClose}
           className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
