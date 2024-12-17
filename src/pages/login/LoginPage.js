@@ -1,11 +1,21 @@
+import React from "react";
 import kakaoLoginImg from "../../assets/kakao_login_large_wide.png";
-import loginIllust from "../../assets/loginIllust.png";
 
-function Login() {
+function LoginPage() {
+  // WebP 지원 여부 확인
+  const isWebPSupported = document.documentElement.classList.contains("webp");
+
+  // 배경 이미지 경로 설정
+  const backgroundImage = isWebPSupported
+    ? "/assets/webp/loginIllust.webp" // WebP 지원 시
+    : require("../../assets/loginIllust.png"); // PNG 사용 시
+
   return (
     <div
       className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
-      style={{ backgroundImage: `url(${loginIllust})` }}
+      style={{
+        backgroundImage: `url(${backgroundImage})`,
+      }}
     >
       <button className="flex justify-center absolute bottom-[15%] w-[80%] drop-shadow-smGray">
         <a href="/api/oauth2/authorization/kakao">
@@ -20,4 +30,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;
