@@ -1,30 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
 import checkPattern from "../../../assets/checkPattern.png";
 
+import { fetchFlavorData, postRegisterData } from '../../../api/service.js'
+
 const AddPage = () => {
   const [selectedOptions, setSelectedOptions] = useState({}); // 선택된 옵션 객체
-  const flavors = [
-    "피자 붕어빵",
-    "두부 붕어빵",
-    "타코야끼 붕어빵",
-    "팥붕어",
-    "슈크림 붕어",
-    "두부 붕어빵",
-    "타코야끼 붕어빵",
-    "팥붕어",
-    "슈크림 붕어",
-    "두부 붕어빵",
-    "타코야끼 붕어빵",
-    "팥붕어",
-    "슈크림 붕어",
-    "두부 붕어빵",
-    "타코야끼타코야끼 붕어빵",
-    "팥붕어",
-    "슈크림 붕어",
-  ]; // 드롭다운 옵션
+  const [flavors, setFlavors] = useState([]); // data 값만 저장
+  const [flavorsList, setFlavorsList] = useState([]); // data 값만 저장
+
+  useEffect(() => {
+    const getFlavors = async () => {
+      try {
+        const response = await fetchFlavorData(); // 서버 전체 응답
+        const flavorsData = response.data; // 응답 데이터 저장
+
+        setFlavors(flavorsData); // 상태에 전체 데이터 저장
+
+        // "미확인 붕어빵" 분리
+        const unknownFlavor = flavorsData.find((item) => item.flavor === "미확인 붕어빵");
+        const filteredFlavors = flavorsData.filter((item) => item.flavor !== "미확인 붕어빵");
+
+        // seq 기준 정렬
+        const sortedFlavors = filteredFlavors.sort((a, b) => a.seq - b.seq);
+
+        // 마지막에 "미확인 붕어빵" 추가
+        const finalFlavors = unknownFlavor ? [...sortedFlavors, unknownFlavor] : sortedFlavors;
+
+        // flavor 값만 추출
+        const flavorNames = finalFlavors.map((item) => item.flavor);
+
+        setFlavorsList(flavorNames); // 상태 업데이트
+      } catch (error) {
+        console.error("데이터 불러오기 실패:", error);
+      }
+    };
+
+    getFlavors();
+  }, []);
+
 
   const handleOptionSelect = (option) => {
     setSelectedOptions((prevOptions) => {
@@ -67,36 +83,39 @@ const AddPage = () => {
       alert("이미지를 업로드해주세요.");
       return;
     }
-    formData.append("image", imageFile); // 'image' 키로 이미지 파일 추가
+    formData.append("picture", imageFile);
 
-    // 붕어빵 옵션 데이터 추가
-    formData.append("options", JSON.stringify(selectedOptions)); // JSON으로 변환해 추가
+    // 선택된 옵션 변환
+    const flavorsToSend = Object.keys(selectedOptions).map((optionName) => {
+      const flavor = flavors.find((flavor) => flavor.flavor === optionName); // flavorId 찾기
+      if (!flavor) {
+        console.error(`Flavor not found for option: ${optionName}`);
+        return null;
+      }
+      return { flavorId: flavor.id, count: selectedOptions[optionName] };
+    }).filter(Boolean); // null 값 제거
 
-    // FormData 내용을 출력
+    // 옵션 데이터를 JSON으로 변환 후 FormData에 추가
+    formData.append("flavors", JSON.stringify(flavorsToSend));
+
+    // FormData 디버깅용 출력
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
     }
 
     try {
-      const response = await fetch("/api/fish-bun/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("서버 응답이 실패했습니다.");
-      }
-
-      const result = await response.json();
+      const result = await postRegisterData(formData);
+      const id = result.data;
       alert("등록되었습니다.");
       console.log("서버 응답:", result);
+
+      navigate(`/register/successPage/${id}`);
     } catch (error) {
       console.error("전송 중 오류:", error);
       alert("전송 중 오류가 발생했습니다.");
     }
-
-    navigate(`/register/successPage`);
   };
+
 
   const handleClose = () => {
     //메인 페이지로 네비게이트
@@ -142,7 +161,7 @@ const AddPage = () => {
         <ImageUpload />
 
         {/* 드롭다운 선택 컴포넌트 */}
-        <DropdownSelector options={flavors} onSelect={handleOptionSelect} />
+        <DropdownSelector options={flavorsList} onSelect={handleOptionSelect} />
 
         {/* 선택된 옵션 표시 */}
         <div className="mt-4 w-72">
