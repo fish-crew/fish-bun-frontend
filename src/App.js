@@ -6,7 +6,7 @@ import {
   Navigate,
   useLocation,
 } from "react-router-dom";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "animate.css";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
@@ -32,21 +32,25 @@ const detectWebP = () => {
   });
 };
 
-(async () => {
-  const isWebPSupported = await detectWebP();
-  const className = isWebPSupported ? "webp" : "no-webp";
-  document.documentElement.classList.add(className);
-})();
-
 function App() {
+  const [isWebPSupported, setIsWebPSupported] = useState(false);
+
+  useEffect(() => {
+    detectWebP().then((supported) => {
+      setIsWebPSupported(supported);
+      const className = supported ? "webp" : "no-webp";
+      document.documentElement.classList.add(className);
+    });
+  }, []);
+
   return (
     <BrowserRouter>
-      <AppContent />
+      <AppContent isWebPSupported={isWebPSupported} />
     </BrowserRouter>
   );
 }
 
-function AppContent() {
+function AppContent({ isWebPSupported }) {
   const location = useLocation();
 
   return (
@@ -54,7 +58,10 @@ function AppContent() {
       <Header />
       <Routes>
         <Route path="/" element={<Navigate to="/loadingPage" replace />} />
-        <Route path="/loadingPage" element={<LoadingPage />} />
+        <Route
+          path="/loadingPage"
+          element={<LoadingPage isWebPSupported={isWebPSupported} />}
+        />
         <Route path="/loginPage" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />
         <Route path="/bookPage" element={<BookPage />} />
