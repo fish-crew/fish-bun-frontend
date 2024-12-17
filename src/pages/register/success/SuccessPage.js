@@ -4,13 +4,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import findMessage from "../../../assets/findMessage.png";
-import paperOnCheckT from "../../../assets/paperOnCheckT.jpg";
-import paperOnCheckB from "../../../assets/paperOnCheckB.jpg";
-import unknownBunMessage from "../../../assets/unknownBunMessage.png";
-import notYet from "../../../assets/flavorIcons/notYet.png";
 
-import { fetchRegisterSuccessPageData, fetchFlavorData } from '../../../api/service.js'
+import {
+  fetchRegisterSuccessPageData,
+  fetchFlavorData,
+} from "../../../api/service.js";
 
 function SuccessPage() {
   const { id } = useParams(); // 경로에서 id 가져오기
@@ -26,10 +24,12 @@ function SuccessPage() {
         const flavorId = successPageResponse.data.map((item) => item.flavorId);
 
         const allFlavors = await fetchFlavorData();
-        const foundData = allFlavors.data.filter((item) => flavorId.includes(item.id));
+        const foundData = allFlavors.data.filter((item) =>
+          flavorId.includes(item.id)
+        );
         const sortedData = foundData.sort((a, b) => a.seq - b.seq);
         setFoundData(sortedData);
-        console.log(foundData)
+        console.log(foundData);
       } catch (error) {
         console.error("데이터 불러오기 실패:", error);
       }
@@ -68,16 +68,16 @@ function SuccessPage() {
   return (
     <div className="flex flex-col justify-around items-center w-full h-full overflow-auto">
       <div className="w-full h-max">
-        <img src={paperOnCheckT} alt="상단 배너" />
+        <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>
       <div
         className="w-full flex flex-col flex-grow bg-cover justify-around"
-        style={{ backgroundImage: `url(${paperOnCheckB})` }}
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
       >
         <div className="relative justify-center w-full overflow-hidden">
           <div className="flex justify-center items-center h-[9dvh] pt-2">
             <img
-              src={findMessage}
+              src="/assets/webp/findMessage.webp"
               alt="findMessage"
               className="animate__animated animate__tada h-full w-auto"
             />
@@ -109,16 +109,17 @@ function SuccessPage() {
                     <img
                       src={(() => {
                         try {
-                          return require(`../../../assets/flavorIcons/${item.iconCode}.png`);
+                          return require(`/assets/webp/flavorIcons/${item.iconCode}.png`);
                         } catch {
-                          return notYet;
+                          return "/assets/webp/flavorIcons/notYet.webp";
                         }
                       })()}
                       alt={item.flavor}
-                      className={`w-full h-full object-contain ${activeIndex === index && animationTrigger
-                        ? "animate__animated animate__bounce"
-                        : ""
-                        }`} // 활성 슬라이드의 이미지에만 애니메이션 클래스 추가
+                      className={`w-full h-full object-contain ${
+                        activeIndex === index && animationTrigger
+                          ? "animate__animated animate__bounce"
+                          : ""
+                      }`} // 활성 슬라이드의 이미지에만 애니메이션 클래스 추가
                     />
                   </div>
 
@@ -143,7 +144,7 @@ function SuccessPage() {
                       {foundData[activeIndex]?.flavor || "이름 없음"}
                     </div>
                     <img
-                      src={unknownBunMessage}
+                      src="/assets/webp/unknownBunMessage.webp"
                       alt="미확인 붕어빵"
                       className="w-full h-auto"
                     />
