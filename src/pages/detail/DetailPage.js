@@ -1,13 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import diaryPhotoBox from "../../assets/diaryphotoBox.png";
-import diaryLine from "../../assets/diaryLine.png";
-import paperOnCheckB from "../../assets/paperOnCheckB.jpg";
-import paperOnCheckT from "../../assets/paperOnCheckT.jpg";
-import bun from "../../assets/bun.png";
 
-import { fetchFlavorData, fetchDetailPageData } from '../../api/service.js'
+import { fetchFlavorData, fetchDetailPageData } from "../../api/service.js";
 
 function DetailsPage() {
   const navigate = useNavigate();
@@ -33,25 +28,31 @@ function DetailsPage() {
         // 문자열을 객체 배열로 변환
         const jsonObjectArray = JSON.parse(jsonString);
         setEatenFlavors(jsonObjectArray);
-        console.log(jsonObjectArray)
+        console.log(jsonObjectArray);
 
         const dateString = detailResponse.data.date; // 서버에서 받은 날짜 문자열
         const dateObject = new Date(dateString); // 문자열을 Date 객체로 변환
-        console.log(dateObject)
+        console.log(dateObject);
         setDate(dateObject); // 상태에 저장
 
         const flavorsResponse = await fetchFlavorData(); // 전체 맛 api
         // "미확인 붕어빵" 분리
-        const unknownFlavor = flavorsResponse.data.find((item) => item.flavor === "미확인 붕어빵");
-        const filteredFlavors = flavorsResponse.data.filter((item) => item.flavor !== "미확인 붕어빵");
+        const unknownFlavor = flavorsResponse.data.find(
+          (item) => item.flavor === "미확인 붕어빵"
+        );
+        const filteredFlavors = flavorsResponse.data.filter(
+          (item) => item.flavor !== "미확인 붕어빵"
+        );
 
         // seq 기준 정렬
         const sortedFlavors = filteredFlavors.sort((a, b) => a.seq - b.seq);
 
         // 마지막에 "미확인 붕어빵" 추가
-        const finalFlavors = unknownFlavor ? [...sortedFlavors, unknownFlavor] : sortedFlavors;
+        const finalFlavors = unknownFlavor
+          ? [...sortedFlavors, unknownFlavor]
+          : sortedFlavors;
         setFlavorsData(finalFlavors); // 응답 데이터 저장
-        console.log(finalFlavors)
+        console.log(finalFlavors);
       } catch (error) {
         console.error("데이터 요청 실패:", error);
       }
@@ -65,10 +66,12 @@ function DetailsPage() {
     if (flavorsData.length > 0 && eatenFlavors.length > 0) {
       // flavorsData와 eatenFlavors를 이용한 후속 작업 실행
       const mergedData = eatenFlavors.map((eaten) => {
-        const matchedFlavor = flavorsData.find((flavor) => flavor.id === eaten.flavorId);
+        const matchedFlavor = flavorsData.find(
+          (flavor) => flavor.id === eaten.flavorId
+        );
         return {
           ...matchedFlavor,
-          count: eaten.count
+          count: eaten.count,
         };
       });
       setProcessedData(mergedData);
@@ -119,7 +122,7 @@ function DetailsPage() {
   return (
     <div className="flex flex-col justify-start h-full overflow-y-auto relative">
       <div className="w-full h-max">
-        <img src={paperOnCheckT} alt="상단 배너" />
+        <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>
       <button
         onClick={handleClose}
@@ -142,17 +145,26 @@ function DetailsPage() {
       </button>
       <div
         className="w-full flex flex-col flex-grow bg-cover bg-repeat-y"
-        style={{ backgroundImage: `url(${paperOnCheckB})` }}
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
       >
         <div className="flex justify-between mx-4 mt-4 text-sz30">
           <div>
             {date ? (
               <>
-                <span>{date.getMonth() + 1}</span>월 <span>{date.getDate()}</span>일{" "}
+                <span>{date.getMonth() + 1}</span>월{" "}
+                <span>{date.getDate()}</span>일{" "}
                 <span>
-                  {["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"][
-                    date.getDay()
-                  ]}
+                  {
+                    [
+                      "일요일",
+                      "월요일",
+                      "화요일",
+                      "수요일",
+                      "목요일",
+                      "금요일",
+                      "토요일",
+                    ][date.getDay()]
+                  }
                 </span>
               </>
             ) : (
@@ -165,7 +177,7 @@ function DetailsPage() {
           <div className="relative flex justify-center items-center h-auto w-full">
             {/* 테두리 이미지 */}
             <img
-              src={diaryPhotoBox}
+              src="/assets/webp/diaryPhotoBox.webp"
               alt="diaryPhotoBox"
               className="absolute w-full h-full object-contain pointer-events-none"
             />
@@ -192,7 +204,7 @@ function DetailsPage() {
               {Array.from({ length: lineCount }).map((_, index) => (
                 <img
                   key={index}
-                  src={diaryLine}
+                  src="/assets/webp/diaryLine.webp"
                   alt="diaryLine"
                   className="w-full h-[0.3rem]"
                   style={{ position: "absolute", top: `${index * 3}rem` }}
