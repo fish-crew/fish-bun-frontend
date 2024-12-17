@@ -3,27 +3,25 @@ import { useNavigate } from "react-router-dom";
 
 // 우선 로드 이미지
 const bgBlue = "/assets/webp/bgBlue.webp";
-const fallbackBgBlue = "../../assets/bgBlue.png";
 
 // 이미지 목록 반환
-const getImageList = (isWebPSupported) => {
-  return isWebPSupported
-    ? [
-        "/assets/webp/logo.webp",
-        "/assets/webp/cat.webp",
-        "/assets/webp/stars.webp",
-        "/assets/webp/loginIllust.webp",
-        "/assets/webp/bg-paperptexture-wh.webp",
-        "/assets/webp/bg-paperptexture.webp",
-      ]
-    : [
-        "../../assets/logo.png",
-        "../../assets/cat.png",
-        "../../assets/stars.png",
-        "../../assets/loginIllust.png",
-        "../../assets/bg-paperptexture-wh.png",
-        "../../assets/bg-paperptexture.png",
-      ];
+const getImageList = () => {
+  return [
+    "/assets/webp/bgBlue.webp",
+    "/assets/webp/logo.webp",
+    "/assets/webp/cat.webp",
+    "/assets/webp/stars.webp",
+    "/assets/webp/loginIllust.webp",
+    "/assets/webp/bulbBtm.webp",
+    "/assets/webp/bulbFull.webp",
+    "/assets/webp/bun-frame.webp",
+    "/assets/webp/checkPattern.webp",
+    "/assets/webp/glitter.webp",
+    "/assets/webp/paperOnCheck.webp",
+    "/assets/webp/paperOnBlueCheckT.webp",
+    "/assets/webp/paperOnCheckT.webp",
+    "/assets/webp/paperOnCheckB.webp",
+  ];
 };
 
 // 이미지 미리 로드 함수
@@ -50,16 +48,15 @@ const preloadSingleImage = (src) => {
   });
 };
 
-function LoadingPage({ isWebPSupported }) {
+function LoadingPage() {
   const navigate = useNavigate();
-  const bgImage = isWebPSupported ? bgBlue : fallbackBgBlue;
 
   useEffect(() => {
-    const images = getImageList(isWebPSupported);
-    const minimumDelay = new Promise((resolve) => setTimeout(resolve, 1800)); // 최소 1.8초 유지
+    const images = getImageList();
+    const minimumDelay = new Promise((resolve) => setTimeout(resolve, 2000)); // 최소 2초 유지
 
     // 1. bgBlue 우선 로드
-    preloadSingleImage(bgImage)
+    preloadSingleImage(bgBlue)
       .then(() => {
         // 2. 나머지 이미지 비동기 로드
         return Promise.all([preloadImages(images), minimumDelay]);
@@ -72,13 +69,13 @@ function LoadingPage({ isWebPSupported }) {
         console.error("Error loading images:", error);
         navigate("/loginPage");
       });
-  }, [isWebPSupported, navigate, bgImage]);
+  }, [navigate]);
 
   return (
     <div
       className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
       style={{
-        backgroundImage: `url(${bgImage})`,
+        backgroundImage: `url(${bgBlue})`,
       }}
     >
       <div className="w-full absolute top-[12%] px-14">
