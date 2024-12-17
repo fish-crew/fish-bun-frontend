@@ -38,24 +38,32 @@ function FishFrame() {
     fetchData();
   }, []);
 
-  // // userInfoData 업데이트될 때 로그 출력
-  // useEffect(() => {
-  //   if (userInfoData) {
-  //     console.log("받아온 데이터:", userInfoData);
-  //   }
-  // }, [userInfoData]);
-
-  // 서버에서 main 데이터 받아오기
-  const [mainData, setMainData] = useState(null);
-
+  //서버에서 main 페이지에 사용할 코드 받아오기
+  const [eatenDays, setEatenDays] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchMainPageData();
-        setMainData(data);
+        const response = await fetchMainPageData(); // 서버 데이터 가져오기
+
+        // 요일 매핑 객체
+        const dayMapping = {
+          Sunday: "일",
+          Monday: "월",
+          Tuesday: "화",
+          Wednesday: "수",
+          Thursday: "목",
+          Friday: "금",
+          Saturday: "토",
+        };
+
+        // 영어 요일을 한국어로 변환
+        const convertedDays = response.data.daysInWeek.map((day) => dayMapping[day]);
+
+        // 상태 업데이트
+        setEatenDays(convertedDays);
       } catch (error) {
-        console.error('데이터 가져오기 실패:', error);
-        alert('서버로부터 데이터를 가져오는 데 실패했습니다.');
+        console.error("데이터 가져오기 실패:", error);
+        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
       }
     };
 
@@ -220,6 +228,23 @@ function Main() {
     }
   };
 
+  //서버에서 데이터 받아오기기
+  const [monthlyCount, setMonthlyCount] = useState();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchMainPageData(); // 서버 데이터 가져오기
+        const monthlyCnt = response.data.monthlyCount;
+        setMonthlyCount(monthlyCnt);
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div
       className="main-area flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
@@ -240,7 +265,7 @@ function Main() {
             사용자 이름
           </div>
           <div className="text-sz20 drop-shadow-smRed">
-            이번달은 <span className="font-semibold">13</span>일 동안 붕어빵을
+            이번달은 <span className="font-semibold">{monthlyCount}</span>일 동안 붕어빵을
             먹었어요!
           </div>
         </div>
