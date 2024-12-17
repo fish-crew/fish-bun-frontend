@@ -4,6 +4,8 @@ import paperOnCheckB from "../../../assets/paperOnCheckB.jpg";
 import paperOnCheckT from "../../../assets/paperOnCheckT.jpg";
 import diaryLine from "../../../assets/diaryLine.png";
 
+import { postReportData } from '../../../api/service.js'
+
 function ReportPage() {
   const navigate = useNavigate();
   const [newBungeobbangsName, setnewBungeobbangsName] = useState("");
@@ -14,7 +16,7 @@ function ReportPage() {
   };
 
   // 서버로 보내기
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // 입력값이 공란인지 확인
     if (!newBungeobbangsName.trim()) {
       alert("뿡어빵의 이름을 입력해주세요.");
@@ -23,6 +25,17 @@ function ReportPage() {
 
     // 입력값이 정상인 경우 처리
     // 서버 요청 로직 추가
+    try {
+      // 서버에 데이터 전송
+      const response = await postReportData(newBungeobbangsName);
+      console.log("서버 응답:", response);
+
+      // 서버 응답에 따라 처리
+      alert("닉네임이 성공적으로 등록되었습니다!");
+    } catch (error) {
+      console.error("데이터 전송 실패:", error);
+      alert("서버로 데이터를 전송하는 데 실패했습니다.");
+    }
 
     //메인 페이지로 네비게이트
     alert("제보가 완료되었습니다.\n감사합니다.");

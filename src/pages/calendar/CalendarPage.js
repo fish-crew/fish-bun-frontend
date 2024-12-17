@@ -10,29 +10,51 @@ import diaryLine from "../../assets/diaryLine.png";
 import paperOnCheckT from "../../assets/paperOnCheckT.jpg";
 import paperOnCheckB from "../../assets/paperOnCheckB.jpg";
 
+import { fetchCalendarPageData } from '../../api/service.js'
+
 function CalendarPage() {
   const [value, setValue] = useState(new Date());
   const [dateArray, setDateArray] = useState([]);
+  const [monthlyCount, setMonthlyCount] = useState(0); //이번달 몇번
+  const [eatenCount, setEatenCount] = useState(0); //이번달 몇마리
+  const [specialDates, setSpecialDates] = useState([]);
   const navigate = useNavigate(); // useNavigate 훅 초기화
 
-  // 서버에서 가져올 데이터 지금은 예시
-  const specialDates = [
-    { date: "2024-12-30", id: "1" },
-    { date: "2024-12-07", id: "2" },
-    { date: "2024-12-01", id: "3" },
-    { date: "2024-12-15", id: "4" },
-  ];
-
   useEffect(() => {
-    const dates = specialDates.map((item) => item.date);
-    setDateArray(dates);
+    const fetchData = async () => {
+      try {
+        const today = new Date();
+        const years = today.getFullYear();
+        const month = today.getMonth() + 1;
+        const response = await fetchCalendarPageData(`${years}-${month}`);
+        const dates = response.data.map((item) => item.date);
+        // 날짜를 YYYY-MM-DD 형태로 변환
+        const formattedDates = dates.map((dateString) => {
+          const date = new Date(dateString); // 문자열을 Date 객체로 변환
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 (0부터 시작하므로 +1)
+          const day = String(date.getDate()).padStart(2, "0"); // 일
+          return `${year}-${month}-${day}`; // YYYY-MM-DD 형태로 반환
+        });
+        const eatenCnt = response.additionalData.monthlyCount;
+        setSpecialDates(response.data);
+        setDateArray(formattedDates);
+        setMonthlyCount(formattedDates.length);
+        setEatenCount(eatenCnt);
+      } catch (error) {
+        console.error('데이터 가져오기 실패:', error);
+        alert('서버로부터 데이터를 가져오는 데 실패했습니다.');
+      }
+    };
+
+    fetchData();
   }, []); // 빈 배열을 넣어 한 번만 실행되도록 설정
 
   const handleDateChange = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
     setValue(formattedDate);
     const selectedDate = specialDates.find(
-      (item) => item.date === formattedDate
+      (item) => item.date.split('T')[0] === formattedDate
     );
     console.log("선택된 날짜:", selectedDate);
     if (selectedDate) {
@@ -130,10 +152,10 @@ function CalendarPage() {
             <img src={diaryLine} alt="Special" className="w-full" />
           </div>
         </div>
-        <div className="text-sz25 items-center">
+        <div className="text-sz22 items-center">
           이번달은{" "}
-          <span className="text-orange-500 font-bold">{dateArray.length}</span>
-          마리의 붕어빵을 먹었어요!
+          <span className="text-orange-500 font-bold">{monthlyCount}</span>번,{" "}
+          <span className="text-orange-500 font-bold">{eatenCount}</span>마리의 붕어빵을 먹었어요!
         </div>
       </div>
     </div>

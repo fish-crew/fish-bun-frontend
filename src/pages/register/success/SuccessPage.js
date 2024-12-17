@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -10,27 +10,33 @@ import paperOnCheckB from "../../../assets/paperOnCheckB.jpg";
 import unknownBunMessage from "../../../assets/unknownBunMessage.png";
 import notYet from "../../../assets/flavorIcons/notYet.png";
 
+import { fetchRegisterSuccessPageData, fetchFlavorData } from '../../../api/service.js'
+
 function SuccessPage() {
+  const { id } = useParams(); // 경로에서 id 가져오기
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0); // 현재 활성화된 슬라이드 인덱스
   const [animationTrigger, setAnimationTrigger] = useState(true); // 애니메이션 트리거 상태 (초기값 true)
 
-  // 데이터 정렬
-  const fishBreadData = [
-    { id: 20, flavor: "팥 붕어빵", iconCode: "redbean", seq: 1 },
-    { id: 21, flavor: "슈크림 붕어빵", iconCode: "custard", seq: 2 },
-    { id: 22, flavor: "초코 붕어빵", iconCode: "choco", seq: 3 },
-    { id: 23, flavor: "고구마 붕어빵", iconCode: "guma", seq: 4 },
-    { id: 24, flavor: "미니 붕어빵", iconCode: "mini", seq: 5 },
-    { id: 25, flavor: "김치 붕어빵", iconCode: "kimchi", seq: 6 },
-    { id: 39, flavor: "미확인 붕어빵", iconCode: "unknown", seq: 0 },
-    {
-      id: 38,
-      flavor: "타코야끼 붕어빵",
-      iconCode: "tako",
-      seq: 19,
-    },
-  ].sort((a, b) => a.seq - b.seq); // seq 값 기준으로 오름차순 정렬
+  const [foundData, setFoundData] = useState([]);
+  useEffect(() => {
+    const getFoundFlavors = async () => {
+      try {
+        const successPageResponse = await fetchRegisterSuccessPageData(id); // 서버 전체 응답
+        const flavorId = successPageResponse.data.map((item) => item.flavorId);
+
+        const allFlavors = await fetchFlavorData();
+        const foundData = allFlavors.data.filter((item) => flavorId.includes(item.id));
+        const sortedData = foundData.sort((a, b) => a.seq - b.seq);
+        setFoundData(sortedData);
+        console.log(foundData)
+      } catch (error) {
+        console.error("데이터 불러오기 실패:", error);
+      }
+    };
+
+    getFoundFlavors();
+  }, []);
 
   const handleReport = () => {
     navigate("/register/reportPage");
@@ -84,7 +90,7 @@ function SuccessPage() {
             onSlideChange={handleSlideChange} // 활성화된 슬라이드 변경
             onSwiper={(swiper) => setActiveIndex(swiper.activeIndex)} // 초기 활성화 슬라이드 설정
           >
-            {fishBreadData.map((item, index) => (
+            {foundData.map((item, index) => (
               <SwiperSlide
                 key={index}
                 style={{
@@ -109,11 +115,10 @@ function SuccessPage() {
                         }
                       })()}
                       alt={item.flavor}
-                      className={`w-full h-full object-contain ${
-                        activeIndex === index && animationTrigger
-                          ? "animate__animated animate__bounce"
-                          : ""
-                      }`} // 활성 슬라이드의 이미지에만 애니메이션 클래스 추가
+                      className={`w-full h-full object-contain ${activeIndex === index && animationTrigger
+                        ? "animate__animated animate__bounce"
+                        : ""
+                        }`} // 활성 슬라이드의 이미지에만 애니메이션 클래스 추가
                     />
                   </div>
 
@@ -135,7 +140,7 @@ function SuccessPage() {
                         textAlign: "center",
                       }}
                     >
-                      {fishBreadData[activeIndex]?.flavor || "이름 없음"}
+                      {foundData[activeIndex]?.flavor || "이름 없음"}
                     </div>
                     <img
                       src={unknownBunMessage}
@@ -149,7 +154,7 @@ function SuccessPage() {
           </Swiper>
         </div>
         <div className="flex justify-center">
-          {fishBreadData[activeIndex]?.flavor === "미확인 붕어빵" ? (
+          {foundData[activeIndex]?.flavor === "미확인 붕어빵" ? (
             <button
               className="bg-[#7f5b41] text-white border-4 font-bold py-1 px-6 rounded-full w-64 text-sz30 tracking-[.25em]"
               onClick={handleReport}
