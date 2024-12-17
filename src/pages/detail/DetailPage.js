@@ -7,14 +7,91 @@ import paperOnCheckB from "../../assets/paperOnCheckB.jpg";
 import paperOnCheckT from "../../assets/paperOnCheckT.jpg";
 import bun from "../../assets/bun.png";
 
+import { fetchFlavorData, fetchDetailPageData } from '../../api/service.js'
+
 function DetailsPage() {
   const navigate = useNavigate();
   const { id } = useParams(); // 경로에서 id 가져오기
-  const content =
-    "오늘은 팥붕어를 먹었다. 슈크림 붕어빵도 먹었다. 그래서 총 3종류를 먹었다. 오늘은 팥붕어를 먹었다. 슈크림 붕어빵도 먹었다. 그래서 총 3종류를 먹었다. 오늘은 팥붕어를 먹었다. 슈크림 붕어빵도 먹었다. 그래서 총 3종류를 먹었다. ";
+  const [content, setContent] = useState(""); // 최종 문자열 저장
 
   const textRef = useRef(null); // 텍스트 컨테이너 참조
   const [lineCount, setLineCount] = useState(0); // 텍스트 줄 수 저장
+
+  const [detailData, setDetailData] = useState({}); // 데이터 저장
+  const [flavorsData, setFlavorsData] = useState([]); // 데이터 저장
+  const [eatenFlavors, setEatenFlavors] = useState([]);
+  const [date, setDate] = useState(null); // Date 객체를 저장할 state
+  const [processedData, setProcessedData] = useState([]);
+  // 데이터 요청
+  useEffect(() => {
+    const getDetailData = async () => {
+      try {
+        const detailResponse = await fetchDetailPageData(id); // 상세 APi
+        setDetailData(detailResponse.data); // 서버에서 받은 데이터의 "data"만 저장
+
+        const jsonString = detailResponse.data.flavors;
+        // 문자열을 객체 배열로 변환
+        const jsonObjectArray = JSON.parse(jsonString);
+        setEatenFlavors(jsonObjectArray);
+        console.log(jsonObjectArray)
+
+        const dateString = detailResponse.data.date; // 서버에서 받은 날짜 문자열
+        const dateObject = new Date(dateString); // 문자열을 Date 객체로 변환
+        console.log(dateObject)
+        setDate(dateObject); // 상태에 저장
+
+        const flavorsResponse = await fetchFlavorData(); // 전체 맛 api
+        // "미확인 붕어빵" 분리
+        const unknownFlavor = flavorsResponse.data.find((item) => item.flavor === "미확인 붕어빵");
+        const filteredFlavors = flavorsResponse.data.filter((item) => item.flavor !== "미확인 붕어빵");
+
+        // seq 기준 정렬
+        const sortedFlavors = filteredFlavors.sort((a, b) => a.seq - b.seq);
+
+        // 마지막에 "미확인 붕어빵" 추가
+        const finalFlavors = unknownFlavor ? [...sortedFlavors, unknownFlavor] : sortedFlavors;
+        setFlavorsData(finalFlavors); // 응답 데이터 저장
+        console.log(finalFlavors)
+      } catch (error) {
+        console.error("데이터 요청 실패:", error);
+      }
+    };
+
+    getDetailData();
+  }, []); // id가 변경될 때마다 다시 실행
+
+  // 두 번째 useEffect: flavorsData 업데이트 후 실행
+  useEffect(() => {
+    if (flavorsData.length > 0 && eatenFlavors.length > 0) {
+      // flavorsData와 eatenFlavors를 이용한 후속 작업 실행
+      const mergedData = eatenFlavors.map((eaten) => {
+        const matchedFlavor = flavorsData.find((flavor) => flavor.id === eaten.flavorId);
+        return {
+          ...matchedFlavor,
+          count: eaten.count
+        };
+      });
+      setProcessedData(mergedData);
+      console.log("Processed Data:", mergedData);
+    }
+  }, [flavorsData, eatenFlavors]); // flavorsData와 eatenFlavors 변경 시 실행
+
+  useEffect(() => {
+    if (processedData.length > 0) {
+      // flavor와 count를 결합한 문자열 배열 생성
+      const flavorsWithCount = processedData.map(
+        (item) => `${item.flavor} ${item.count}개`
+      );
+
+      // 배열을 콤마(,)로 연결한 문장 생성
+      const flavorSentence = flavorsWithCount.join(", ");
+
+      // 최종 문장 생성
+      const finalSentence = `오늘은 ${flavorSentence}를 먹었다. 그래서 총 ${processedData.length}종류를 먹었다. 정말 맛있었다!`;
+
+      setContent(finalSentence); // 상태에 저장
+    }
+  }, [processedData]);
 
   // 텍스트 줄 수 계산
   useEffect(() => {
@@ -32,7 +109,7 @@ function DetailsPage() {
     window.addEventListener("resize", calculateLineCount); // 화면 크기 변화 감지
 
     return () => window.removeEventListener("resize", calculateLineCount); // 이벤트 제거
-  }, []);
+  }, [content]);
 
   const handleClose = () => {
     //메인 페이지로 네비게이트
@@ -68,7 +145,20 @@ function DetailsPage() {
         style={{ backgroundImage: `url(${paperOnCheckB})` }}
       >
         <div className="flex justify-between mx-4 mt-4 text-sz30">
-          <div>12월 8일 일요일</div>
+          <div>
+            {date ? (
+              <>
+                <span>{date.getMonth() + 1}</span>월 <span>{date.getDate()}</span>일{" "}
+                <span>
+                  {["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"][
+                    date.getDay()
+                  ]}
+                </span>
+              </>
+            ) : (
+              <span>날짜를 불러오는 중...</span>
+            )}
+          </div>
           <div>날씨:어쨌든맑음</div>
         </div>
         <div className="flex flex-col px-3 pb-3 flex-grow justify-start w-full">
@@ -83,7 +173,7 @@ function DetailsPage() {
             {/* 가운데 배치할 이미지 */}
             <div className="relative w-full h-full flex justify-center items-center">
               <img
-                src={bun} // 가운데 배치할 이미지 경로
+                src={detailData.fileUrl} // 가운데 배치할 이미지 경로
                 alt="bunImage"
                 className="w-[70%] h-[70%] object-contain"
               />
