@@ -4,6 +4,8 @@ import paperOnCheckT from "../../assets/paperOnBlueCheckT.jpg";
 import paperOnCheckB from "../../assets/paperOnCheckB.jpg";
 import style from "./NicknamePage.module.css";
 
+import { postNickNameAddData } from '../../api/service.js'
+
 function NicknamePage() {
   const navigate = useNavigate();
 
@@ -22,7 +24,7 @@ function NicknamePage() {
   };
 
   // 서버로 보내기
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // 입력값이 공란인지 확인
     if (!nickname.trim()) {
       alert("닉네임을 입력해주세요.");
@@ -31,11 +33,18 @@ function NicknamePage() {
 
     // 입력값이 정상인 경우 처리
     // 서버 요청 로직 추가
-    alert("입력 값 제출(api 연결 후 삭제)");
-  };
+    try {
+      // 서버에 데이터 전송
+      const response = await postNickNameAddData(nickname);
+      console.log("서버 응답:", response);
 
-  const handleClose = () => {
-    //메인 페이지로 네비게이트
+      // 서버 응답에 따라 처리
+      alert("닉네임이 성공적으로 등록되었습니다!");
+    } catch (error) {
+      console.error("데이터 전송 실패:", error);
+      alert("서버로 데이터를 전송하는 데 실패했습니다.");
+    }
+
     navigate("/main");
   };
 
