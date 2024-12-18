@@ -29,7 +29,6 @@ function SuccessPage() {
         );
         const sortedData = foundData.sort((a, b) => a.seq - b.seq);
         setFoundData(sortedData);
-        console.log(foundData);
       } catch (error) {
         console.error("데이터 불러오기 실패:", error);
       }
