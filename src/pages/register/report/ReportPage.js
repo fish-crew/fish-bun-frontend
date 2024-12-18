@@ -27,15 +27,12 @@ function ReportPage() {
       const response = await postReportData(newBungeobbangsName);
 
       // 서버 응답에 따라 처리
-      alert("닉네임이 성공적으로 등록되었습니다!");
+      alert("붕어빵이 성공적으로 등록되었습니다!");
+      navigate("/main");
     } catch (error) {
       console.error("데이터 전송 실패:", error);
       alert("서버로 데이터를 전송하는 데 실패했습니다.");
     }
-
-    //메인 페이지로 네비게이트
-    alert("제보가 완료되었습니다.\n감사합니다.");
-    navigate("/main");
   };
 
   const handleClose = () => {
