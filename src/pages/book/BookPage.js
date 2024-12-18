@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./BookPage.module.css";
 import { useSelector } from 'react-redux'; //Redux Store에서 가져오기
+import { fetchBookPageData, fetchFlavorData } from "../../api/service.js";
 
 function CustomArrow(props) {
   const { className, style, onClick } = props;
@@ -62,21 +63,24 @@ function BookPage() {
     ),
   };
 
-  const flavors = [
-    { id: 1, flavor: "팥 붕어빵" },
-    { id: 2, flavor: "슈크림 붕어빵" },
-    { id: 3, flavor: "피자 붕어빵" },
-    { id: 4, flavor: "고구마 붕어빵" },
-    { id: 5, flavor: "타코야끼 붕어빵" },
-    { id: 6, flavor: "두부 붕어빵" },
-    { id: 7, flavor: "애플파이 붕어빵" },
-    { id: 8, flavor: "뿌링클 붕어빵" },
-    { id: 9, flavor: "초코 붕어빵" },
-    { id: 10, flavor: "망고 붕어빵" },
-    { id: 11, flavor: "치즈 붕어빵" },
-  ];
+  const [collectedFish, setCollectedFish] = useState([]);
+  const [flavors, setFlavors] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const bookResponse = await fetchBookPageData();
+        setCollectedFish(bookResponse.data.map((item) => item.completedFlavorId));
 
-  const colctedFish = [1, 2, 4, 6, 10]; // 수집된 붕어빵 ID
+        const flavorsResponse = await fetchFlavorData();
+        setFlavors(flavorsResponse.data.filter(item => item.flavor !== '미확인 붕어빵'));
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // 붕어빵 데이터를 9개씩 나누기
   const chunkedFlavors = [];
@@ -130,15 +134,18 @@ function BookPage() {
                     {page.map((fish) => (
                       <div
                         key={fish.id}
-                        className={`flex flex-col items-center justify-center h-max ${colctedFish.includes(fish.id)
+                        className={`flex flex-col items-center justify-center h-max ${collectedFish.includes(fish.id)
                           ? "opacity-100"
                           : "opacity-25"
                           }`}
                       >
                         <img
-                          src={`/assets/webp/flavorIcons/${fish.id}.webp`}
+                          src={`/assets/webp/flavorIcons/${fish.iconCode}.webp`}
                           alt={fish.flavor}
                           className="w-[75%] aspect-[1/1]"
+                          onError={(e) => {
+                            e.target.src = "/assets/webp/flavorIcons/notYet.webp"; // 이미지 로드 실패 시 기본 이미지로 대체
+                          }}
                         />
                         <span className="whitespace-pre-wrap">
                           {fish.flavor}
