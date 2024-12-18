@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./BookPage.module.css";
+import { useSelector } from 'react-redux'; //Redux Store에서 가져오기
 
 function CustomArrow(props) {
   const { className, style, onClick } = props;
@@ -23,6 +24,7 @@ function CustomArrow(props) {
 }
 
 function BookPage() {
+  const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
   const [activeIndex, setActiveIndex] = useState(0); // 현재 활성화된 캐러셀 인덱스 상태 관리
   const navigate = useNavigate();
   const handleClose = () => {
@@ -76,8 +78,6 @@ function BookPage() {
 
   const colctedFish = [1, 2, 4, 6, 10]; // 수집된 붕어빵 ID
 
-  const nickname = "붕어빵 탐험대";
-
   // 붕어빵 데이터를 9개씩 나누기
   const chunkedFlavors = [];
   for (let i = 0; i < flavors.length; i += 9) {
@@ -130,11 +130,10 @@ function BookPage() {
                     {page.map((fish) => (
                       <div
                         key={fish.id}
-                        className={`flex flex-col items-center justify-center h-max ${
-                          colctedFish.includes(fish.id)
-                            ? "opacity-100"
-                            : "opacity-25"
-                        }`}
+                        className={`flex flex-col items-center justify-center h-max ${colctedFish.includes(fish.id)
+                          ? "opacity-100"
+                          : "opacity-25"
+                          }`}
                       >
                         <img
                           src={`/assets/webp/flavorIcons/${fish.id}.webp`}

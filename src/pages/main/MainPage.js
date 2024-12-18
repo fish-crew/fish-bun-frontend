@@ -4,16 +4,22 @@ import html2canvas from "html2canvas";
 import styles from "./MainPage.module.css";
 
 import { fetchUserData, fetchMainPageData } from "../../api/service.js";
+import { useDispatch } from 'react-redux';
+import { setNickname } from '../../redux/slices/user.js'; // Redux 액션 가져오기
+import { useSelector } from 'react-redux'; //Redux Store에서 가져오기
 
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
   const [userInfoData, setUserInfoData] = useState(null);
+  const dispatch = useDispatch(); // Redux 액션 디스패치를 위한 훅
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (!userInfoData) {
-          const data = await fetchUserData();
-          setUserInfoData(data);
+          const response = await fetchUserData();
+          // setUserInfoData(data); //이건 일단 뺴고 닉네임만 redux에 저장
+          const nickname = response.data.nickname;
+          dispatch(setNickname(nickname)); // Redux Store에 닉네임 저장
         }
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
@@ -166,6 +172,7 @@ function FishFrame() {
 }
 
 function Main() {
+  const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 메뉴 상태
 
@@ -274,7 +281,7 @@ function Main() {
             <span className="ps-1">미니붕어</span>
           </div> */}
           <div className="text-name font-bold pt-1 drop-shadow-xlRedLight">
-            사용자 이름
+            <span>{nickname}님</span>
           </div>
           <div className="text-sz20 drop-shadow-smRed">
             이번달은 붕어빵을{" "}
