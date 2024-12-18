@@ -281,7 +281,7 @@ function Main() {
             <span className="ps-1">미니붕어</span>
           </div> */}
           <div className="text-name font-bold pt-1 drop-shadow-xlRedLight">
-            <span>{nickname}dfgdfgdfg님</span>
+            <span>{nickname}님</span>
           </div>
           <div className="text-sz20 drop-shadow-smRed">
             이번달은 붕어빵을{" "}
