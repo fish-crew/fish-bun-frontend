@@ -60,6 +60,7 @@ function LoadingPage() {
       })
       .catch((error) => {
         console.error("Error loading images:", error);
+        navigate("/loginPage");
       });
   }, [navigate]);
 
@@ -72,7 +73,7 @@ function LoadingPage() {
         <img
           src="/assets/webp/logo.webp"
           alt="붕어빵 탐험대 로고"
-          className="animate__animated animate__bounceInUp"
+          className=""
         />
       </div>
       <div

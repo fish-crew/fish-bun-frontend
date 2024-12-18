@@ -1,0 +1,13 @@
+@keyframes objectMoving {
+  0%,
+  100% {
+    transform: rotate(0deg) translateX(0) translateY(0);
+  }
+  50% {
+    transform: rotate(0deg) translateX(0.1rem) translateY(-0.5rem);
+  }
+}
+
+.objectMoving {
+  animation: objectMoving 2s ease-in-out infinite;
+}
