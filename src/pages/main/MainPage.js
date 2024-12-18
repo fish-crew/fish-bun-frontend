@@ -4,9 +4,9 @@ import html2canvas from "html2canvas";
 import styles from "./MainPage.module.css";
 
 import { fetchUserData, fetchMainPageData } from "../../api/service.js";
-import { useDispatch } from 'react-redux';
-import { setNickname } from '../../redux/slices/user.js'; // Redux 액션 가져오기
-import { useSelector } from 'react-redux'; //Redux Store에서 가져오기
+import { useDispatch } from "react-redux";
+import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져오기
+import { useSelector } from "react-redux"; //Redux Store에서 가져오기
 
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
@@ -217,7 +217,7 @@ function Main() {
       const seconds = String(now.getSeconds()).padStart(2, "0");
 
       // 파일 이름 포맷팅
-      const fileName = `bunlog-${year}-${month}-${date}-${hours}-${minutes}-${seconds}.png`;
+      const fileName = `bunglog-${year}-${month}-${date}-${hours}-${minutes}-${seconds}.png`;
 
       // 다운로드 링크 생성
       const link = document.createElement("a");
@@ -281,7 +281,7 @@ function Main() {
             <span className="ps-1">미니붕어</span>
           </div> */}
           <div className="text-name font-bold pt-1 drop-shadow-xlRedLight">
-            <span>{nickname}님</span>
+            <span>{nickname}dfgdfgdfg님</span>
           </div>
           <div className="text-sz20 drop-shadow-smRed">
             이번달은 붕어빵을{" "}
