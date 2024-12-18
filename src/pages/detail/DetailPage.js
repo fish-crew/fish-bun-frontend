@@ -143,7 +143,7 @@ function DetailsPage() {
         className="w-full flex flex-col flex-grow bg-cover bg-repeat-y"
         style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
       >
-        <div className="flex justify-between mx-4 mt-4 text-sz30">
+        <div className="flex justify-between mx-4 mt-4 pb-2 text-sz30">
           <div>
             {date ? (
               <>
@@ -170,22 +170,21 @@ function DetailsPage() {
           <div>날씨:어쨌든맑음</div>
         </div>
         <div className="flex flex-col px-3 pb-3 flex-grow justify-start w-full">
-          <div className="relative flex justify-center items-center h-auto w-full">
+          <div className="relative flex justify-center items-center w-full h-[calc(100vw_*_336/600)]">
+            {/* 가운데 배치할 이미지 */}
+            <div className="absolute top-0 h-full flex justify-center items-center overflow-hidden">
+              <img
+                src={detailData.fileUrl}
+                alt="bunImage"
+                className="max-w-[95%] max-h-[95%] object-contain"
+              />
+            </div>
             {/* 테두리 이미지 */}
             <img
               src="/assets/webp/diaryphotoBox.webp"
               alt="diaryPhotoBox"
-              className="absolute w-full h-full object-contain pointer-events-none"
+              className="absolute top-0 w-full h-full object-contain pointer-events-none"
             />
-
-            {/* 가운데 배치할 이미지 */}
-            <div className="relative w-full h-full flex justify-center items-center">
-              <img
-                src={detailData.fileUrl} // 가운데 배치할 이미지 경로
-                alt="bunImage"
-                className="w-[70%] h-[70%] object-contain"
-              />
-            </div>
           </div>
 
           {/* 텍스트와 선 */}
@@ -196,7 +195,7 @@ function DetailsPage() {
             </p>
 
             {/* 선 이미지 */}
-            <div className="absolute top-10 left-0 w-full pointer-events-none z-0">
+            <div className="absolute top-11 left-0 w-full pointer-events-none z-0">
               {Array.from({ length: lineCount }).map((_, index) => (
                 <img
                   key={index}
