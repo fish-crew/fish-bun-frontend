@@ -74,7 +74,7 @@ function CalendarPage() {
   return (
     <div className="w-full flex-grow flex flex-col overflow-y-auto">
       <div className="w-full h-max">
-        <img src="/assets/WebP/paperOnCheckT.webp" alt="상단 배너" />
+        <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>
       <button
         onClick={handleClose}
