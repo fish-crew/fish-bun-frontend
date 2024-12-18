@@ -20,6 +20,8 @@ import AddPage from "./pages/register/add/AddPage";
 import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
+import { Provider } from "react-redux"; // Provider 임포트
+import store from "./redux/store.js"; // Redux Store 임포트
 
 // WebP 감지 로직
 const detectWebP = () => {
@@ -44,9 +46,11 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <AppContent isWebPSupported={isWebPSupported} />
-    </BrowserRouter>
+    <Provider store={store}> {/* Redux Store 제공 */}
+      <BrowserRouter>
+        <AppContent isWebPSupported={isWebPSupported} />
+      </BrowserRouter>
+    </Provider>
   );
 }
 
