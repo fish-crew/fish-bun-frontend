@@ -107,19 +107,15 @@ function SuccessPage() {
                 <div className="flex flex-col items-center w-40">
                   <div className="w-48 h-48 md:w-52 md:h-52 bg-transparent rounded-lg flex items-center justify-center overflow-visible">
                     <img
-                      src={(() => {
-                        try {
-                          return require(`/assets/webp/flavorIcons/${item.iconCode}.png`);
-                        } catch {
-                          return "/assets/webp/flavorIcons/notYet.webp";
-                        }
-                      })()}
+                      src={`/assets/webp/flavorIcons/${item.iconCode}.webp`}
                       alt={item.flavor}
-                      className={`w-full h-full object-contain ${
-                        activeIndex === index && animationTrigger
-                          ? "animate__animated animate__bounce"
-                          : ""
-                      }`} // 활성 슬라이드의 이미지에만 애니메이션 클래스 추가
+                      className={`w-full h-full object-contain ${activeIndex === index && animationTrigger
+                        ? "animate__animated animate__bounce"
+                        : ""
+                        }`}
+                      onError={(e) => {
+                        e.target.src = "/assets/webp/flavorIcons/notYet.webp"; // 기본 이미지 경로로 대체
+                      }}
                     />
                   </div>
 
