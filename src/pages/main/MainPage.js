@@ -194,16 +194,26 @@ function Main() {
 
       // 캡처 대상 설정
       const element = document.querySelector(".main-area");
+      const bulbTopBlur = document.querySelector(".bulbTopBlur");
+      const bulbTop = document.querySelector(".bulbTop");
 
-      // 캡처 제외할 요소 숨기기
+      const originalBackgroundImage = element.style.backgroundImage;
+      element.style.backgroundImage =
+        "url(/assets/webp/glitter.webp), url(/assets/webp/checkPatternMerged.webp)";
+
       const btnArea = document.querySelector(".btn-area");
       if (btnArea) btnArea.style.display = "none";
+      if (bulbTop) bulbTop.style.display = "none";
+      if (bulbTopBlur) bulbTopBlur.style.display = "none";
 
       // html2canvas로 캡처
       const canvas = await html2canvas(element);
 
-      // 숨긴 요소 복원
-      if (btnArea) btnArea.style.display = ""; // 원래 상태로 복원
+      element.style.backgroundImage = originalBackgroundImage;
+
+      if (btnArea) btnArea.style.display = "";
+      if (bulbTop) bulbTop.style.display = "";
+      if (bulbTopBlur) bulbTopBlur.style.display = "";
 
       const dataURL = canvas.toDataURL("image/png");
 
@@ -259,19 +269,19 @@ function Main() {
       }}
     >
       <div
-        className={`w-full absolute top-0 w-[88%] absolute ${styles["soft-blink"]}`}
+        className={`w-full absolute top-0 absolute ${styles["soft-blink"]} bulbTopBlur`}
       >
         <img src="/assets/webp/bulbTopBlur.webp" alt="bulb bottom" />
       </div>
-      <div className="w-full absolute top-0">
+      <div className="w-full absolute top-0 bulbTop">
         <img src="/assets/webp/bulbTop.webp" alt="bulb bottom" />
       </div>
       <div
-        className={`w-full absolute bottom-0 w-[88%] absolute ${styles["soft-blink"]}`}
+        className={`w-full absolute bottom-0 absolute ${styles["soft-blink"]} BulbBtmBlur`}
       >
         <img src="/assets/webp/bulbBtmBlur.webp" alt="bulb bottom" />
       </div>
-      <div className="w-full absolute bottom-0">
+      <div className="w-full absolute bottom-0 bulbBtm">
         <img src="/assets/webp/bulbBtm.webp" alt="bulb bottom" />
       </div>
       <div className="mid-area mb-8">
