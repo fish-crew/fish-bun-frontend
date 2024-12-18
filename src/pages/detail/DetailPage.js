@@ -173,7 +173,7 @@ function DetailsPage() {
           <div className="relative flex justify-center items-center h-auto w-full">
             {/* 테두리 이미지 */}
             <img
-              src="/assets/webp/diaryPhotoBox.webp"
+              src="/assets/webp/diaryphotoBox.webp"
               alt="diaryPhotoBox"
               className="absolute w-full h-full object-contain pointer-events-none"
             />
