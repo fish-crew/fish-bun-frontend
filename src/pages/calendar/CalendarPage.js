@@ -13,37 +13,48 @@ function CalendarPage() {
   const [monthlyCount, setMonthlyCount] = useState(0); //이번달 몇번
   const [eatenCount, setEatenCount] = useState(0); //이번달 몇마리
   const [specialDates, setSpecialDates] = useState([]);
+  const [currentMonth, setCurrentMonth] = useState({
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+  });
   const navigate = useNavigate(); // useNavigate 훅 초기화
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const today = new Date();
-        const years = today.getFullYear();
-        const month = today.getMonth() + 1;
-        const response = await fetchCalendarPageData(`${years}-${month}`);
-        const dates = response.data.map((item) => item.date);
-        // 날짜를 YYYY-MM-DD 형태로 변환
-        const formattedDates = dates.map((dateString) => {
-          const date = new Date(dateString); // 문자열을 Date 객체로 변환
-          const year = date.getFullYear();
-          const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 (0부터 시작하므로 +1)
-          const day = String(date.getDate()).padStart(2, "0"); // 일
-          return `${year}-${month}-${day}`; // YYYY-MM-DD 형태로 반환
-        });
-        const eatenCnt = response.additionalData.monthlyCount;
-        setSpecialDates(response.data);
-        setDateArray(formattedDates);
-        setMonthlyCount(formattedDates.length);
-        setEatenCount(eatenCnt);
-      } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
-        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
-      }
-    };
+  // 서버로부터 데이터를 가져오는 함수
+  const fetchData = async (year, month) => {
+    try {
+      const response = await fetchCalendarPageData(`${year}-${month}`);
+      const dates = response.data.map((item) => item.date);
+      // 날짜를 YYYY-MM-DD 형태로 변환
+      const formattedDates = dates.map((dateString) => {
+        const date = new Date(dateString); // 문자열을 Date 객체로 변환
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 (0부터 시작하므로 +1)
+        const day = String(date.getDate()).padStart(2, "0"); // 일
+        return `${year}-${month}-${day}`; // YYYY-MM-DD 형태로 반환
+      });
+      const eatenCnt = response.additionalData.monthlyCount;
+      setSpecialDates(response.data);
+      setDateArray(formattedDates);
+      setMonthlyCount(formattedDates.length);
+      setEatenCount(eatenCnt);
+    } catch (error) {
+      console.error("데이터 가져오기 실패:", error);
+      alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+    }
+  };
 
-    fetchData();
-  }, []); // 빈 배열을 넣어 한 번만 실행되도록 설정
+  // 초기 데이터 가져오기
+  useEffect(() => {
+    fetchData(currentMonth.year, currentMonth.month);
+  }, [currentMonth]); // currentMonth가 변경될 때마다 호출
+
+  // 달력의 현재 활성화된 날짜 변경 핸들러
+  const handleActiveStartDateChange = ({ activeStartDate }) => {
+    const year = activeStartDate.getFullYear();
+    const month = activeStartDate.getMonth() + 1;
+    setCurrentMonth({ year, month });
+  };
+
 
   const handleDateChange = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
@@ -103,6 +114,7 @@ function CalendarPage() {
             //locale="en"
             onChange={handleDateChange}
             value={value}
+            onActiveStartDateChange={handleActiveStartDateChange} // 달력 월 변경 반영하기 위한
             className={styles.reactCalendar} // CSS 모듈로 커스텀 클래스 적용
             formatDay={(locale, date) => moment(date).format("D")}
             showNeighboringMonth={false} // 인접 월의 날짜 표시 안 함
