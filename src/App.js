@@ -21,7 +21,8 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 import { Provider } from "react-redux"; // Provider 임포트
-import store from "./redux/store.js"; // Redux Store 임포트
+import store, { persistor } from './redux/store'; // Store와 Persistor 가져오기
+import { PersistGate } from 'redux-persist/integration/react'; // PersistGate 추가
 
 // WebP 감지 로직
 const detectWebP = () => {
@@ -47,9 +48,12 @@ function App() {
 
   return (
     <Provider store={store}> {/* Redux Store 제공 */}
-      <BrowserRouter>
-        <AppContent isWebPSupported={isWebPSupported} />
-      </BrowserRouter>
+      {/* Redux 상태 복원을 위한 PersistGate */}
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <AppContent isWebPSupported={isWebPSupported} />
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   );
 }
