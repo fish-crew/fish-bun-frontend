@@ -55,7 +55,6 @@ function CalendarPage() {
     setCurrentMonth({ year, month });
   };
 
-
   const handleDateChange = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
     setValue(formattedDate);
@@ -105,7 +104,7 @@ function CalendarPage() {
         </div>
         <div className="flex flex-col flex-grow items-center justify-around">
           <img
-            src="/assets/WebP/diaryLine.webp"
+            src="/assets/webp/diaryLine.webp"
             alt="Special"
             className="w-full"
           />
@@ -136,7 +135,7 @@ function CalendarPage() {
                   return (
                     <div className="flex justify-center">
                       <img
-                        src="/assets/WebP/cal-bun.webp"
+                        src="/assets/webp/cal-bun.webp"
                         alt="Special"
                         className="w-[75%] aspect-[1/1]"
                       />
@@ -146,7 +145,7 @@ function CalendarPage() {
                   return (
                     <div className="flex justify-center">
                       <img
-                        src="/assets/WebP/cal-bun-empty.webp"
+                        src="/assets/webp/cal-bun-empty.webp"
                         alt="Special"
                         className="w-[75%] aspect-[1/1]"
                       />
@@ -160,7 +159,7 @@ function CalendarPage() {
           <div className="pb-3">
             {" "}
             <img
-              src="/assets/WebP/diaryLine.webp"
+              src="/assets/webp/diaryLine.webp"
               alt="Special"
               className="w-full"
             />
