@@ -62,7 +62,6 @@ function CalendarPage() {
     const selectedDate = specialDates.find(
       (item) => item.date.split("T")[0] === formattedDate
     );
-    console.log("선택된 날짜:", selectedDate);
     if (selectedDate) {
       navigate(`/detail/${selectedDate.id}`);
     }

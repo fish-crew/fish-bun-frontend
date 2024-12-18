@@ -25,7 +25,6 @@ function ReportPage() {
     try {
       // 서버에 데이터 전송
       const response = await postReportData(newBungeobbangsName);
-      console.log("서버 응답:", response);
 
       // 서버 응답에 따라 처리
       alert("닉네임이 성공적으로 등록되었습니다!");

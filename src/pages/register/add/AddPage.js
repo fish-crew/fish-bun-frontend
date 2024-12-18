@@ -104,16 +104,10 @@ const AddPage = () => {
     // 옵션 데이터를 JSON으로 변환 후 FormData에 추가
     formData.append("flavors", JSON.stringify(flavorsToSend));
 
-    // FormData 디버깅용 출력
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
     try {
       const result = await postRegisterData(formData);
       const id = result.data;
       alert("등록되었습니다.");
-      console.log("서버 응답:", result);
 
       navigate(`/register/successPage/${id}`);
     } catch (error) {

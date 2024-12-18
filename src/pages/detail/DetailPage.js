@@ -28,11 +28,9 @@ function DetailsPage() {
         // 문자열을 객체 배열로 변환
         const jsonObjectArray = JSON.parse(jsonString);
         setEatenFlavors(jsonObjectArray);
-        console.log(jsonObjectArray);
 
         const dateString = detailResponse.data.date; // 서버에서 받은 날짜 문자열
         const dateObject = new Date(dateString); // 문자열을 Date 객체로 변환
-        console.log(dateObject);
         setDate(dateObject); // 상태에 저장
 
         const flavorsResponse = await fetchFlavorData(); // 전체 맛 api
@@ -52,7 +50,6 @@ function DetailsPage() {
           ? [...sortedFlavors, unknownFlavor]
           : sortedFlavors;
         setFlavorsData(finalFlavors); // 응답 데이터 저장
-        console.log(finalFlavors);
       } catch (error) {
         console.error("데이터 요청 실패:", error);
       }
@@ -75,7 +72,6 @@ function DetailsPage() {
         };
       });
       setProcessedData(mergedData);
-      console.log("Processed Data:", mergedData);
     }
   }, [flavorsData, eatenFlavors]); // flavorsData와 eatenFlavors 변경 시 실행
 
