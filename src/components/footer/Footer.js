@@ -1,13 +1,5 @@
-import GoogleAdvertise from "../ads/GoogleAdvertise";
-
 function Footer() {
-  return (
-    <div className="">
-      <div class=" mx-auto bg-gray-200">
-        <GoogleAdvertise />
-      </div>
-    </div>
-  );
+  return <div className=""></div>;
 }
 
 export default Footer;
