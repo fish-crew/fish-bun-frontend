@@ -56,11 +56,11 @@ function LoadingPage() {
       .then(() => Promise.all([preloadImages(images), minimumDelay]))
       .then(() => {
         console.log("All images loaded successfully!");
-        // navigate("/loginPage");
+        navigate("/loginPage");
       })
       .catch((error) => {
         console.error("Error loading images:", error);
-        // navigate("/loginPage");
+        navigate("/loginPage");
       });
   }, [navigate]);
 
