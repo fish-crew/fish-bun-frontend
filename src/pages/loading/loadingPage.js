@@ -56,11 +56,11 @@ function LoadingPage() {
       .then(() => Promise.all([preloadImages(images), minimumDelay]))
       .then(() => {
         console.log("All images loaded successfully!");
-        navigate("/loginPage");
+        // navigate("/loginPage");
       })
       .catch((error) => {
         console.error("Error loading images:", error);
-        navigate("/loginPage");
+        // navigate("/loginPage");
       });
   }, [navigate]);
 
@@ -69,7 +69,7 @@ function LoadingPage() {
       className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
       style={{ backgroundImage: `url(${bgBlue})` }}
     >
-      <div className="w-full absolute top-[12%] px-14">
+      <div className="w-full absolute top-[12%] px-14 z-20 drop-shadow-2xl">
         <img
           src="/assets/webp/logo.webp"
           alt="붕어빵 탐험대 로고"
@@ -103,7 +103,7 @@ function LoadingPage() {
         <img src="/assets/webp/starsBlur.webp" alt="별빛" />
       </div>
       <div
-        className="w-[88%] absolute z-10"
+        className="w-[88%] absolute"
         style={{
           top: "52%",
           left: "50%",
