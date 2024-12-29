@@ -51,12 +51,17 @@ function DetailsPage() {
           : sortedFlavors;
         setFlavorsData(finalFlavors); // 응답 데이터 저장
       } catch (error) {
-        console.error("데이터 요청 실패:", error);
+        if (error.response && error.response.status === 403) {
+          alert("접근 권한이 없습니다. 캘린더 페이지로 이동합니다.");
+          navigate("/calendarPage"); // 403 에러 발생 시 캘린더 페이지로 이동
+        } else {
+          console.error("데이터 요청 실패:", error);
+        }
       }
     };
 
     getDetailData();
-  }, []); // id가 변경될 때마다 다시 실행
+  }, []);
 
   // 두 번째 useEffect: flavorsData 업데이트 후 실행
   useEffect(() => {
