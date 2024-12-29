@@ -121,8 +121,11 @@ function CalendarPage() {
             //prevLabel={null} // "<" 버튼 숨기기
             //nextLabel={null} // ">" 버튼 숨기기
             navigationLabel={({ date }) => (
-              <span className="text-lg font-bold">
-                {moment(date).format("MM")}월
+              <span className="text-lg">
+                <span className="text-[#d4d4d4] font-semibold">
+                  {moment(date).format("YYYY")}년&nbsp;
+                </span>
+                <span className="font-bold">{moment(date).format("MM")}월</span>
               </span>
             )}
             tileContent={({ date, view }) => {

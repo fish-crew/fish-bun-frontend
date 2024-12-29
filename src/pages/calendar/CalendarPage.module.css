@@ -12,7 +12,7 @@
 }
 
 :global(.react-calendar__tile) {
-  @apply h-[7dvh] max-h-full flex items-center justify-center text-sz22 flex-col;
+  @apply h-[8dvh] max-h-full flex items-center justify-center text-sz22 flex-col;
   /* 날짜 셀 스타일 */
 }
 
@@ -29,7 +29,7 @@
 }
 
 :global(.react-calendar__navigation__label__labelText) {
-  @apply text-lg font-bold;
+  @apply text-lg;
   /* 텍스트 스타일 */
 }
 
@@ -43,7 +43,7 @@
 }
 
 :global(.react-calendar__tile--now abbr) {
-  @apply rounded-full text-white font-bold w-[3dvh] h-[3dvh];
+  @apply rounded-full text-white font-semibold;
 }
 
 :global(.react-calendar__tile:enabled:hover),
