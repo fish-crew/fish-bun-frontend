@@ -17,7 +17,7 @@
 }
 
 :global(.react-calendar__navigation) {
-  @apply flex justify-start items-center px-4 mb-3;
+  @apply flex justify-start items-end px-4 mb-3;
 }
 
 :global(.react-calendar__navigation__label) {
@@ -28,10 +28,9 @@
   @apply pb-1 text-sz45;
 }
 
-:global(.react-calendar__navigation__label__labelText) {
+/* :global(.react-calendar__navigation__label__labelText) {
   @apply text-lg;
-  /* 텍스트 스타일 */
-}
+} */
 
 :global(.react-calendar__month-view__days__day--weekend) {
   @apply text-black flex justify-center;
