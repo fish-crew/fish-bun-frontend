@@ -84,7 +84,7 @@ function DetailsPage() {
     if (processedData.length > 0) {
       // flavor와 count를 결합한 문자열 배열 생성
       const flavorsWithCount = processedData.map(
-        (item) => `${item.flavor} ${item.count}개`
+        (item) => `${item.flavor} ${item.count}마리`
       );
 
       // 배열을 콤마(,)로 연결한 문장 생성
@@ -175,13 +175,13 @@ function DetailsPage() {
           <div>날씨:어쨌든맑음</div>
         </div>
         <div className="flex flex-col px-3 pb-3 flex-grow justify-start w-full">
-          <div className="relative flex justify-center items-center w-full h-[calc(100vw_*_336/600)]">
+          <div className="relative flex justify-center items-center w-full h-[calc(100vw_*_336/600)] md:h-[12rem]">
             {/* 가운데 배치할 이미지 */}
             <div className="absolute top-0 h-full flex justify-center items-center overflow-hidden">
               <img
                 src={detailData.fileUrl}
                 alt="bunImage"
-                className="max-w-[95%] max-h-[95%] object-contain"
+                className="max-w-[95%] max-h-[90%] md:max-h-[95%] object-contain"
               />
             </div>
             {/* 테두리 이미지 */}
