@@ -122,7 +122,7 @@ function CalendarPage() {
             //nextLabel={null} // ">" 버튼 숨기기
             navigationLabel={({ date }) => (
               <span className="">
-                <div className="text-point-color font-semibold pb-1 text-sz20">
+                <div className="text-point-color font-semibold pb-2 text-sz20">
                   {moment(date).format("YYYY")}년
                 </div>
                 <div className="font-bold text-lg">
