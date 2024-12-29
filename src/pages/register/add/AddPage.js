@@ -54,6 +54,14 @@ const AddPage = () => {
       }
       return { ...prevOptions, [option]: 1 }; // 새 옵션 추가, 기본 수량 1
     });
+
+    // 스크롤 동작
+    setTimeout(() => {
+      const scrollArea = document.querySelector(".overflow-y-auto");
+      if (scrollArea) {
+        scrollArea.scrollTop = scrollArea.scrollHeight;
+      }
+    }, 0);
   };
 
   const handleRemoveOption = (option) => {
@@ -153,7 +161,7 @@ const AddPage = () => {
       <div className="text-center text-sz25 mb-4 text-white drop-shadow-smRed">
         등록은 하루에 한번만 가능합니다.
       </div>
-      <div className="flex flex-col flex-grow overflow-y-auto w-full items-center">
+      <div className="flex flex-col flex-grow w-full items-center">
         {/* 이미지 업로드 컴포넌트 */}
         <ImageUpload />
 
@@ -161,7 +169,7 @@ const AddPage = () => {
         <DropdownSelector options={flavorsList} onSelect={handleOptionSelect} />
 
         {/* 선택된 옵션 표시 */}
-        <div className="mt-4 w-72">
+        <div className="mt-4 w-72 flex-grow overflow-y-auto">
           <div className="space-y-1">
             {Object.keys(selectedOptions).map((option) => (
               <div
