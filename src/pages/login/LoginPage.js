@@ -1,7 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./LoginPage.module.css";
+import { useNavigate } from "react-router-dom";
+import { getCookie } from "../../api/cookie";
 
 function LoginPage() {
+  const navigate = useNavigate();
+  const accessToken = getCookie();
+
+  useEffect(() => {
+    if (accessToken) {
+      navigate("/main", { replace: true }); // 메인 페이지로 리다이렉트
+    }
+  }, [accessToken, navigate]);
+
   return (
     <div
       className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
