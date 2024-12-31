@@ -67,51 +67,51 @@ function AppContent({ isWebPSupported }) {
     <div className="App flex flex-col h-[100dvh] justify-between">
       <Header />
       <Routes>
-        <Route path="/" element={<Navigate to="/loadingPage" replace />} />
+        <Route path="/" element={<Navigate to="/main" replace />} />
         <Route
           path="/loadingPage"
           element={<LoadingPage isWebPSupported={isWebPSupported} />}
         />
         <Route path="/loginPage" element={<LoginPage />} />
         <Route path="/main" element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <MainPage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } />
         <Route path="/bookPage" element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <BookPage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } />
         <Route path="/calendarPage" element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <CalendarPage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } />
         <Route path="/nicknamePage" element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <NicknamePage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } />
         <Route path="/register/addPage" element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <AddPage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } />
         <Route path="/register/successPage/:id" element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <SuccessPage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } />
         <Route path="/register/reportPage" element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <ReportPage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } />
         <Route path="/detail/:id" element={
-          <ProtectedRoute>
+          // <ProtectedRoute>
             <DetailPage />
-          </ProtectedRoute>
+          // </ProtectedRoute>
         } />
         {/* 잘못된 경로일 때 */}
         <Route path="*" element={<Navigate to="/main" replace />} />
