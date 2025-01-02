@@ -9,12 +9,12 @@ function LoginPage() {
 
   useEffect(() => {
     if (accessToken) {
-      navigate("/tutorialPage", { replace: true }); // 튜토리얼 페이지로 리다이렉트
+      navigate("/nicknamePage", { replace: true }); // 닉네임 페이지로 리다이렉트
     }
   }, [accessToken, navigate]);
 
-  const moveToTutorial = () => {
-    navigate("/tutorialPage");
+  const moveToNickname = () => {
+    navigate("/nicknamePage");
   };
   return (
     <div
@@ -31,7 +31,7 @@ function LoginPage() {
 
       <button
         className="flex justify-center absolute bottom-[15%] w-[80%] drop-shadow-smGray"
-        onClick={moveToTutorial}
+        onClick={moveToNickname}
       >
         <img
           src="/assets/webp/kakao_login_large_wide.webp" // WebP 카카오 로그인 버튼
