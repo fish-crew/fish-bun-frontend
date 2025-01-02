@@ -73,7 +73,7 @@ function ReportPage() {
           <input
             type="text"
             name="newBungeobbangsName"
-            placeholder="뿡어빵 이름을 입력하세요."
+            placeholder="붕어빵 이름을 입력하세요."
             onChange={handleInputChange}
             className="text-sz35 bg-transparent outline-none w-80 py-2"
             style={{
