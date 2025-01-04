@@ -23,7 +23,7 @@ function FishFrame() {
         }
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
-        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        // alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
       }
     };
 
@@ -57,7 +57,7 @@ function FishFrame() {
         setEatenDays(convertedDays);
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
-        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        // alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
       }
     };
 
@@ -105,6 +105,12 @@ function FishFrame() {
     return () => window.removeEventListener("resize", calculateSizes);
   }, []);
 
+  const goToDetail = () => {
+    //서버로 id 값 받아오기 위한 데이터를 전송
+    // 서버에서 받아오 id 값을 통해 
+    console.log("클ㄹ익됨")
+  }
+
   return (
     <div className="">
       <div ref={frameRef} className="frame-area relative w-full aspect-[1/1]">
@@ -125,7 +131,9 @@ function FishFrame() {
                 className="absolute top-1/2 left-1/2"
                 style={{
                   transform: `${baseTransform} translate(${radius}px)`,
+                  zIndex: 10, // z-index 추가해야 클릭 가능
                 }}
+                onClick={goToDetail}
               >
                 <img
                   src={imageSrc}
@@ -250,7 +258,7 @@ function Main() {
         setMonthlyCount(monthlyCnt);
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
-        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        // alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
       }
     };
 
