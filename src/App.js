@@ -21,6 +21,9 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 import TutorialPage from "./pages/tutorial/TutorialPage";
+import WritingPage from './pages/writing/WritingPage'
+import WritingPage2 from './pages/writing/WritingPage2'
+import WritingPage3 from './pages/writing/WritingPage3'
 import { Provider } from "react-redux"; // Provider 임포트
 import store, { persistor } from "./redux/store"; // Store와 Persistor 가져오기
 import { PersistGate } from "redux-persist/integration/react"; // PersistGate 추가
@@ -76,6 +79,9 @@ function AppContent({ isWebPSupported }) {
         />
         <Route path="/loginPage" element={<LoginPage />} />
         <Route path="/tutorialPage" element={<TutorialPage />} />
+        <Route path="/writingPage" element={<WritingPage />} />
+        <Route path="/writingPage2" element={<WritingPage2 />} />
+        <Route path="/writingPage3" element={<WritingPage3 />} />
         <Route
           path="/main"
           element={

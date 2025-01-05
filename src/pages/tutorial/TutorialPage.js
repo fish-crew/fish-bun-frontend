@@ -36,7 +36,7 @@ function TutorialPage() {
   const [lineCount2, setLineCount2] = useState(0);
 
   const handleClose = () => navigate("/loadingPage");
-  const moveToLogin = () => navigate("/loginPage");
+  const moveToLogin = () => navigate("/writingPage");
 
   return (
     <div className="flex flex-col justify-start h-full relative">
