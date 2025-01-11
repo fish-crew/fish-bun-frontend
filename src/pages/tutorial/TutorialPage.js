@@ -276,7 +276,7 @@ function TutorialPage() {
           className="my-4 bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em] h-[8dvh]"
           onClick={moveToLogin}
         >
-          탐험 떠나기
+          다음
         </button>
       </div>
     </div>

@@ -7,12 +7,6 @@
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>https://bunglog.me/loadingPage</loc>
-        <lastmod>2025-01-05</lastmod>
-        <changefreq>daily</changefreq>
-        <priority>0.9</priority>
-    </url>
-    <url>
         <loc>https://bunglog.me/loginPage</loc>
         <lastmod>2025-01-05</lastmod>
         <changefreq>daily</changefreq>

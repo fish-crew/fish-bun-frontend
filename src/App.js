@@ -13,7 +13,7 @@ import Footer from "./components/footer/Footer";
 import BookPage from "./pages/book/BookPage";
 import CalendarPage from "./pages/calendar/CalendarPage";
 import LoginPage from "./pages/login/LoginPage";
-import LoadingPage from "./pages/loading/loadingPage";
+// import LoadingPage from "./pages/loading/loadingPage";
 import MainPage from "./pages/main/MainPage";
 import NicknamePage from "./pages/nickname/NicknamePage";
 import AddPage from "./pages/register/add/AddPage";
@@ -21,9 +21,9 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 import TutorialPage from "./pages/tutorial/TutorialPage";
-import WritingPage from './pages/writing/WritingPage'
-import WritingPage2 from './pages/writing/WritingPage2'
-import WritingPage3 from './pages/writing/WritingPage3'
+import WritingPage from "./pages/writing/WritingPage";
+import WritingPage2 from "./pages/writing/WritingPage2";
+import WritingPage3 from "./pages/writing/WritingPage3";
 import { Provider } from "react-redux"; // Provider 임포트
 import store, { persistor } from "./redux/store"; // Store와 Persistor 가져오기
 import { PersistGate } from "redux-persist/integration/react"; // PersistGate 추가
@@ -72,13 +72,16 @@ function AppContent({ isWebPSupported }) {
     <div className="App flex flex-col h-[100dvh] justify-between">
       <Header />
       <Routes>
-        <Route path="/" element={<Navigate to="/loadingPage" replace />} />
-        <Route
+        <Route path="/" element={<Navigate to="/tutorialPage" replace />} />
+        {/* <Route
           path="/loadingPage"
           element={<LoadingPage isWebPSupported={isWebPSupported} />}
-        />
+        /> */}
         <Route path="/loginPage" element={<LoginPage />} />
-        <Route path="/tutorialPage" element={<TutorialPage />} />
+        <Route
+          path="/tutorialPage"
+          element={<TutorialPage isWebPSupported={isWebPSupported} />}
+        />
         <Route path="/writingPage" element={<WritingPage />} />
         <Route path="/writingPage2" element={<WritingPage2 />} />
         <Route path="/writingPage3" element={<WritingPage3 />} />
@@ -147,11 +150,9 @@ function AppContent({ isWebPSupported }) {
           }
         />
         {/* 잘못된 경로일 때 */}
-        <Route path="*" element={<Navigate to="/main" replace />} />
+        <Route path="*" element={<Navigate to="/tutorialPage" replace />} />
       </Routes>
-      {!["/loginPage", "/loadingPage"].includes(location.pathname) && (
-        <Footer />
-      )}
+      {!["/loginPage"].includes(location.pathname) && <Footer />}
     </div>
   );
 }
