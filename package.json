@@ -50,7 +50,6 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://ecf0-59-9-220-5.ngrok-free.app",
   "devDependencies": {
     "tailwindcss": "^3.4.16"
   }
