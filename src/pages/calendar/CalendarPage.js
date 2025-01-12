@@ -19,11 +19,66 @@ function CalendarPage() {
   });
   const navigate = useNavigate(); // useNavigate 훅 초기화
 
+  // // 서버로부터 데이터를 가져오는 함수
+  // const fetchData = async (year, month) => {
+  //   try {
+  //     const response = await fetchCalendarPageData(`${year}-${month}`);
+  //     const dates = response.data.map((item) => item.date);
+  //     // 날짜를 YYYY-MM-DD 형태로 변환
+  //     const formattedDates = dates.map((dateString) => {
+  //       const date = new Date(dateString); // 문자열을 Date 객체로 변환
+  //       const year = date.getFullYear();
+  //       const month = String(date.getMonth() + 1).padStart(2, "0"); // 월 (0부터 시작하므로 +1)
+  //       const day = String(date.getDate()).padStart(2, "0"); // 일
+  //       return `${year}-${month}-${day}`; // YYYY-MM-DD 형태로 반환
+  //     });
+  //     const eatenCnt = response.additionalData.monthlyCount;
+  //     setSpecialDates(response.data);
+  //     setDateArray(formattedDates);
+  //     setMonthlyCount(formattedDates.length);
+  //     setEatenCount(eatenCnt);
+  //   } catch (error) {
+  //     console.error("데이터 가져오기 실패:", error);
+  //     alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+  //   }
+  // };
+
   // 서버로부터 데이터를 가져오는 함수
   const fetchData = async (year, month) => {
     try {
-      const response = await fetchCalendarPageData(`${year}-${month}`);
-      const dates = response.data.map((item) => item.date);
+      // 임시 데이터 설정
+      const mockResponse = {
+        data: [
+          { id: 8, date: "2024-12-17T01:01:35.573244" },
+          { id: 14, date: "2024-12-17T14:10:38.08802" },
+          { id: 15, date: "2024-12-17T14:11:33.381323" },
+          { id: 16, date: "2024-12-17T14:21:27.926623" },
+          { id: 18, date: "2024-12-17T14:34:42.136631" },
+          { id: 19, date: "2024-12-17T15:02:15.681968" },
+          { id: 20, date: "2024-12-17T15:07:02.627411" },
+          { id: 21, date: "2024-12-17T15:07:16.956311" },
+          { id: 22, date: "2024-12-17T15:07:28.092208" },
+          { id: 23, date: "2024-12-17T15:09:31.207098" },
+          { id: 24, date: "2024-12-17T15:11:20.492259" },
+          { id: 25, date: "2024-12-17T15:18:20.116078" },
+          { id: 26, date: "2024-12-17T15:54:47.896892" },
+          { id: 27, date: "2024-12-17T15:58:40.778893" },
+          { id: 28, date: "2024-12-18T01:14:18.49824" },
+          { id: 31, date: "2024-12-18T17:48:48.629813" },
+          { id: 32, date: "2024-12-18T17:55:23.77255" },
+          { id: 33, date: "2024-12-18T20:37:24.979957" },
+          { id: 34, date: "2024-12-18T22:14:02.743518" },
+          { id: 36, date: "2024-12-19T00:41:22.44144" },
+          { id: 72, date: "2024-12-30T18:39:41.730862" },
+        ],
+        additionalData: {
+          monthlyCount: 66,
+        },
+        result: "success",
+        statusCode: "200",
+      };
+
+      const dates = mockResponse.data.map((item) => item.date);
       // 날짜를 YYYY-MM-DD 형태로 변환
       const formattedDates = dates.map((dateString) => {
         const date = new Date(dateString); // 문자열을 Date 객체로 변환
@@ -32,8 +87,8 @@ function CalendarPage() {
         const day = String(date.getDate()).padStart(2, "0"); // 일
         return `${year}-${month}-${day}`; // YYYY-MM-DD 형태로 반환
       });
-      const eatenCnt = response.additionalData.monthlyCount;
-      setSpecialDates(response.data);
+      const eatenCnt = mockResponse.additionalData.monthlyCount;
+      setSpecialDates(mockResponse.data);
       setDateArray(formattedDates);
       setMonthlyCount(formattedDates.length);
       setEatenCount(eatenCnt);
@@ -42,6 +97,7 @@ function CalendarPage() {
       alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
     }
   };
+
 
   // 초기 데이터 가져오기
   useEffect(() => {

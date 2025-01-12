@@ -1,0 +1,159 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+const WritingPage = () => {
+  const navigate = useNavigate();
+  const moveToNextPage = () => {
+    navigate("/writingPage2");
+  };
+  const handleClose = () => navigate("/tutorialPage");
+
+  return (
+    <div className="flex flex-col justify-start h-full relative">
+      <div className="w-full h-max">
+        <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
+      </div>
+      <button
+        onClick={handleClose}
+        className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-6 h-6 text-white stroke-[3px]"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      <div
+        className="w-full flex flex-col flex-grow bg-cover bg-repeat-y items-center overflow-y-hidden"
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
+      >
+        <div className="text-point-color text-sz35 py-4 px-5 font-semibold text-start w-full">
+          지역별 붕어빵 스타일 비교{" "}
+        </div>
+
+        <div className="flex flex-col px-5 flex-grow justify-start w-full overflow-y-auto text-start break-all">
+          <p>
+            붕어빵은 한국의 겨울철 대표적인 길거리 음식으로, 추운 날씨 속에서도
+            따뜻함과 달콤함을 선사합니다. 하지만 이 붕어빵은 단순히 맛있는
+            간식일 뿐 아니라 지역마다 고유한 개성과 스타일을 품고 있다는 점에서
+            흥미롭습니다. 지역별 재료와 조리법의 차이는 붕어빵의 맛과 모양을
+            새롭게 바꾸며, 그 지역의 정서와 문화를 엿볼 수 있는 좋은 기회가
+            됩니다. 이번 글에서는 한국 각 지역에서 즐길 수 있는 붕어빵의
+            다채로운 스타일을 깊이 있게 탐구해 보겠습니다.
+          </p>
+
+          <section>
+            <div className="text-sz30 pt-5 pb-1">서울: 전통적인 팥 붕어빵</div>
+            <p>
+              서울의 붕어빵은 가장 전통적인 형태를 유지하고 있습니다. 길거리에서
+              흔히 볼 수 있는 붕어빵은 밀가루 반죽으로 만들어져 바삭한 겉과
+              달콤한 팥 소의 조화가 매력적입니다. 서울에서는 이러한 전통적인
+              붕어빵을 쉽게 접할 수 있으며, 많은 사람들이 어릴 적부터 익숙하게
+              접해온 맛으로 향수를 느끼기도 합니다. 서울의 붕어빵은 크기가 작고
+              간편하게 먹기 좋아, 바쁜 도심 속에서 잠깐의 휴식을 제공하는
+              간식으로 제격입니다. 하지만 요즘에는 커스터드 크림이나 초콜릿 등
+              새로운 속재료가 추가된 변형 붕어빵도 인기를 끌고 있습니다. 전통과
+              현대가 공존하는 서울의 붕어빵은 언제나 다양한 선택지를 제공합니다.
+            </p>
+          </section>
+
+          <section>
+            <div className="text-sz30 pt-5 pb-1">부산: 씨앗 호떡과의 조합</div>
+            <p>
+              부산은 씨앗 호떡으로 유명하지만, 붕어빵에도 이 씨앗 문화가
+              녹아들어 있습니다. 해바라기씨, 호박씨 같은 고소한 씨앗들이
+              토핑으로 올라가 붕어빵의 맛을 한층 풍부하게 만듭니다. 또한,
+              해산물의 도시답게 오징어 먹물이 반죽에 섞여 검은 색감의 붕어빵도
+              만나볼 수 있습니다. 이 독특한 붕어빵은 겉은 바삭하고 속은
+              촉촉하며, 시각적으로도 새로운 즐거움을 제공합니다. 부산의 붕어빵은
+              현지인뿐만 아니라 관광객들에게도 큰 인기를 끌며, 지역 특산물과의
+              조화로 남다른 맛을 선사합니다. 겨울철 해운대의 바닷바람 속에서
+              따뜻한 붕어빵 한 입은 잊을 수 없는 추억이 될 것입니다.
+            </p>
+          </section>
+
+          <section>
+            <div className="text-sz30 pt-5 pb-1">
+              전주: 찹쌀 붕어빵의 쫄깃함
+            </div>
+            <p>
+              전주는 음식의 도시답게 붕어빵에도 그들만의 특별한 변화를
+              더했습니다. 전주의 찹쌀 붕어빵은 밀가루 대신 찹쌀 반죽으로
+              만들어져 쫄깃쫄깃한 식감을 자랑합니다. 찹쌀 붕어빵은 겉은
+              바삭하지만 속은 쫀득하며, 일반 붕어빵보다 포만감이 높아 간식으로도
+              식사 대용으로도 훌륭합니다. 또한, 전주의 찹쌀 붕어빵은 팥 소뿐만
+              아니라 견과류, 콩, 고구마 무스 등 다양한 재료를 활용하여 지역
+              주민들의 입맛을 사로잡고 있습니다. 전주 한옥마을을 거닐다 보면 이
+              독특한 찹쌀 붕어빵을 맛보는 경험은 꼭 한 번 해볼 만한
+              즐거움입니다.
+            </p>
+          </section>
+
+          <section>
+            <div className="text-sz30 pt-5 pb-1">
+              대구: 매콤한 속재료의 변신
+            </div>
+            <p>
+              대구는 매운 음식의 도시로 알려져 있는 만큼 붕어빵에서도 그 개성을
+              드러냅니다. 대구의 붕어빵은 단맛이 주를 이루는 일반적인 붕어빵과는
+              달리, 고추장, 김치, 매콤한 소스로 채워진 특별한 속재료를 사용해
+              독특한 풍미를 선사합니다. 이는 겨울철 차가운 날씨에 몸을 따뜻하게
+              데워줄 뿐만 아니라, 매운맛을 좋아하는 사람들에게 색다른 재미를
+              줍니다. 또한, 대구에서는 이러한 매콤한 붕어빵 외에도 기본적인 팥
+              붕어빵과의 하이브리드 스타일도 볼 수 있어 선택의 폭이 넓습니다.
+              지역 주민들이 즐겨 찾는 노점에서 신선한 매콤 붕어빵을 먹는 경험은
+              대구 여행의 묘미 중 하나로 손꼽힙니다.
+            </p>
+          </section>
+
+          <section>
+            <div className="text-sz30 pt-5 pb-1">
+              제주도: 한라봉과 녹차의 향연
+            </div>
+            <p>
+              제주도는 특산물을 활용한 독창적인 붕어빵으로 유명합니다. 특히
+              한라봉 잼이나 감귤 크림을 속재료로 활용하여 상큼한 맛을 더한
+              붕어빵은 제주도만의 독특한 매력을 자랑합니다. 반죽에도 녹차를 섞어
+              풍부한 향과 색감을 제공하는 경우가 많아, 녹차와 감귤이 어우러진
+              붕어빵은 단순한 간식을 넘어섰습니다. 관광객들은 한라산의 경치를
+              보며 이러한 붕어빵을 맛보며 제주의 자연과 문화를 함께 느낄 수
+              있습니다. 또한, 제주도 붕어빵은 고급 디저트처럼 포장되어
+              선물용으로도 인기가 많아, 현지 문화를 경험하고자 하는 사람들에게
+              큰 호응을 얻고 있습니다.
+            </p>
+          </section>
+
+          <section>
+            <p>
+              한국의 붕어빵은 단순히 길거리 음식이 아니라, 각 지역의 정체성과
+              개성을 담고 있는 음식 문화의 일환입니다. 지역마다 독특한 재료와
+              조리법으로 만들어진 붕어빵은 그 지역을 더욱 특별하게 만드는 요소
+              중 하나입니다. 서울의 전통적이고 간단한 붕어빵에서부터 제주도의
+              고급스러운 감귤 크림 붕어빵까지, 각 지역을 여행하며 다양한
+              붕어빵을 맛보는 것은 또 다른 여행의 즐거움이 될 것입니다. 이번
+              겨울에는 각 지역의 붕어빵을 찾아 떠나보는 건 어떨까요? 그 맛과
+              함께, 그 속에 담긴 이야기도 함께 즐길 수 있을 것입니다.
+            </p>
+          </section>
+        </div>
+        <button
+          className="my-4 bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em] h-[8dvh]"
+          onClick={moveToNextPage}
+        >
+          다음
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default WritingPage;

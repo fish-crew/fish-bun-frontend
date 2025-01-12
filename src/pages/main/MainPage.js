@@ -9,33 +9,42 @@ import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져
 import { useSelector } from "react-redux"; //Redux Store에서 가져오기
 
 function FishFrame() {
-  // 서버에서 userInfo 데이터 받아오기
-  const [userInfoData, setUserInfoData] = useState(null);
-  const dispatch = useDispatch(); // Redux 액션 디스패치를 위한 훅
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (!userInfoData) {
-          const response = await fetchUserData();
-          // setUserInfoData(data); //이건 일단 뺴고 닉네임만 redux에 저장
-          const nickname = response.data.nickname;
-          dispatch(setNickname(nickname)); // Redux Store에 닉네임 저장
-        }
-      } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
-        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
-      }
-    };
+  // // 서버에서 userInfo 데이터 받아오기
+  // const [userInfoData, setUserInfoData] = useState(null);
+  // const dispatch = useDispatch(); // Redux 액션 디스패치를 위한 훅
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       if (!userInfoData) {
+  //         const response = await fetchUserData();
+  //         // setUserInfoData(data); //이건 일단 뺴고 닉네임만 redux에 저장
+  //         const nickname = response.data.nickname;
+  //         dispatch(setNickname(nickname)); // Redux Store에 닉네임 저장
+  //       }
+  //     } catch (error) {
+  //       console.error("데이터 가져오기 실패:", error);
+  //       alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
-  //서버에서 main 페이지에 사용할 코드 받아오기
+  // 서버에서 main 페이지에 사용할 코드 받아오기
   const [eatenDays, setEatenDays] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchMainPageData(); // 서버 데이터 가져오기
+        // 임시 데이터 설정
+        const mockResponse = {
+          data: {
+            daysInWeek: ["Monday"],
+            weeklyCount: 1,
+            monthlyCount: 21,
+          },
+          result: "success",
+          statusCode: "200",
+        };
 
         // 요일 매핑 객체
         const dayMapping = {
@@ -49,7 +58,7 @@ function FishFrame() {
         };
 
         // 영어 요일을 한국어로 변환
-        const convertedDays = response.data.daysInWeek.map(
+        const convertedDays = mockResponse.data.daysInWeek.map(
           (day) => dayMapping[day]
         );
 
@@ -63,6 +72,7 @@ function FishFrame() {
 
     fetchData();
   }, []);
+
 
   const navigate = useNavigate();
   const today = new Date();
@@ -172,7 +182,7 @@ function FishFrame() {
 }
 
 function Main() {
-  const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
+  const nickname = '통과시켜줘';
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 메뉴 상태
 
@@ -240,13 +250,23 @@ function Main() {
     }
   };
 
-  //서버에서 데이터 받아오기기
+  // 서버에서 데이터 받아오기기
   const [monthlyCount, setMonthlyCount] = useState();
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchMainPageData(); // 서버 데이터 가져오기
-        const monthlyCnt = response.data.monthlyCount;
+        // 임시 데이터 설정
+        const mockResponse = {
+          data: {
+            daysInWeek: ["Monday"],
+            weeklyCount: 1,
+            monthlyCount: 21,
+          },
+          result: "success",
+          statusCode: "200",
+        };
+
+        const monthlyCnt = mockResponse.data.monthlyCount;
         setMonthlyCount(monthlyCnt);
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
@@ -256,6 +276,7 @@ function Main() {
 
     fetchData();
   }, []);
+
 
   const randomDuration = () => {
     return `${Math.random() * 1 + 1}s`; // 1초에서 4초 사이 랜덤 시간

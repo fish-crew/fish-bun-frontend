@@ -25,7 +25,7 @@ function CustomArrow(props) {
 }
 
 function BookPage() {
-  const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
+  const nickname = '통과시켜줘요요'
   const [activeIndex, setActiveIndex] = useState(0); // 현재 활성화된 캐러셀 인덱스 상태 관리
   const navigate = useNavigate();
   const handleClose = () => {
@@ -63,16 +63,173 @@ function BookPage() {
     ),
   };
 
+  // const [collectedFish, setCollectedFish] = useState([]);
+  // const [flavors, setFlavors] = useState([]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const bookResponse = await fetchBookPageData();
+  //       setCollectedFish(bookResponse.data.map((item) => item.completedFlavorId));
+
+  //       const flavorsResponse = await fetchFlavorData();
+  //       setFlavors(flavorsResponse.data.filter(item => item.flavor !== '미확인 붕어빵'));
+  //     } catch (error) {
+  //       console.error("데이터 가져오기 실패:", error);
+  //       alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   const [collectedFish, setCollectedFish] = useState([]);
   const [flavors, setFlavors] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const bookResponse = await fetchBookPageData();
-        setCollectedFish(bookResponse.data.map((item) => item.completedFlavorId));
+        // 임시 데이터 설정
+        const bookMockResponse = {
+          data: [
+            { completedFlavorId: 1 },
+            { completedFlavorId: 2 },
+            { completedFlavorId: 3 },
+          ],
+          result: "success",
+          statusCode: "200",
+        };
 
-        const flavorsResponse = await fetchFlavorData();
-        setFlavors(flavorsResponse.data.filter(item => item.flavor !== '미확인 붕어빵'));
+        const flavorMockResponse = {
+          data: [
+            {
+              id: 20,
+              flavor: "미확인 붕어빵",
+              iconCode: "unknown",
+              seq: 0,
+            },
+            {
+              id: 1,
+              flavor: "팥 붕어빵",
+              iconCode: "redbean",
+              seq: 1,
+            },
+            {
+              id: 2,
+              flavor: "슈크림 붕어빵",
+              iconCode: "custard",
+              seq: 2,
+            },
+            {
+              id: 3,
+              flavor: "초코 붕어빵",
+              iconCode: "choco",
+              seq: 3,
+            },
+            {
+              id: 4,
+              flavor: "고구마 붕어빵",
+              iconCode: "guma",
+              seq: 4,
+            },
+            {
+              id: 5,
+              flavor: "미니 붕어빵",
+              iconCode: "mini",
+              seq: 5,
+            },
+            {
+              id: 6,
+              flavor: "김치 붕어빵",
+              iconCode: "kimchi",
+              seq: 6
+            },
+            {
+              id: 7,
+              flavor: "피자 붕어빵",
+              iconCode: "pizza",
+              seq: 7
+            },
+            {
+              id: 8,
+              flavor: "팥 크림치즈 붕어빵",
+              iconCode: "redbean-cream-cheese",
+              seq: 8
+            },
+            {
+              id: 9,
+              flavor: "치즈 붕어빵",
+              iconCode: "cheese",
+              seq: 9
+            },
+            {
+              id: 10,
+              flavor: "콘치즈 붕어빵",
+              iconCode: "corn-cheese",
+              seq: 10
+            },
+            {
+              id: 11,
+              flavor: "매콤이 붕어빵",
+              iconCode: "maecom",
+              seq: 11
+            },
+            {
+              id: 12,
+              flavor: "뿌링클 붕어빵 ",
+              iconCode: "bburing",
+              seq: 12
+            },
+            {
+              id: 13,
+              flavor: "애플파이 붕어빵",
+              iconCode: "apple-pie",
+              seq: 13
+            },
+            {
+              id: 14,
+              flavor: "흑임자 붕어빵 ",
+              iconCode: "black-sesame",
+              seq: 14
+            },
+            {
+              id: 15,
+              flavor: "팥절미 붕어빵",
+              iconCode: "redbean-mozzi",
+              seq: 15
+            },
+            {
+              id: 16,
+              flavor: "고구마 크림치즈 붕어빵",
+              iconCode: "guma-cream-cheese",
+              seq: 16
+            },
+            {
+              id: 17,
+              flavor: "애플시나몬 붕어빵",
+              iconCode: "apple-sinnamon",
+              seq: 17
+            },
+            {
+              id: 18,
+              flavor: "대왕 붕어빵",
+              iconCode: "king",
+              seq: 18
+            },
+            {
+              id: 19,
+              flavor: "타코야끼 붕어빵",
+              iconCode: "tako",
+              seq: 19
+            }
+          ],
+          result: "success",
+          statusCode: "200",
+        };
+
+        // 데이터 처리
+        setCollectedFish(bookMockResponse.data.map((item) => item.completedFlavorId));
+        setFlavors(
+          flavorMockResponse.data.filter((item) => item.flavor !== "미확인 붕어빵")
+        );
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
         alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
@@ -81,6 +238,7 @@ function BookPage() {
 
     fetchData();
   }, []);
+
 
   // 붕어빵 데이터를 9개씩 나누기
   const chunkedFlavors = [];

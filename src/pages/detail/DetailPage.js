@@ -17,43 +17,304 @@ function DetailsPage() {
   const [eatenFlavors, setEatenFlavors] = useState([]);
   const [date, setDate] = useState(null); // Date 객체를 저장할 state
   const [processedData, setProcessedData] = useState([]);
+  // // 데이터 요청
+  // useEffect(() => {
+  //   const getDetailData = async () => {
+  //     try {
+  //       const detailResponse = await fetchDetailPageData(id); // 상세 APi
+  //       setDetailData(detailResponse.data); // 서버에서 받은 데이터의 "data"만 저장
+
+  //       const jsonString = detailResponse.data.flavors;
+  //       // 문자열을 객체 배열로 변환
+  //       const jsonObjectArray = JSON.parse(jsonString);
+  //       setEatenFlavors(jsonObjectArray);
+
+  //       const dateString = detailResponse.data.date; // 서버에서 받은 날짜 문자열
+  //       const dateObject = new Date(dateString); // 문자열을 Date 객체로 변환
+  //       setDate(dateObject); // 상태에 저장
+
+  //       const flavorsResponse = await fetchFlavorData(); // 전체 맛 api
+  //       // "미확인 붕어빵" 분리
+  //       const unknownFlavor = flavorsResponse.data.find(
+  //         (item) => item.flavor === "미확인 붕어빵"
+  //       );
+  //       const filteredFlavors = flavorsResponse.data.filter(
+  //         (item) => item.flavor !== "미확인 붕어빵"
+  //       );
+
+  //       // seq 기준 정렬
+  //       const sortedFlavors = filteredFlavors.sort((a, b) => a.seq - b.seq);
+
+  //       // 마지막에 "미확인 붕어빵" 추가
+  //       const finalFlavors = unknownFlavor
+  //         ? [...sortedFlavors, unknownFlavor]
+  //         : sortedFlavors;
+  //       setFlavorsData(finalFlavors); // 응답 데이터 저장
+  //     } catch (error) {
+  //       if (error.response && error.response.status === 403) {
+  //         alert("접근 권한이 없습니다. 캘린더 페이지로 이동합니다.");
+  //         navigate("/calendarPage"); // 403 에러 발생 시 캘린더 페이지로 이동
+  //       } else {
+  //         console.error("데이터 요청 실패:", error);
+  //       }
+  //     }
+  //   };
+
+  //   getDetailData();
+  // }, []);
+
   // 데이터 요청
   useEffect(() => {
     const getDetailData = async () => {
       try {
-        const detailResponse = await fetchDetailPageData(id); // 상세 APi
-        setDetailData(detailResponse.data); // 서버에서 받은 데이터의 "data"만 저장
+        // 임시 데이터 설정
+        const detailMockResponse = {
+          data: {
+            id: 72,
+            fileUrl: "https://bunglog.me/file/fishbun/2024/12/30/b2595f988b31412099ab7bc5a95b58c4.png",
+            date: "2024-12-30T18:39:41.730862",
+            flavors: '[{"flavorId":1,"count":1},{"flavorId":2,"count":1}]',
+          },
+          result: "success",
+          statusCode: "200",
+        };
 
-        const jsonString = detailResponse.data.flavors;
-        // 문자열을 객체 배열로 변환
-        const jsonObjectArray = JSON.parse(jsonString);
+        const flavorsMockResponse = {
+          data: [
+            { id: 1, flavor: "팥 붕어빵", iconCode: "redbean", seq: 1 },
+            { id: 2, flavor: "슈크림 붕어빵", iconCode: "custard", seq: 2 },
+            { id: 3, flavor: "미확인 붕어빵", iconCode: "unknown", seq: 99 },
+          ],
+          result: "success",
+          statusCode: "200",
+        };
+
+        // 상세 데이터 처리
+        setDetailData(detailMockResponse.data);
+
+        const jsonString = detailMockResponse.data.flavors;
+        const jsonObjectArray = JSON.parse(jsonString); // 문자열을 객체 배열로 변환
         setEatenFlavors(jsonObjectArray);
 
-        const dateString = detailResponse.data.date; // 서버에서 받은 날짜 문자열
-        const dateObject = new Date(dateString); // 문자열을 Date 객체로 변환
-        setDate(dateObject); // 상태에 저장
+        const dateString = detailMockResponse.data.date;
+        const dateObject = new Date(dateString);
+        setDate(dateObject);
 
-        const flavorsResponse = await fetchFlavorData(); // 전체 맛 api
-        // "미확인 붕어빵" 분리
-        const unknownFlavor = flavorsResponse.data.find(
+        // 전체 맛 데이터 처리
+        const unknownFlavor = flavorsMockResponse.data.find(
           (item) => item.flavor === "미확인 붕어빵"
         );
-        const filteredFlavors = flavorsResponse.data.filter(
+        const filteredFlavors = flavorsMockResponse.data.filter(
           (item) => item.flavor !== "미확인 붕어빵"
         );
 
-        // seq 기준 정렬
         const sortedFlavors = filteredFlavors.sort((a, b) => a.seq - b.seq);
-
-        // 마지막에 "미확인 붕어빵" 추가
         const finalFlavors = unknownFlavor
           ? [...sortedFlavors, unknownFlavor]
           : sortedFlavors;
-        setFlavorsData(finalFlavors); // 응답 데이터 저장
+        setFlavorsData(finalFlavors);
       } catch (error) {
         if (error.response && error.response.status === 403) {
           alert("접근 권한이 없습니다. 캘린더 페이지로 이동합니다.");
-          navigate("/calendarPage"); // 403 에러 발생 시 캘린더 페이지로 이동
+          navigate("/calendarPage");
+        } else {
+          console.error("데이터 요청 실패:", error);
+        }
+      }
+    };
+
+    getDetailData();
+  }, []);
+
+
+  // // 두 번째 useEffect: flavorsData 업데이트 후 실행
+  // useEffect(() => {
+  //   if (flavorsData.length > 0 && eatenFlavors.length > 0) {
+  //     // flavorsData와 eatenFlavors를 이용한 후속 작업 실행
+  //     const mergedData = eatenFlavors.map((eaten) => {
+  //       const matchedFlavor = flavorsData.find(
+  //         (flavor) => flavor.id === eaten.flavorId
+  //       );
+  //       return {
+  //         ...matchedFlavor,
+  //         count: eaten.count,
+  //       };
+  //     });
+  //     setProcessedData(mergedData);
+  //   }
+  // }, [flavorsData, eatenFlavors]); // flavorsData와 eatenFlavors 변경 시 실행
+
+  // 데이터 요청
+  useEffect(() => {
+    const getDetailData = async () => {
+      try {
+        // 임시 데이터 설정
+        const detailMockResponse = {
+          data: {
+            id: 72,
+            fileUrl: "https://bunglog.me/file/fishbun/2024/12/30/b2595f988b31412099ab7bc5a95b58c4.png",
+            date: "2024-12-30T18:39:41.730862",
+            flavors: '[{"flavorId":1,"count":1},{"flavorId":2,"count":1}]',
+          },
+          result: "success",
+          statusCode: "200",
+        };
+
+        const flavorsMockResponse = {
+          data: [
+            {
+              id: 20,
+              flavor: "미확인 붕어빵",
+              iconCode: "unknown",
+              seq: 0,
+            },
+            {
+              id: 1,
+              flavor: "팥 붕어빵",
+              iconCode: "redbean",
+              seq: 1,
+            },
+            {
+              id: 2,
+              flavor: "슈크림 붕어빵",
+              iconCode: "custard",
+              seq: 2,
+            },
+            {
+              id: 3,
+              flavor: "초코 붕어빵",
+              iconCode: "choco",
+              seq: 3,
+            },
+            {
+              id: 4,
+              flavor: "고구마 붕어빵",
+              iconCode: "guma",
+              seq: 4,
+            },
+            {
+              id: 5,
+              flavor: "미니 붕어빵",
+              iconCode: "mini",
+              seq: 5,
+            },
+            {
+              id: 6,
+              flavor: "김치 붕어빵",
+              iconCode: "kimchi",
+              seq: 6,
+            },
+            {
+              id: 7,
+              flavor: "피자 붕어빵",
+              iconCode: "pizza",
+              seq: 7,
+            },
+            {
+              id: 8,
+              flavor: "팥 크림치즈 붕어빵",
+              iconCode: "redbean-cream-cheese",
+              seq: 8,
+            },
+            {
+              id: 9,
+              flavor: "치즈 붕어빵",
+              iconCode: "cheese",
+              seq: 9,
+            },
+            {
+              id: 10,
+              flavor: "콘치즈 붕어빵",
+              iconCode: "corn-cheese",
+              seq: 10,
+            },
+            {
+              id: 11,
+              flavor: "매콤이 붕어빵",
+              iconCode: "maecom",
+              seq: 11,
+            },
+            {
+              id: 12,
+              flavor: "뿌링클 붕어빵 ",
+              iconCode: "bburing",
+              seq: 12,
+            },
+            {
+              id: 13,
+              flavor: "애플파이 붕어빵",
+              iconCode: "apple-pie",
+              seq: 13,
+            },
+            {
+              id: 14,
+              flavor: "흑임자 붕어빵 ",
+              iconCode: "black-sesame",
+              seq: 14,
+            },
+            {
+              id: 15,
+              flavor: "팥절미 붕어빵",
+              iconCode: "redbean-mozzi",
+              seq: 15,
+            },
+            {
+              id: 16,
+              flavor: "고구마 크림치즈 붕어빵",
+              iconCode: "guma-cream-cheese",
+              seq: 16,
+            },
+            {
+              id: 17,
+              flavor: "애플시나몬 붕어빵",
+              iconCode: "apple-sinnamon",
+              seq: 17,
+            },
+            {
+              id: 18,
+              flavor: "대왕 붕어빵",
+              iconCode: "king",
+              seq: 18,
+            },
+            {
+              id: 19,
+              flavor: "타코야끼 붕어빵",
+              iconCode: "tako",
+              seq: 19,
+            },
+          ],
+          result: "success",
+          statusCode: "200",
+        };
+
+        // 상세 데이터 처리
+        setDetailData(detailMockResponse.data);
+
+        const jsonString = detailMockResponse.data.flavors;
+        const jsonObjectArray = JSON.parse(jsonString); // 문자열을 객체 배열로 변환
+        setEatenFlavors(jsonObjectArray);
+
+        const dateString = detailMockResponse.data.date;
+        const dateObject = new Date(dateString);
+        setDate(dateObject);
+
+        // 전체 맛 데이터 처리
+        const unknownFlavor = flavorsMockResponse.data.find(
+          (item) => item.flavor === "미확인 붕어빵"
+        );
+        const filteredFlavors = flavorsMockResponse.data.filter(
+          (item) => item.flavor !== "미확인 붕어빵"
+        );
+
+        const sortedFlavors = filteredFlavors.sort((a, b) => a.seq - b.seq);
+        const finalFlavors = unknownFlavor
+          ? [...sortedFlavors, unknownFlavor]
+          : sortedFlavors;
+        setFlavorsData(finalFlavors);
+      } catch (error) {
+        if (error.response && error.response.status === 403) {
+          alert("접근 권한이 없습니다. 캘린더 페이지로 이동합니다.");
+          navigate("/calendarPage");
         } else {
           console.error("데이터 요청 실패:", error);
         }
@@ -79,6 +340,7 @@ function DetailsPage() {
       setProcessedData(mergedData);
     }
   }, [flavorsData, eatenFlavors]); // flavorsData와 eatenFlavors 변경 시 실행
+
 
   useEffect(() => {
     if (processedData.length > 0) {
