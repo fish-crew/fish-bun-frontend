@@ -23,7 +23,7 @@ function CalendarPage() {
   const fetchData = async (year, month) => {
     try {
       const response = await fetchCalendarPageData(`${year}-${month}`);
-      const dates = response.data.map((item) => item.date);
+      const dates = response.data.map((item) => item.regDate);
       // 날짜를 YYYY-MM-DD 형태로 변환
       const formattedDates = dates.map((dateString) => {
         const date = new Date(dateString); // 문자열을 Date 객체로 변환
