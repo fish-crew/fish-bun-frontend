@@ -72,7 +72,7 @@ function TutorialPage() {
                 }}
             >
                 <div className="text-point-color text-sz35 py-4 px-5 font-semibold text-start w-full">
-                    붕어빵 탐험대원 활동 지침서랍니당
+                    붕어빵 탐험대원 활동 지침서랍니당~!~!
                 </div>
 
                 <div className="flex flex-col px-5 flex-grow justify-start w-full overflow-y-auto text-start break-all">
