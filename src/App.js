@@ -24,6 +24,7 @@ import { Provider } from "react-redux"; // Provider 임포트
 import store, { persistor } from './redux/store'; // Store와 Persistor 가져오기
 import { PersistGate } from 'redux-persist/integration/react'; // PersistGate 추가
 import ProtectedRoute from "./components/routes/ProtectedRoute";
+import { DataProvider } from "./context/DataContext";
 
 
 // WebP 감지 로직
@@ -52,9 +53,11 @@ function App() {
     <Provider store={store}> {/* Redux Store 제공 */}
       {/* Redux 상태 복원을 위한 PersistGate */}
       <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter>
-          <AppContent isWebPSupported={isWebPSupported} />
-        </BrowserRouter>
+        <DataProvider>
+          <BrowserRouter>
+            <AppContent isWebPSupported={isWebPSupported} />
+          </BrowserRouter>
+        </DataProvider>
       </PersistGate>
     </Provider>
   );
