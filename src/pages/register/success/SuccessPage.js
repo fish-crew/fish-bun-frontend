@@ -64,6 +64,23 @@ function SuccessPage() {
     setTimeout(() => setAnimationTrigger(true), 50); // 애니메이션 재적용
   };
 
+  // 페이지네이션 점 컴포넌트
+  const PaginationDots = ({ total, activeIndex, onDotClick }) => {
+    return (
+      <div className="flex justify-center items-center gap-3 my-4">
+        {Array.from({ length: total }, (_, index) => (
+          <span
+            key={index}
+            className={`w-3 h-3 rounded-full cursor-pointer transition-all ${index === activeIndex ? "bg-[#7f5b41] scale-125" : "bg-gray-300"
+              }`}
+            onClick={() => onDotClick(index)} // 클릭 시 활성화된 슬라이드 변경
+          ></span>
+        ))}
+      </div>
+    );
+  };
+
+
   return (
     <div className="flex flex-col justify-around items-center w-full h-full overflow-auto">
       <div className="w-full h-max">
@@ -149,6 +166,17 @@ function SuccessPage() {
             ))}
           </Swiper>
         </div>
+
+        {/* 페이지네이션 점 표시 */}
+        <PaginationDots
+          total={foundData.length}
+          activeIndex={activeIndex}
+          onDotClick={(index) => {
+            setActiveIndex(index); // 슬라이드 인덱스 변경
+            resetAnimation(); // 애니메이션 초기화
+          }}
+        />
+
         <div className="flex justify-center">
           {foundData[activeIndex]?.flavor === "미확인 붕어빵" ? (
             <button
