@@ -7,6 +7,7 @@ import { fetchUserData, fetchMainPageData } from "../../api/service.js";
 import { useDispatch } from "react-redux";
 import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져오기
 import { useSelector } from "react-redux"; //Redux Store에서 가져오기
+import { useDataContext } from "../../context/DataContext"; //context에서 데이터 가져오기
 
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
@@ -91,6 +92,16 @@ function FishFrame() {
 
   const weekDays = ["화", "수", "목", "금", "토", "일", "월"];
 
+  const engDayMapping = {
+    Sunday: "일",
+    Monday: "월",
+    Tuesday: "화",
+    Wednesday: "수",
+    Thursday: "목",
+    Friday: "금",
+    Saturday: "토",
+  };
+
   const calculateSizes = () => {
     if (frameRef.current) {
       const frameWidth = frameRef.current.offsetWidth;
@@ -105,10 +116,23 @@ function FishFrame() {
     return () => window.removeEventListener("resize", calculateSizes);
   }, []);
 
-  const goToDetail = () => {
-    //서버로 id 값 받아오기 위한 데이터를 전송
-    // 서버에서 받아오 id 값을 통해 
-    console.log("클ㄹ익됨")
+  const { dayData } = useDataContext(); // Context에서 데이터 가져오기
+  const goToDetail = (day) => {
+    // 한국어 요일을 영어로 변환
+    const englishDay = Object.keys(engDayMapping).find((key) => engDayMapping[key] === day);
+
+    if (englishDay) {
+      const id = dayData[englishDay] || null; // Context에서 ID 가져오기
+
+      if (id) {
+        console.log(`${day} 클릭됨, ID: ${id}`);
+        navigate(`/detail/${id}`);
+      } else {
+        console.log(`${day} 클릭됨, 등록된 데이터 없음`);
+      }
+    } else {
+      console.error(`${day}에 해당하는 영어 요일이 없습니다.`);
+    }
   }
 
   return (
@@ -133,7 +157,7 @@ function FishFrame() {
                   transform: `${baseTransform} translate(${radius}px)`,
                   zIndex: 10, // z-index 추가해야 클릭 가능
                 }}
-                onClick={goToDetail}
+                onClick={() => goToDetail(day)}
               >
                 <img
                   src={imageSrc}
@@ -165,7 +189,11 @@ function FishFrame() {
           onClick={goToAdd}
         >
           <img
-            src="/assets/webp/goToRegisterBtn.webp"
+            src={
+              eatenDays.includes(todayKorean)
+                ? "/assets/webp/goToRegisterBtn.webp" // 이미 등록 되었을 때
+                : "/assets/webp/goToRegisterBtn.webp" // 등록 아직 안되었을 때 여기 색 있는 버튼으로 바꾸기
+            }
             alt="icon"
             className="p-2"
             style={{
@@ -248,26 +276,40 @@ function Main() {
     }
   };
 
+  const { dayData, resetWeek } = useDataContext(); //context에서 데이터 가져오기
   //서버에서 데이터 받아오기기
   const [monthlyCount, setMonthlyCount] = useState();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchMainPageData(); // 서버 데이터 가져오기
-        const monthlyCnt = response.data.monthlyCount;
-        setMonthlyCount(monthlyCnt);
-      } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
-        // alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
-      }
-    };
 
-    fetchData();
+  // 서버에서 데이터 가져오기 및 초기화 판단
+  const fetchAndUpdateData = async () => {
+    try {
+      const response = await fetchMainPageData(); // 서버 데이터 가져오기
+      const { weeklyCount, monthlyCount } = response.data;
+
+      // 월간 카운트 업데이트
+      setMonthlyCount(monthlyCount);
+
+      // 초기화 여부 판단
+      if (weeklyCount === 0) {
+        console.log("새로운 주가 시작되었습니다. 데이터를 초기화합니다.");
+        resetWeek(); // Context 초기화
+      } else {
+        console.log("기존 데이터를 유지합니다. 초기화는 필요하지 않습니다.");
+      }
+    } catch (error) {
+      console.error("서버 데이터 가져오기 실패:", error);
+    }
+  };
+
+
+  // Main 페이지 로드 시 데이터 가져오기
+  useEffect(() => {
+    fetchAndUpdateData();
   }, []);
 
-  const randomDuration = () => {
-    return `${Math.random() * 1 + 1}s`; // 1초에서 4초 사이 랜덤 시간
-  };
+  useEffect(() => {
+    console.log("Context에서 저장된 데이터:", dayData);
+  }, [dayData]); // dayData가 변경될 때마다 로그 출력
 
   return (
     <div
