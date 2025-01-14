@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
+import { useDataContext } from "../../../context/DataContext"; // Context 가져오기
 
 import { fetchFlavorData, postRegisterData } from "../../../api/service.js";
 
@@ -9,6 +10,7 @@ const AddPage = () => {
   const [selectedOptions, setSelectedOptions] = useState({}); // 선택된 옵션 객체
   const [flavors, setFlavors] = useState([]); // data 값만 저장
   const [flavorsList, setFlavorsList] = useState([]); // data 값만 저장
+  const { addOrUpdateDayData } = useDataContext(); // Context에서 함수 가져오기
 
   useEffect(() => {
     const getFlavors = async () => {
@@ -109,13 +111,22 @@ const AddPage = () => {
       })
       .filter(Boolean); // null 값 제거
 
-    // 옵션 데이터를 JSON으로 변환 후 FormData에 추가
     formData.append("flavors", JSON.stringify(flavorsToSend));
 
     try {
       const result = await postRegisterData(formData);
-      const id = result.data;
+      console.log(result)
+      const id = result.data; // 서버에서 받은 ID 값 (예: 81)
+
       alert("등록되었습니다.");
+
+      // 오늘의 요일 계산
+      const today = new Date();
+      const dayMapping = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      const todayEnglish = dayMapping[today.getDay()]; // 오늘의 영어 요일
+
+      // Context에 저장
+      addOrUpdateDayData(todayEnglish, id); // 요일과 ID 저장
 
       navigate(`/register/successPage/${id}`);
     } catch (error) {
