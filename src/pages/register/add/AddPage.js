@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
-import { useDataContext } from "../../../context/DataContext"; // Context 가져오기
-
 import { fetchFlavorData, postRegisterData } from "../../../api/service.js";
+import { useDispatch } from "react-redux"; // Redux 디스패치 훅
+import { addOrUpdateDayData } from "../../../redux/slices/dayData"; // dayData 액션 가져오기
 
 const AddPage = () => {
   const [selectedOptions, setSelectedOptions] = useState({}); // 선택된 옵션 객체
   const [flavors, setFlavors] = useState([]); // data 값만 저장
   const [flavorsList, setFlavorsList] = useState([]); // data 값만 저장
-  const { addOrUpdateDayData } = useDataContext(); // Context에서 함수 가져오기
+
+  const dispatch = useDispatch(); // Redux 디스패치
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getFlavors = async () => {
@@ -82,7 +84,6 @@ const AddPage = () => {
   };
 
   //서버로 보내기 (나중에 수정)
-  const navigate = useNavigate();
   const handleSubmit = async () => {
     if (!Object.keys(selectedOptions).length) {
       alert("옵션을 선택해주세요.");
@@ -122,11 +123,11 @@ const AddPage = () => {
 
       // 오늘의 요일 계산
       const today = new Date();
-      const dayMapping = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-      const todayEnglish = dayMapping[today.getDay()]; // 오늘의 영어 요일
+      const dayMapping = ["일", "월", "화", "수", "목", "금", "토"];
+      const todayKorean = dayMapping[today.getDay()]; // 오늘의 요일
 
-      // Context에 저장
-      addOrUpdateDayData(todayEnglish, id); // 요일과 ID 저장
+      // Redux로 dayData 상태 업데이트
+      dispatch(addOrUpdateDayData({ day: todayKorean, id }));
 
       navigate(`/register/successPage/${id}`);
     } catch (error) {
