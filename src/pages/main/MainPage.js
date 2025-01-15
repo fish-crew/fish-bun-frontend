@@ -4,15 +4,16 @@ import html2canvas from "html2canvas";
 import styles from "./MainPage.module.css";
 
 import { fetchUserData, fetchMainPageData } from "../../api/service.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux"; //Redux Store에서 가져오기
 import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져오기
-import { useSelector } from "react-redux"; //Redux Store에서 가져오기
-import { useDataContext } from "../../context/DataContext"; //context에서 데이터 가져오기
+import { resetWeek } from "../../redux/slices/dayData.js"; // dayData 액션 추가
 
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
   const [userInfoData, setUserInfoData] = useState(null);
   const dispatch = useDispatch(); // Redux 액션 디스패치를 위한 훅
+  const dayData = useSelector((state) => state.dayData.dayData); // Redux에서 dayData 가져오기
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -92,16 +93,6 @@ function FishFrame() {
 
   const weekDays = ["화", "수", "목", "금", "토", "일", "월"];
 
-  const engDayMapping = {
-    Sunday: "일",
-    Monday: "월",
-    Tuesday: "화",
-    Wednesday: "수",
-    Thursday: "목",
-    Friday: "금",
-    Saturday: "토",
-  };
-
   const calculateSizes = () => {
     if (frameRef.current) {
       const frameWidth = frameRef.current.offsetWidth;
@@ -116,13 +107,9 @@ function FishFrame() {
     return () => window.removeEventListener("resize", calculateSizes);
   }, []);
 
-  const { dayData } = useDataContext(); // Context에서 데이터 가져오기
   const goToDetail = (day) => {
-    // 한국어 요일을 영어로 변환
-    const englishDay = Object.keys(engDayMapping).find((key) => engDayMapping[key] === day);
-
-    if (englishDay) {
-      const id = dayData[englishDay] || null; // Context에서 ID 가져오기
+    if (day) {
+      const id = dayData[day] || null; // Redux에서 ID 가져오기
 
       if (id) {
         console.log(`${day} 클릭됨, ID: ${id}`);
@@ -211,6 +198,7 @@ function Main() {
   const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false); // 메뉴 상태
+  const dispatch = useDispatch(); // Redux 디스패치
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
   const closeMenu = () => {
@@ -276,7 +264,6 @@ function Main() {
     }
   };
 
-  const { dayData, resetWeek } = useDataContext(); //context에서 데이터 가져오기
   //서버에서 데이터 받아오기기
   const [monthlyCount, setMonthlyCount] = useState();
 
@@ -291,25 +278,17 @@ function Main() {
 
       // 초기화 여부 판단
       if (weeklyCount === 0) {
-        console.log("새로운 주가 시작되었습니다. 데이터를 초기화합니다.");
-        resetWeek(); // Context 초기화
-      } else {
-        console.log("기존 데이터를 유지합니다. 초기화는 필요하지 않습니다.");
+        dispatch(resetWeek()); // Redux에서 데이터 초기화
       }
     } catch (error) {
       console.error("서버 데이터 가져오기 실패:", error);
     }
   };
 
-
   // Main 페이지 로드 시 데이터 가져오기
   useEffect(() => {
     fetchAndUpdateData();
   }, []);
-
-  useEffect(() => {
-    console.log("Context에서 저장된 데이터:", dayData);
-  }, [dayData]); // dayData가 변경될 때마다 로그 출력
 
   return (
     <div
