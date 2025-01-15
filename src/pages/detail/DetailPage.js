@@ -24,12 +24,10 @@ function DetailsPage() {
         const detailResponse = await fetchDetailPageData(id); // 상세 APi
         setDetailData(detailResponse.data); // 서버에서 받은 데이터의 "data"만 저장
 
-        const jsonString = detailResponse.data.flavors;
-        // 문자열을 객체 배열로 변환
-        const jsonObjectArray = JSON.parse(jsonString);
-        setEatenFlavors(jsonObjectArray);
+        const flavorsArray = detailResponse.data.flavors;
+        setEatenFlavors(flavorsArray);
 
-        const dateString = detailResponse.data.date; // 서버에서 받은 날짜 문자열
+        const dateString = detailResponse.data.regDate; // 서버에서 받은 날짜 문자열
         const dateObject = new Date(dateString); // 문자열을 Date 객체로 변환
         setDate(dateObject); // 상태에 저장
 
