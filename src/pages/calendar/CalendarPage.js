@@ -59,7 +59,7 @@ function CalendarPage() {
     const formattedDate = moment(date).format("YYYY-MM-DD");
     setValue(formattedDate);
     const selectedDate = specialDates.find(
-      (item) => item.date.split("T")[0] === formattedDate
+      (item) => item.regDate.split("T")[0] === formattedDate
     );
     if (selectedDate) {
       navigate(`/detail/${selectedDate.id}`);
