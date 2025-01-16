@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import styles from "./MainPage.module.css";
-
+import Modal from "../../components/modals/Modal.js";
+import tutorialPages from "../../components/modals/TutorialData.js";
 import { fetchUserData, fetchMainPageData } from "../../api/service.js";
 import { useDispatch, useSelector } from "react-redux"; //Redux Store에서 가져오기
 import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져오기
@@ -120,7 +121,7 @@ function FishFrame() {
     } else {
       console.error(`${day}에 해당하는 영어 요일이 없습니다.`);
     }
-  }
+  };
 
   return (
     <div className="">
@@ -290,6 +291,33 @@ function Main() {
     fetchAndUpdateData();
   }, []);
 
+  const [isFirstVisit, setFirstVisit] = useState("Y");
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => setModalOpen(false);
+
+  useEffect(() => {
+    if (isFirstVisit === "Y") {
+      setTimeout(() => setModalOpen(true), 500); // 자동으로 모달 열기
+    }
+  }, [isFirstVisit]);
+
+  const handleNext = () => {
+    if (currentPage < tutorialPages.length - 1) {
+      setCurrentPage(currentPage + 1);
+    } else {
+      setModalOpen(false); // 마지막 페이지에서 모달 닫기
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div
       className="main-area flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
@@ -312,6 +340,61 @@ function Main() {
       </div>
       <div className="w-full absolute bottom-0 bulbBtm">
         <img src="/assets/webp/bulbBtm.webp" alt="bulb bottom" />
+      </div>
+      {/* Modal 컴포넌트 */}
+      <Modal isOpen={isModalOpen} onClose={closeModal} title="Tutorial">
+        <div>
+          <img
+            src={tutorialPages[currentPage].image}
+            alt={`Page ${currentPage + 1}`}
+            style={{ width: "100%" }}
+          />
+          <div>{tutorialPages[currentPage].text}</div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: "20px",
+            }}
+          >
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+              disabled={currentPage === 0}
+            >
+              Previous
+            </button>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(prev + 1, tutorialPages.length - 1)
+                )
+              }
+            >
+              {currentPage === tutorialPages.length - 1 ? "Finish" : "Next"}
+            </button>
+          </div>
+        </div>
+      </Modal>
+      <div className="top-btn-area flex absolute top-0 justify-start">
+        <button
+          className="m-[2dvh] text-white bg-[#650000] rounded-full z-10"
+          onClick={openModal}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6 w-[5dvh] h-[5dvh]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+            />
+          </svg>
+        </button>
       </div>
       <div className="mid-area mb-8">
         <div className="text-[#fffed6]">
