@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import html2canvas from "html2canvas";
 import styles from "./MainPage.module.css";
 import Modal from "../../components/modals/Modal.js";
+import modalStyles from "../../components/modals/Modal.module.css";
+
 import tutorialPages from "../../components/modals/TutorialData.js";
 import { fetchUserData, fetchMainPageData } from "../../api/service.js";
 import { useDispatch, useSelector } from "react-redux"; //Redux Store에서 가져오기
@@ -325,6 +327,83 @@ function Main() {
         backgroundImage: `url(/assets/webp/glitter.webp), url(/assets/webp/checkPattern.webp)`,
       }}
     >
+      {/* Modal 컴포넌트 */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        title={tutorialPages[currentPage]?.title || "Tutorial"}
+      >
+        <div className="flex flex-col items-center justify-between flex-1">
+          <div className={styles.modalScroll}>
+            <img
+              src={tutorialPages[currentPage].image}
+              alt={`Page ${currentPage + 1}`}
+              style={{ width: "100%" }}
+              className={`${modalStyles.modalImg} pb-2`}
+            />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: tutorialPages[currentPage].text,
+              }}
+              className={styles.inlineImg}
+            ></div>
+          </div>
+          <div className="flex justify-between w-full justify-between">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
+              disabled={currentPage === 0}
+              className="flex items-center text-[#650000] text-sz25"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-arrow-left-circle-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+              </svg>
+              &nbsp;이전 페이지
+            </button>
+            <button
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(prev + 1, tutorialPages.length - 1)
+                )
+              }
+              disabled={currentPage === tutorialPages.length - 1}
+              className="flex items-center text-[#650000] text-sz25"
+            >
+              {currentPage === tutorialPages.length - 1
+                ? "마지막 페이지"
+                : "다음 페이지"}
+              &nbsp;
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-arrow-right-circle-fill"
+                viewBox="0 0 16 16"
+              >
+                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
+              </svg>
+            </button>
+            {/* <button
+              onClick={() =>
+                setCurrentPage((prev) =>
+                  Math.min(prev + 1, tutorialPages.length - 1)
+                )
+              }
+            >
+              {currentPage === tutorialPages.length - 1
+                ? "Finish"
+                : "다음 페이지"}
+            </button> */}
+          </div>
+        </div>
+      </Modal>
       <div
         className={`w-full absolute top-0 absolute ${styles["soft-blink"]} bulbTopBlur`}
       >
@@ -341,40 +420,7 @@ function Main() {
       <div className="w-full absolute bottom-0 bulbBtm">
         <img src="/assets/webp/bulbBtm.webp" alt="bulb bottom" />
       </div>
-      {/* Modal 컴포넌트 */}
-      <Modal isOpen={isModalOpen} onClose={closeModal} title="Tutorial">
-        <div>
-          <img
-            src={tutorialPages[currentPage].image}
-            alt={`Page ${currentPage + 1}`}
-            style={{ width: "100%" }}
-          />
-          <div>{tutorialPages[currentPage].text}</div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginTop: "20px",
-            }}
-          >
-            <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-              disabled={currentPage === 0}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() =>
-                setCurrentPage((prev) =>
-                  Math.min(prev + 1, tutorialPages.length - 1)
-                )
-              }
-            >
-              {currentPage === tutorialPages.length - 1 ? "Finish" : "Next"}
-            </button>
-          </div>
-        </div>
-      </Modal>
+
       <div className="top-btn-area flex absolute top-0 justify-start">
         <button
           className="m-[2dvh] text-white bg-[#650000] rounded-full z-10"
