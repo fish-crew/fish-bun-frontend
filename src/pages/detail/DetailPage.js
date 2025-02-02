@@ -27,7 +27,7 @@ function DetailsPage() {
         const flavorsArray = detailResponse.data.flavors;
         setEatenFlavors(flavorsArray);
 
-        const dateString = detailResponse.data.regDate; // 서버에서 받은 날짜 문자열
+        const dateString = detailResponse.data.date; // 서버에서 받은 날짜 문자열
         const dateObject = new Date(dateString); // 문자열을 Date 객체로 변환
         setDate(dateObject); // 상태에 저장
 
