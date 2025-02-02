@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
 import { fetchFlavorData, postRegisterData } from "../../../api/service.js";
@@ -10,9 +10,24 @@ const AddPage = () => {
   const [selectedOptions, setSelectedOptions] = useState({}); // 선택된 옵션 객체
   const [flavors, setFlavors] = useState([]); // data 값만 저장
   const [flavorsList, setFlavorsList] = useState([]); // data 값만 저장
-
+  const [dateToSend, setDateToSend] = useState(""); // 서버로 전송할 날짜 저장
   const dispatch = useDispatch(); // Redux 디스패치
   const navigate = useNavigate();
+  const location = useLocation(); // URL 파라미터 가져오기
+
+  // URL 파라미터에서 날짜 가져오기
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const paramDate = queryParams.get("date");
+
+    if (paramDate) {
+      setDateToSend(paramDate); // URL 파라미터로 전달된 날짜를 사용
+    } else {
+      const today = new Date();
+      const formattedToday = today.toISOString().split("T")[0]; // 오늘 날짜를 "YYYY-MM-DD" 형식으로 변환
+      setDateToSend(formattedToday); // 오늘 날짜를 기본값으로 설정
+    }
+  }, [location]);
 
   useEffect(() => {
     const getFlavors = async () => {
@@ -83,7 +98,7 @@ const AddPage = () => {
     });
   };
 
-  //서버로 보내기 (나중에 수정)
+  //서버로 보내기
   const handleSubmit = async () => {
     if (!Object.keys(selectedOptions).length) {
       alert("옵션을 선택해주세요.");
@@ -113,6 +128,7 @@ const AddPage = () => {
       .filter(Boolean); // null 값 제거
 
     formData.append("flavors", JSON.stringify(flavorsToSend));
+    formData.append("date", dateToSend);
 
     try {
       const result = await postRegisterData(formData);
