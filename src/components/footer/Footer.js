@@ -3,7 +3,10 @@ import { useLocation } from "react-router-dom";
 
 function Footer() {
   const location = useLocation();
-  const isSpecialPage = ["/main"].includes(location.pathname);
+  const isSpecialPage = ["/main", "/register/addPage"].includes(
+    location.pathname
+  );
+
   const footerColor = isSpecialPage
     ? "bg-[#650000] text-[#edebeb]"
     : "bg-[#f1f0ec] text-[#650000]";
@@ -109,42 +112,54 @@ function Footer() {
     },
   ];
 
+  const isCoupangTxtPage = ["/register/reportPage"].includes(location.pathname);
+
+  const coupangAds = !isCoupangTxtPage ? (
+    <div className="w-full flex items-center justify-between">
+      <div className="flex justify-center items-center">
+        <div className="pe-1">공유하기</div>
+        {buttons.map((btn, idx) => (
+          <SocialButton
+            key={idx}
+            iconPath={btn.iconPath}
+            onClick={btn.onClick}
+            label={btn.label}
+          />
+        ))}
+      </div>
+      <div className="flex justify-center items-center">
+        <div className="pe-1">붕어빵탐험대</div>
+        {snsButtons.map((btn, idx) => (
+          <SocialButton
+            key={idx}
+            iconPath={btn.iconPath}
+            onClick={btn.onClick}
+            label={btn.label}
+          />
+        ))}
+      </div>
+    </div>
+  ) : (
+    <div className="text-[1.8dvh] text-center w-full text-gray-400">
+      *파트너 활동을 통해 일정액의 수수료를 제공받을 수 있음
+    </div>
+  );
+
   return (
     <div>
       <div className="mx-auto bg-gray-200">
         <div
-          className={`w-full text-sz23 flex bg-[#650000] text-white px-4 items-center justify-between ${footerColor}`}
+          className={`w-full text-sz23 flex px-4 items-center justify-between ${footerColor}`}
         >
-          <div className="flex justify-center items-center">
-            <div className="pe-1">공유하기</div>
-            {buttons.map((btn, idx) => (
-              <SocialButton
-                key={idx}
-                iconPath={btn.iconPath}
-                onClick={btn.onClick}
-                label={btn.label}
-              />
-            ))}
-          </div>
-          <div className="flex justify-center items-center">
-            <div className="pe-1">붕어빵탐험대</div>
-            {snsButtons.map((btn, idx) => (
-              <SocialButton
-                key={idx}
-                iconPath={btn.iconPath}
-                onClick={btn.onClick}
-                label={btn.label}
-              />
-            ))}
-          </div>
+          {coupangAds} {/* JSX 요소로 직접 삽입 */}
         </div>
         <iframe
           src="https://ads-partners.coupang.com/widgets.html?id=835435&template=carousel&trackingCode=AF6298929&subId=&width=680&height=108&tsource="
           width="100%"
           height="90"
-          frameborder="0"
+          frameBorder="0"
           scrolling="no"
-          referrerpolicy="unsafe-url"
+          referrerPolicy="unsafe-url"
           browsingtopics
         ></iframe>
       </div>
