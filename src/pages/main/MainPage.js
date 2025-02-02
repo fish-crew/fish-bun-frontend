@@ -365,7 +365,7 @@ function Main() {
             <button
               onClick={() =>
                 currentPage === tutorialPages.length - 1
-                  ? setModalOpen(false)
+                  ? alert("마지막 페이지 입니다!")
                   : setCurrentPage((prev) =>
                       Math.min(prev + 1, tutorialPages.length - 1)
                     )
