@@ -112,7 +112,7 @@ function Footer() {
 
   return (
     <div>
-      <div className="mx-auto max-h-[90px] bg-gray-200">
+      <div className="mx-auto bg-gray-200">
         <div
           className={`w-full text-sz23 flex bg-[#650000] text-white px-4 items-center justify-between ${footerColor}`}
         >
@@ -139,7 +139,15 @@ function Footer() {
             ))}
           </div>
         </div>
-        <GoogleAdvertise />
+        <iframe
+          src="https://ads-partners.coupang.com/widgets.html?id=835435&template=carousel&trackingCode=AF6298929&subId=&width=680&height=108&tsource="
+          width="100%"
+          height="90"
+          frameborder="0"
+          scrolling="no"
+          referrerpolicy="unsafe-url"
+          browsingtopics
+        ></iframe>
       </div>
     </div>
   );
