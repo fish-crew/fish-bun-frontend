@@ -22,8 +22,9 @@ function CalendarPage() {
   // 서버로부터 데이터를 가져오는 함수
   const fetchData = async (year, month) => {
     try {
-      const response = await fetchCalendarPageData(`${year}-${month}`);
-      const dates = response.data.map((item) => item.regDate);
+      const formattedMonth = String(month).padStart(2, "0"); // 여기서 문자열 변환
+      const response = await fetchCalendarPageData(`${year}-${formattedMonth}`);
+      const dates = response.data.map((item) => item.date);
       // 날짜를 YYYY-MM-DD 형태로 변환
       const formattedDates = dates.map((dateString) => {
         const date = new Date(dateString); // 문자열을 Date 객체로 변환
@@ -51,18 +52,27 @@ function CalendarPage() {
   // 달력의 현재 활성화된 날짜 변경 핸들러
   const handleActiveStartDateChange = ({ activeStartDate }) => {
     const year = activeStartDate.getFullYear();
-    const month = activeStartDate.getMonth() + 1;
-    setCurrentMonth({ year, month });
+    const month = String(activeStartDate.getMonth() + 1).padStart(2, "0"); // 여기서 month를 문자열로 변환
+    setCurrentMonth({ year, month }); // 이제 month가 "01" ~ "09" 형식으로 저장됨
   };
 
   const handleDateChange = (date) => {
     const formattedDate = moment(date).format("YYYY-MM-DD");
     setValue(formattedDate);
     const selectedDate = specialDates.find(
-      (item) => item.regDate.split("T")[0] === formattedDate
+      (item) => item.date.split("T")[0] === formattedDate
     );
     if (selectedDate) {
       navigate(`/detail/${selectedDate.id}`);
+    } else {
+      // 오늘 날짜와 비교
+      const today = moment().startOf("day"); // 오늘 날짜
+      const selectedMoment = moment(date).startOf("day"); // 선택한 날짜
+
+      if (selectedMoment.isSameOrBefore(today)) {
+        // 선택 날짜가 오늘 또는 오늘 이전이면 등록 페이지로 이동
+        navigate(`/register/addPage?date=${formattedDate}`);
+      }
     }
   };
 
