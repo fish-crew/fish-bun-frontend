@@ -306,6 +306,32 @@ function Main() {
     setCurrentPage(0);
   };
 
+  const handleNext = () => {
+    if (currentPage === tutorialPages.length - 1) {
+      alert("마지막 페이지 입니다!");
+    } else {
+      setCurrentPage((prev) => Math.min(prev + 1, tutorialPages.length - 1));
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage === 0) {
+      alert("첫 페이지 입니다!");
+    } else {
+      setCurrentPage((prev) => Math.max(prev - 1, 0));
+    }
+  };
+  const scrollableRef = useRef(null); // 모달 내부 스크롤 영역 참조
+
+  useEffect(() => {
+    const scrollArea = scrollableRef.current;
+    if (scrollArea) {
+      scrollArea.style.overflow = "hidden"; // 스크롤 잠금
+      scrollArea.scrollTop = 0; // 스크롤 초기화
+      scrollArea.style.overflow = "auto";
+    }
+  }, [currentPage]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -349,7 +375,10 @@ function Main() {
         title={tutorialPages[currentPage]?.title || "Tutorial"}
       >
         <div className="flex flex-col items-center justify-between flex-1">
-          <div className={styles.modalScroll}>
+          <div
+            ref={scrollableRef}
+            className={`scrollableArea ${styles.modalScroll}`}
+          >
             <img
               src={tutorialPages[currentPage].image}
               alt={`Page ${currentPage + 1}`}
@@ -367,11 +396,7 @@ function Main() {
             className={`flex justify-between w-full ${styles.borderTop} pt-2`}
           >
             <button
-              onClick={() =>
-                currentPage === 0
-                  ? alert("첫 페이지 입니다!")
-                  : setCurrentPage((prev) => Math.max(prev - 1, 0))
-              }
+              onClick={handlePrev}
               className={`flex items-center text-sz25 ${
                 currentPage === 0 ? "text-gray-500" : "text-[#650000]"
               }`}
@@ -389,13 +414,7 @@ function Main() {
               &nbsp;{currentPage === 0 ? "첫 페이지" : "이전 페이지"}
             </button>
             <button
-              onClick={() =>
-                currentPage === tutorialPages.length - 1
-                  ? alert("마지막 페이지 입니다!")
-                  : setCurrentPage((prev) =>
-                      Math.min(prev + 1, tutorialPages.length - 1)
-                    )
-              }
+              onClick={handleNext}
               className={`flex items-center text-sz25 ${
                 currentPage === tutorialPages.length - 1
                   ? "text-gray-500"
