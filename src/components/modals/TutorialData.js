@@ -4,7 +4,7 @@ const tutorialPages = [
     title: "로딩 화면",
     text: ` <p>
         <div className="text-start text-sz25">
-          팥냥이와 함께 떠나는 붕어빵 탐험! 팥냥이가 탐험대원분들을 안내해
+          팥냥이와 함께 떠나는 붕어빵 탐험!<br>팥냥이가 탐험대원분들을 안내해
           줍니다.
         </div>
       </p>`,
@@ -42,8 +42,8 @@ const tutorialPages = [
               alt="<br><img
               src="/assets/webp/cal-bun.webp"
               alt="◆"
-            />"
-            /> 붕어빵 등록하기
+            
+            /> <span class="text-[#650000] text-sz30 font-bold">붕어빵 등록하기</span>
             </p>
             붕어빵 탐험대에 합류하게 되신 걸 환영합니다! 메인 화면에서는 붕어빵
             탐험 중 발견한 붕어빵을 등록할 수 있습니다. 이때 붕어빵은 <span class=" px-2 py-1 bg-[#650000] text-white rounded-md">접시 중앙의 + 버튼</span>을 이용해 하루 한
@@ -64,8 +64,8 @@ const tutorialPages = [
               alt="<br><img
               src="/assets/webp/cal-bun.webp"
               alt="◆"
-            />"
-            /> 붕어빵 탐험대 소문내기
+            
+            /> <span class="text-[#650000] text-sz30 font-bold">붕어빵 탐험대 소문내기</span>
             </p>
             하단의 카카오톡 또는 클립보드 아이콘<img
                 src="/assets/webp/tutorialImgs/sns-sharing.webp"
@@ -80,8 +80,8 @@ const tutorialPages = [
               alt="<br><img
               src="/assets/webp/cal-bun.webp"
               alt="◆"
-            />"
-            /> 메뉴 버튼 이용하기
+            
+            /> <span class="text-[#650000] text-sz30 font-bold">메뉴 버튼 이용하기</span>
             </p>
             우측 하단의 &nbsp;
             <img
@@ -136,8 +136,7 @@ const tutorialPages = [
               alt="<br><img
               src="/assets/webp/cal-bun.webp"
               alt="◆"
-            />"
-            /> 붕어빵 사진 등록하기
+            /> <span class="text-[#650000] text-sz30 font-bold">붕어빵 사진 등록하기</span>
             </p>
             붕어빵 등록화면에서는 오늘 먹은 붕어빵 사진과 종류, 수량을 하루 한
             번 등록할 수 있습니다. '사진을 추가해 주세요' 영역을 클릭해 오늘
@@ -148,8 +147,7 @@ const tutorialPages = [
               alt="<br><img
               src="/assets/webp/cal-bun.webp"
               alt="◆"
-            />"
-            /> 붕어빵 수량 등록하기
+            /> <span class="text-[#650000] text-sz30 font-bold">붕어빵 수량 등록하기</span>
             </p>
             사진을 등록했다면 이제 어떤 붕어빵을 수집했는지 기록할 차례입니다.
             '붕어빵 선택' 드롭다운 버튼을 클릭해 붕어빵 종류를 선택해 주세요.
@@ -206,7 +204,7 @@ const tutorialPages = [
               <img
               src="/assets/webp/cal-bun.webp"
               alt="◆"
-            /> 작성된 일지 확인하기
+            /> <span class="text-[#650000] text-sz30 font-bold">작성된 일지 확인하기</span>
             </p>
             일지 상세 화면에서는 해당 날짜에 수집한 붕어빵에 대한 정보를 확인할
             수 있습니다. [붕어빵 등록 화면]에서 등록한 사진과 붕어빵 정보를
@@ -216,7 +214,7 @@ const tutorialPages = [
               <br><img
               src="/assets/webp/cal-bun.webp"
               alt="◆"
-            /> 날씨 변경하기
+            /> <span class="text-[#650000] text-sz30 font-bold">날씨 변경하기</span>
             </p>
             붕어빵 탐험대에서 제공하는 일지는 '어쨌든 맑음'을 기본 선택 값으로
             합니다. 날씨 부분을 클릭하면 토글 버튼을 이용해 원하는 날씨로 수정할
@@ -225,7 +223,7 @@ const tutorialPages = [
               <br><img
               src="/assets/webp/cal-bun.webp"
               alt="◆"
-            /> 일지 수정하기
+            /> <span class="text-[#650000] text-sz30 font-bold">일지 수정하기</span>
             </p>
             일지는 붕어빵 등록 정보를 바탕으로 자동 작성됩니다. 내용을 수정하고
             싶다면 [일지 수정하기] 버튼을 눌러 자유롭게 일지를 작성할 수
