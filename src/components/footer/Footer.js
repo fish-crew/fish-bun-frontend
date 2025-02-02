@@ -1,4 +1,3 @@
-import GoogleAdvertise from "../ads/GoogleAdvertise";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
