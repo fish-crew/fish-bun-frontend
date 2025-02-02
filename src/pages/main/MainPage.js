@@ -297,7 +297,10 @@ function Main() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const openModal = () => setModalOpen(true);
+  const openModal = () => {
+    setModalOpen(true);
+    setCurrentPage(0);
+  };
   const closeModal = () => setModalOpen(false);
 
   useEffect(() => {
@@ -305,20 +308,6 @@ function Main() {
       setTimeout(() => setModalOpen(true), 500); // 자동으로 모달 열기
     }
   }, [isFirstVisit]);
-
-  const handleNext = () => {
-    if (currentPage < tutorialPages.length - 1) {
-      setCurrentPage(currentPage + 1);
-    } else {
-      setModalOpen(false); // 마지막 페이지에서 모달 닫기
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
 
   return (
     <div
@@ -348,11 +337,18 @@ function Main() {
               className={styles.inlineImg}
             ></div>
           </div>
-          <div className="flex justify-between w-full justify-between">
+          <div
+            className={`flex justify-between w-full ${styles.borderTop} pt-2`}
+          >
             <button
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 0))}
-              disabled={currentPage === 0}
-              className="flex items-center text-[#650000] text-sz25"
+              onClick={() =>
+                currentPage === 0
+                  ? alert("첫 페이지 입니다!")
+                  : setCurrentPage((prev) => Math.max(prev - 1, 0))
+              }
+              className={`flex items-center text-sz25 ${
+                currentPage === 0 ? "text-gray-500" : "text-[#650000]"
+              }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -364,16 +360,21 @@ function Main() {
               >
                 <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
               </svg>
-              &nbsp;이전 페이지
+              &nbsp;{currentPage === 0 ? "첫 페이지" : "이전 페이지"}
             </button>
             <button
               onClick={() =>
-                setCurrentPage((prev) =>
-                  Math.min(prev + 1, tutorialPages.length - 1)
-                )
+                currentPage === tutorialPages.length - 1
+                  ? setModalOpen(false)
+                  : setCurrentPage((prev) =>
+                      Math.min(prev + 1, tutorialPages.length - 1)
+                    )
               }
-              disabled={currentPage === tutorialPages.length - 1}
-              className="flex items-center text-[#650000] text-sz25"
+              className={`flex items-center text-sz25 ${
+                currentPage === tutorialPages.length - 1
+                  ? "text-gray-500"
+                  : "text-[#650000]"
+              }`}
             >
               {currentPage === tutorialPages.length - 1
                 ? "마지막 페이지"
