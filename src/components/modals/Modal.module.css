@@ -63,4 +63,6 @@
 .modalImg {
   width: auto !important;
   height: 30dvh;
+  border-radius: 0.5rem;
+  padding: unset;
 }
