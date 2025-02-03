@@ -182,7 +182,7 @@ function FishFrame() {
             src={
               eatenDays.includes(todayKorean)
                 ? "/assets/webp/goToRegisterBtn.webp" // 이미 등록 되었을 때
-                : "/assets/webp/goToRegisterBtn.webp" // 등록 아직 안되었을 때 여기 색 있는 버튼으로 바꾸기
+                : "/assets/webp/goToRegisterBtn_red.webp" // 등록 아직 안되었을 때 (빨간색)
             }
             alt="icon"
             className="p-2"
@@ -346,9 +346,8 @@ function Main() {
                   ? alert("첫 페이지 입니다!")
                   : setCurrentPage((prev) => Math.max(prev - 1, 0))
               }
-              className={`flex items-center text-sz25 ${
-                currentPage === 0 ? "text-gray-500" : "text-[#650000]"
-              }`}
+              className={`flex items-center text-sz25 ${currentPage === 0 ? "text-gray-500" : "text-[#650000]"
+                }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -367,14 +366,13 @@ function Main() {
                 currentPage === tutorialPages.length - 1
                   ? setModalOpen(false)
                   : setCurrentPage((prev) =>
-                      Math.min(prev + 1, tutorialPages.length - 1)
-                    )
+                    Math.min(prev + 1, tutorialPages.length - 1)
+                  )
               }
-              className={`flex items-center text-sz25 ${
-                currentPage === tutorialPages.length - 1
-                  ? "text-gray-500"
-                  : "text-[#650000]"
-              }`}
+              className={`flex items-center text-sz25 ${currentPage === tutorialPages.length - 1
+                ? "text-gray-500"
+                : "text-[#650000]"
+                }`}
             >
               {currentPage === tutorialPages.length - 1
                 ? "마지막 페이지"
