@@ -91,6 +91,8 @@ function FishFrame() {
       alert("오늘은 이미 붕어빵을 등록하셨습니다!");
       return;
     }
+    // 버튼 클릭 시 sessionStorage에 플래그 저장
+    sessionStorage.setItem("addPageAllowed", "true");
     navigate("/register/addPage");
   };
 
@@ -397,9 +399,8 @@ function Main() {
           >
             <button
               onClick={handlePrev}
-              className={`flex items-center text-sz25 ${
-                currentPage === 0 ? "text-gray-500" : "text-[#650000]"
-              }`}
+              className={`flex items-center text-sz25 ${currentPage === 0 ? "text-gray-500" : "text-[#650000]"
+                }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -415,11 +416,10 @@ function Main() {
             </button>
             <button
               onClick={handleNext}
-              className={`flex items-center text-sz25 ${
-                currentPage === tutorialPages.length - 1
-                  ? "text-gray-500"
-                  : "text-[#650000]"
-              }`}
+              className={`flex items-center text-sz25 ${currentPage === tutorialPages.length - 1
+                ? "text-gray-500"
+                : "text-[#650000]"
+                }`}
             >
               {currentPage === tutorialPages.length - 1
                 ? "마지막 페이지"

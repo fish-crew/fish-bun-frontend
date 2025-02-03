@@ -1,10 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
 import { fetchFlavorData, postRegisterData } from "../../../api/service.js";
 import { useDispatch } from "react-redux"; // Redux 디스패치 훅
 import { addOrUpdateDayData } from "../../../redux/slices/dayData"; // dayData 액션 가져오기
+
+// 커스텀 훅: sessionStorage에서 플래그 확인 후 삭제
+function useAccessGuard() {
+  // lazy initializer를 사용해 초기 allowed 값을 sessionStorage에서 읽어옵니다.
+  const [allowed] = useState(() => {
+    return sessionStorage.getItem("addPageAllowed") === "true";
+  });
+
+  useEffect(() => {
+    // 초기 렌더링 이후(다음 tick)에 sessionStorage의 플래그를 제거합니다.
+    const timer = setTimeout(() => {
+      sessionStorage.removeItem("addPageAllowed");
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return allowed;
+}
 
 const AddPage = () => {
   const [selectedOptions, setSelectedOptions] = useState({}); // 선택된 옵션 객체
@@ -64,6 +82,14 @@ const AddPage = () => {
 
     getFlavors();
   }, []);
+
+  // 커스텀 훅으로 접근 플래그 확인 (버튼 클릭 시 true여야 함)
+  const allowed = useAccessGuard();
+
+  // allowed 값이 false면 URL로 직접 접근한 경우이므로 /main으로 리다이렉트
+  if (!allowed) {
+    return <Navigate to="/main" replace />;
+  }
 
   const handleOptionSelect = (option) => {
     setSelectedOptions((prevOptions) => {
