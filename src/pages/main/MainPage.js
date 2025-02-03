@@ -186,7 +186,7 @@ function FishFrame() {
             src={
               eatenDays.includes(todayKorean)
                 ? "/assets/webp/goToRegisterBtn.webp" // 이미 등록 되었을 때
-                : "/assets/webp/goToRegisterBtn.webp" // 등록 아직 안되었을 때 여기 색 있는 버튼으로 바꾸기
+                : "/assets/webp/goToRegisterBtn_red.webp" // 등록 아직 안되었을 때 (빨간색)
             }
             alt="icon"
             className="p-2"

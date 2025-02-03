@@ -51,7 +51,7 @@ function DetailsPage() {
       } catch (error) {
         if (error.response && error.response.status === 403) {
           alert("접근 권한이 없습니다. 캘린더 페이지로 이동합니다.");
-          navigate("/calendarPage"); // 403 에러 발생 시 캘린더 페이지로 이동
+          navigate(-1); // 403 에러 발생 시 이전 페이지로
         } else {
           console.error("데이터 요청 실패:", error);
         }
@@ -114,8 +114,8 @@ function DetailsPage() {
   }, [content]);
 
   const handleClose = () => {
-    //메인 페이지로 네비게이트
-    navigate("/calendarPage");
+    //이전로 네비게이트
+    navigate(-1);
   };
 
   return (
