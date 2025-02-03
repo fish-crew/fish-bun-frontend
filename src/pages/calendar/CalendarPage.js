@@ -70,6 +70,8 @@ function CalendarPage() {
       const selectedMoment = moment(date).startOf("day"); // 선택한 날짜
 
       if (selectedMoment.isSameOrBefore(today)) {
+        // 버튼 클릭 시 sessionStorage에 플래그 저장
+        sessionStorage.setItem("addPageAllowed", "true");
         // 선택 날짜가 오늘 또는 오늘 이전이면 등록 페이지로 이동
         navigate(`/register/addPage?date=${formattedDate}`);
       }
