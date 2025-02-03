@@ -43,7 +43,7 @@ export default function BungBalGamePage() {
     setStep(0);
   };
 
-  const progressPercentage = (step / bungBalGameQuestions.length) * 100;
+  const progressPercentage = ((step - 1) / bungBalGameQuestions.length) * 100;
   const bgImage =
     step === 0
       ? `url(/assets/webp/bgBlue.webp)`
