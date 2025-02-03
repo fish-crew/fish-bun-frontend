@@ -121,7 +121,7 @@ export async function postReportData(flavors) {
 
 export const updateFirstLogin = async () => {
   try {
-    const response = await axiosInstance.patch(
+    const response = await axiosInstance.post(
       "/fish-bun/user/update-first-login"
     );
     return response.data;
