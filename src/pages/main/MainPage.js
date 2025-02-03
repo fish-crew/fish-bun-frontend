@@ -6,7 +6,11 @@ import Modal from "../../components/modals/Modal.js";
 import modalStyles from "../../components/modals/Modal.module.css";
 
 import tutorialPages from "../../components/modals/TutorialData.js";
-import { fetchUserData, fetchMainPageData } from "../../api/service.js";
+import {
+  fetchUserData,
+  fetchMainPageData,
+  updateFirstLogin,
+} from "../../api/service.js";
 import { useDispatch, useSelector } from "react-redux"; //Redux Store에서 가져오기
 import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져오기
 import { resetWeek } from "../../redux/slices/dayData.js"; // dayData 액션 추가
@@ -293,7 +297,7 @@ function Main() {
     fetchAndUpdateData();
   }, []);
 
-  const [isFirstVisit, setFirstVisit] = useState("Y");
+  const [isFirstLogin, setFirstLogin] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -301,13 +305,61 @@ function Main() {
     setModalOpen(true);
     setCurrentPage(0);
   };
-  const closeModal = () => setModalOpen(false);
+
+  const handleNext = () => {
+    if (currentPage === tutorialPages.length - 1) {
+      alert("마지막 페이지 입니다!");
+    } else {
+      setCurrentPage((prev) => Math.min(prev + 1, tutorialPages.length - 1));
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage === 0) {
+      alert("첫 페이지 입니다!");
+    } else {
+      setCurrentPage((prev) => Math.max(prev - 1, 0));
+    }
+  };
+  const scrollableRef = useRef(null); // 모달 내부 스크롤 영역 참조
 
   useEffect(() => {
-    if (isFirstVisit === "Y") {
-      setTimeout(() => setModalOpen(true), 500); // 자동으로 모달 열기
+    const scrollArea = scrollableRef.current;
+    if (scrollArea) {
+      scrollArea.style.overflow = "hidden"; // 스크롤 잠금
+      scrollArea.scrollTop = 0; // 스크롤 초기화
+      scrollArea.style.overflow = "auto";
     }
-  }, [isFirstVisit]);
+  }, [currentPage]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchUserData();
+        const isFirstLogin = response.data.isFirstLogin;
+        setFirstLogin(isFirstLogin);
+
+        // 최초 로그인이라면 모달을 띄우고 API 호출
+        if (isFirstLogin === "Y") {
+          setTimeout(() => setModalOpen(true), 500);
+
+          try {
+            const response = await updateFirstLogin();
+            console.log("First login status updated:", response);
+          } catch (error) {
+            console.error("Failed to update first login status:", error);
+          }
+        }
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const closeModal = () => setModalOpen(false);
 
   return (
     <div
@@ -323,7 +375,10 @@ function Main() {
         title={tutorialPages[currentPage]?.title || "Tutorial"}
       >
         <div className="flex flex-col items-center justify-between flex-1">
-          <div className={styles.modalScroll}>
+          <div
+            ref={scrollableRef}
+            className={`scrollableArea ${styles.modalScroll}`}
+          >
             <img
               src={tutorialPages[currentPage].image}
               alt={`Page ${currentPage + 1}`}
@@ -341,11 +396,7 @@ function Main() {
             className={`flex justify-between w-full ${styles.borderTop} pt-2`}
           >
             <button
-              onClick={() =>
-                currentPage === 0
-                  ? alert("첫 페이지 입니다!")
-                  : setCurrentPage((prev) => Math.max(prev - 1, 0))
-              }
+              onClick={handlePrev}
               className={`flex items-center text-sz25 ${
                 currentPage === 0 ? "text-gray-500" : "text-[#650000]"
               }`}
@@ -363,13 +414,7 @@ function Main() {
               &nbsp;{currentPage === 0 ? "첫 페이지" : "이전 페이지"}
             </button>
             <button
-              onClick={() =>
-                currentPage === tutorialPages.length - 1
-                  ? setModalOpen(false)
-                  : setCurrentPage((prev) =>
-                      Math.min(prev + 1, tutorialPages.length - 1)
-                    )
-              }
+              onClick={handleNext}
               className={`flex items-center text-sz25 ${
                 currentPage === tutorialPages.length - 1
                   ? "text-gray-500"
