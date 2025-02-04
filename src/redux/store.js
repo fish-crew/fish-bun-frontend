@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // Local Storage를 사용하기 위한 스토리지 가져오기
 import userReducer from "./slices/user"; // 사용자 닉네임 등을 관리하는 Slice 가져오기
-import dayDataReducer from "./slices/dayData"; // dayData 관련 Slice 가져오기
 
 // redux-persist 설정
 const userPersistConfig = {
@@ -10,20 +9,13 @@ const userPersistConfig = {
   storage, // Local Storage를 사용
 };
 
-const dayDataPersistConfig = {
-  key: "dayData", // dayData 상태 저장 키
-  storage, // Local Storage를 사용
-};
-
 // Reducer에 persistReducer로 감싸서 persist 기능 추가
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
-const persistedDayDataReducer = persistReducer(dayDataPersistConfig, dayDataReducer);
 
 // Redux Store 생성
 const store = configureStore({
   reducer: {
     user: persistedUserReducer, // Persist된 userReducer 등록
-    dayData: persistedDayDataReducer, // Persist된 dayDataReducer 등록
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

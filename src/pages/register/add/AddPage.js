@@ -3,8 +3,6 @@ import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
 import { fetchFlavorData, postRegisterData } from "../../../api/service.js";
-import { useDispatch } from "react-redux"; // Redux 디스패치 훅
-import { addOrUpdateDayData } from "../../../redux/slices/dayData"; // dayData 액션 가져오기
 
 // 커스텀 훅: sessionStorage에서 플래그 확인 후 삭제
 function useAccessGuard() {
@@ -29,7 +27,6 @@ const AddPage = () => {
   const [flavors, setFlavors] = useState([]); // data 값만 저장
   const [flavorsList, setFlavorsList] = useState([]); // data 값만 저장
   const [dateToSend, setDateToSend] = useState(""); // 서버로 전송할 날짜 저장
-  const dispatch = useDispatch(); // Redux 디스패치
   const navigate = useNavigate();
   const location = useLocation(); // URL 파라미터 가져오기
 
@@ -162,15 +159,6 @@ const AddPage = () => {
       const id = result.data; // 서버에서 받은 ID 값 (예: 81)
 
       alert("등록되었습니다.");
-
-      // 오늘의 요일 계산
-      const today = new Date();
-      const dayMapping = ["일", "월", "화", "수", "목", "금", "토"];
-      const todayKorean = dayMapping[today.getDay()]; // 오늘의 요일
-
-      // Redux로 dayData 상태 업데이트
-      dispatch(addOrUpdateDayData({ day: todayKorean, id }));
-
       navigate(`/register/successPage/${id}`);
     } catch (error) {
       console.error("전송 중 오류:", error);
