@@ -13,13 +13,11 @@ import {
 } from "../../api/service.js";
 import { useDispatch, useSelector } from "react-redux"; //Redux Store에서 가져오기
 import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져오기
-import { resetWeek } from "../../redux/slices/dayData.js"; // dayData 액션 추가
 
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
   const [userInfoData, setUserInfoData] = useState(null);
   const dispatch = useDispatch(); // Redux 액션 디스패치를 위한 훅
-  const dayData = useSelector((state) => state.dayData.dayData); // Redux에서 dayData 가져오기
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,30 +38,13 @@ function FishFrame() {
   }, []);
 
   //서버에서 main 페이지에 사용할 코드 받아오기
-  const [eatenDays, setEatenDays] = useState([]);
+  const [eatenDays, setEatenDays] = useState({});
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetchMainPageData(); // 서버 데이터 가져오기
 
-        // 요일 매핑 객체
-        const dayMapping = {
-          Sunday: "일",
-          Monday: "월",
-          Tuesday: "화",
-          Wednesday: "수",
-          Thursday: "목",
-          Friday: "금",
-          Saturday: "토",
-        };
-
-        // 영어 요일을 한국어로 변환
-        const convertedDays = response.data.daysInWeek.map(
-          (day) => dayMapping[day]
-        );
-
-        // 상태 업데이트
-        setEatenDays(convertedDays);
+        setEatenDays(response.data.daysInWeek);
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
         // alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
@@ -76,18 +57,18 @@ function FishFrame() {
   const navigate = useNavigate();
   const today = new Date();
   const dayMapping = {
-    0: "일",
-    1: "월",
-    2: "화",
-    3: "수",
-    4: "목",
-    5: "금",
-    6: "토",
+    0: "Sunday",
+    1: "Monday",
+    2: "Tuesday",
+    3: "Wednesday",
+    4: "Thursday",
+    5: "Friday",
+    6: "Saturday",
   };
-  const todayKorean = dayMapping[today.getDay()]; // 오늘 요일 (한국어)
+  const todayEnglish = dayMapping[today.getDay()]; // 오늘 요일 (영어)
 
   const goToAdd = () => {
-    if (eatenDays.includes(todayKorean)) {
+    if (eatenDays[todayEnglish]) { //키가 존재하는지 확인
       alert("오늘은 이미 붕어빵을 등록하셨습니다!");
       return;
     }
@@ -100,7 +81,7 @@ function FishFrame() {
   const [radius, setRadius] = useState(0);
   const [imageSize, setImageSize] = useState(0);
 
-  const weekDays = ["화", "수", "목", "금", "토", "일", "월"];
+  const weekDays = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Monday"];
 
   const calculateSizes = () => {
     if (frameRef.current) {
@@ -118,7 +99,8 @@ function FishFrame() {
 
   const goToDetail = (day) => {
     if (day) {
-      const id = dayData[day] || null; // Redux에서 ID 가져오기
+      // eatenDays 객체에서 해당 day(영어 요일)를 key로 사용하여 id를 가져옴
+      const id = eatenDays[day] || null;
 
       if (id) {
         console.log(`${day} 클릭됨, ID: ${id}`);
@@ -141,7 +123,7 @@ function FishFrame() {
         {weekDays.map((day, index) => {
           const angle = (360 / weekDays.length) * index;
           const baseTransform = `translate(-50%, -50%) rotate(${angle}deg)`;
-          const imageSrc = eatenDays.includes(day)
+          const imageSrc = eatenDays[day]
             ? "/assets/webp/bun-frame-filled.webp"
             : "/assets/webp/bun-frame-empty.webp";
 
@@ -186,7 +168,7 @@ function FishFrame() {
         >
           <img
             src={
-              eatenDays.includes(todayKorean)
+              eatenDays[todayEnglish]
                 ? "/assets/webp/goToRegisterBtn.webp" // 이미 등록 되었을 때
                 : "/assets/webp/goToRegisterBtn_red.webp" // 등록 아직 안되었을 때 (빨간색)
             }
@@ -285,10 +267,6 @@ function Main() {
       // 월간 카운트 업데이트
       setMonthlyCount(monthlyCount);
 
-      // 초기화 여부 판단
-      if (weeklyCount === 0) {
-        dispatch(resetWeek()); // Redux에서 데이터 초기화
-      }
     } catch (error) {
       console.error("서버 데이터 가져오기 실패:", error);
     }
