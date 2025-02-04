@@ -20,11 +20,11 @@ import AddPage from "./pages/register/add/AddPage";
 import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
+import BungBalGamePage from "./pages/game/bungBalGamePage";
 import { Provider } from "react-redux"; // Provider 임포트
-import store, { persistor } from './redux/store'; // Store와 Persistor 가져오기
-import { PersistGate } from 'redux-persist/integration/react'; // PersistGate 추가
+import store, { persistor } from "./redux/store"; // Store와 Persistor 가져오기
+import { PersistGate } from "redux-persist/integration/react"; // PersistGate 추가
 import ProtectedRoute from "./components/routes/ProtectedRoute";
-
 
 // WebP 감지 로직
 const detectWebP = () => {
@@ -49,7 +49,9 @@ function App() {
   }, []);
 
   return (
-    <Provider store={store}> {/* Redux Store 제공 */}
+    <Provider store={store}>
+      {" "}
+      {/* Redux Store 제공 */}
       {/* Redux 상태 복원을 위한 PersistGate */}
       <PersistGate loading={null} persistor={persistor}>
         <BrowserRouter>
@@ -73,46 +75,71 @@ function AppContent({ isWebPSupported }) {
           element={<LoadingPage isWebPSupported={isWebPSupported} />}
         />
         <Route path="/loginPage" element={<LoginPage />} />
-        <Route path="/main" element={
-          <ProtectedRoute>
-            <MainPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/bookPage" element={
-          <ProtectedRoute>
-            <BookPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/calendarPage" element={
-          <ProtectedRoute>
-            <CalendarPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/nicknamePage" element={
-          <ProtectedRoute>
-            <NicknamePage />
-          </ProtectedRoute>
-        } />
-        <Route path="/register/addPage" element={
-          <ProtectedRoute>
-            <AddPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/register/successPage/:id" element={
-          <ProtectedRoute>
-            <SuccessPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/register/reportPage" element={
-          <ProtectedRoute>
-            <ReportPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/detail/:id" element={
-          <ProtectedRoute>
-            <DetailPage />
-          </ProtectedRoute>
-        } />
+        <Route
+          path="/main"
+          element={
+            <ProtectedRoute>
+              <MainPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bookPage"
+          element={
+            <ProtectedRoute>
+              <BookPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/calendarPage"
+          element={
+            <ProtectedRoute>
+              <CalendarPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/nicknamePage"
+          element={
+            <ProtectedRoute>
+              <NicknamePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/register/addPage"
+          element={
+            <ProtectedRoute>
+              <AddPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/register/successPage/:id"
+          element={
+            <ProtectedRoute>
+              <SuccessPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/register/reportPage"
+          element={
+            <ProtectedRoute>
+              <ReportPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/detail/:id"
+          element={
+            <ProtectedRoute>
+              <DetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/bungBalGamePage" element={<BungBalGamePage />} />
         {/* 잘못된 경로일 때 */}
         <Route path="*" element={<Navigate to="/main" replace />} />
       </Routes>
