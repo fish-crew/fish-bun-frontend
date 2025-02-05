@@ -44,7 +44,8 @@ function FishFrame() {
       try {
         const response = await fetchMainPageData(); // 서버 데이터 가져오기
 
-        setEatenDays(response.data.daysInWeek);
+        // daysInWeek가 null 이면 빈 객체를 사용
+        setEatenDays(response.data.daysInWeek || {});
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
         // alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
