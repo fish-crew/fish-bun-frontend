@@ -92,6 +92,12 @@ function BookPage() {
     chunkedFlavors.push(flavors.slice(i, i + 9));
   }
 
+  const goToFishDetail = (fishId) => {
+    return () => {
+      navigate(`/bookDetailPage/${fishId}`);
+    }
+  }
+
   return (
     <div className="w-full flex-grow flex flex-col">
       <div className="w-full h-max">
@@ -138,11 +144,11 @@ function BookPage() {
                     {page.map((fish) => (
                       <div
                         key={fish.id}
-                        className={`flex flex-col items-center justify-center h-max ${
-                          collectedFish.includes(fish.id)
-                            ? "opacity-100"
-                            : "opacity-25"
-                        }`}
+                        className={`flex flex-col items-center justify-center h-max ${collectedFish.includes(fish.id)
+                          ? "opacity-100"
+                          : "opacity-25"
+                          }`}
+                        onClick={goToFishDetail(fish.id)}
                       >
                         <img
                           src={`/assets/webp/flavorIcons/${fish.iconCode}.webp`}
