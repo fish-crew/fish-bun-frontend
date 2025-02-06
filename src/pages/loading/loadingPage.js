@@ -17,7 +17,6 @@ const getImageList = () => {
     "/assets/webp/checkPattern.webp",
     "/assets/webp/glitter.webp",
     "/assets/webp/paperOnCheck.webp",
-    "/assets/webp/paperOnBlueCheckT.webp",
     "/assets/webp/paperOnCheckT.webp",
     "/assets/webp/paperOnCheckB.webp",
   ];

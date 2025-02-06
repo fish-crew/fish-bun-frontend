@@ -8,8 +8,8 @@ function Footer() {
   );
 
   const footerColor = isSpecialPage
-    ? "bg-[#650000] text-[#edebeb]"
-    : "bg-[#f1f0ec] text-[#650000]";
+    ? "bg-[#1069b0] text-[#edebeb]"
+    : "bg-[#f1f0ec] text-[#1069b0]";
 
   const SocialButton = ({ iconPath, onClick, label }) => (
     <button

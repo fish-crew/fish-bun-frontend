@@ -52,7 +52,7 @@ function ReportPage() {
         {/* 닫기 버튼 */}
         <button
           onClick={handleClose}
-          className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
+          className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#1069b0] hover:bg-gray-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -93,7 +93,7 @@ function ReportPage() {
           </div>
         </div>
         <button
-          className="mt-4 bg-[#650000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+          className="mt-4 bg-[#1069b0] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
           onClick={handleSubmit}
         >
           확인

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./BookPage.module.css";
-import { useSelector } from 'react-redux'; //Redux Store에서 가져오기
+import { useSelector } from "react-redux"; //Redux Store에서 가져오기
 import { fetchBookPageData, fetchFlavorData } from "../../api/service.js";
 
 function CustomArrow(props) {
@@ -69,10 +69,14 @@ function BookPage() {
     const fetchData = async () => {
       try {
         const bookResponse = await fetchBookPageData();
-        setCollectedFish(bookResponse.data.map((item) => item.completedFlavorId));
+        setCollectedFish(
+          bookResponse.data.map((item) => item.completedFlavorId)
+        );
 
         const flavorsResponse = await fetchFlavorData();
-        setFlavors(flavorsResponse.data.filter(item => item.flavor !== '미확인 붕어빵'));
+        setFlavors(
+          flavorsResponse.data.filter((item) => item.flavor !== "미확인 붕어빵")
+        );
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
         alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
@@ -95,7 +99,7 @@ function BookPage() {
       </div>
       <button
         onClick={handleClose}
-        className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#650000] hover:bg-gray-300"
+        className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#1069b0] hover:bg-gray-300"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -134,17 +138,19 @@ function BookPage() {
                     {page.map((fish) => (
                       <div
                         key={fish.id}
-                        className={`flex flex-col items-center justify-center h-max ${collectedFish.includes(fish.id)
-                          ? "opacity-100"
-                          : "opacity-25"
-                          }`}
+                        className={`flex flex-col items-center justify-center h-max ${
+                          collectedFish.includes(fish.id)
+                            ? "opacity-100"
+                            : "opacity-25"
+                        }`}
                       >
                         <img
                           src={`/assets/webp/flavorIcons/${fish.iconCode}.webp`}
                           alt={fish.flavor}
                           className="w-[75%] aspect-[1/1]"
                           onError={(e) => {
-                            e.target.src = "/assets/webp/flavorIcons/notYet.webp"; // 이미지 로드 실패 시 기본 이미지로 대체
+                            e.target.src =
+                              "/assets/webp/flavorIcons/notYet.webp"; // 이미지 로드 실패 시 기본 이미지로 대체
                           }}
                         />
                         <span className="whitespace-pre-wrap">

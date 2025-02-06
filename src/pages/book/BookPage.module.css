@@ -1,6 +1,6 @@
 :global(.slick-prev:before),
 :global(.slick-next:before) {
-  color: #650000 !important; /* 화살표 색상 강제 변경 */
+  color: #1069b0 !important; /* 화살표 색상 강제 변경 */
 }
 
 :global(.slick-prev:before) {

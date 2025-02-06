@@ -69,7 +69,8 @@ function FishFrame() {
   const todayEnglish = dayMapping[today.getDay()]; // 오늘 요일 (영어)
 
   const goToAdd = () => {
-    if (eatenDays[todayEnglish]) { //키가 존재하는지 확인
+    if (eatenDays[todayEnglish]) {
+      //키가 존재하는지 확인
       alert("오늘은 이미 붕어빵을 등록하셨습니다!");
       return;
     }
@@ -82,13 +83,21 @@ function FishFrame() {
   const [radius, setRadius] = useState(0);
   const [imageSize, setImageSize] = useState(0);
 
-  const weekDays = ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Monday"];
+  const weekDays = [
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+    "Monday",
+  ];
 
   const calculateSizes = () => {
     if (frameRef.current) {
       const frameWidth = frameRef.current.offsetWidth;
-      setRadius(frameWidth / 3.8);
-      setImageSize(frameWidth / 4.15);
+      setRadius(frameWidth / 3.45);
+      setImageSize(frameWidth / 4.25);
     }
   };
 
@@ -171,9 +180,9 @@ function FishFrame() {
             src={
               eatenDays[todayEnglish]
                 ? "/assets/webp/goToRegisterBtn.webp" // 이미 등록 되었을 때
-                : "/assets/webp/goToRegisterBtn_red.webp" // 등록 아직 안되었을 때 (빨간색)
+                : "/assets/webp/goToRegisterBtn_blue.webp" // 등록 아직 안되었을 때 (파란색)
             }
-            alt="icon"
+            alt="등록 버튼"
             className="p-2"
             style={{
               width: `${imageSize * 0.7}px`,
@@ -210,26 +219,37 @@ function Main() {
 
       // 캡처 대상 설정
       const element = document.querySelector(".main-area");
-      const bulbTopBlur = document.querySelector(".bulbTopBlur");
-      const bulbTop = document.querySelector(".bulbTop");
+      const profileArea = document.querySelector(".profileArea");
+      const bunTxtArea = document.querySelector(".bunTxtArea");
+
+      // const bulbTopBlur = document.querySelector(".bulbTopBlur");
+      // const bulbTop = document.querySelector(".bulbTop");
 
       const originalBackgroundImage = element.style.backgroundImage;
-      element.style.backgroundImage =
-        "url(/assets/webp/glitter.webp), url(/assets/webp/checkPatternMerged.webp)";
+      // element.style.backgroundImage =
+      //   "url(/assets/webp/glitter.webp), url(/assets/webp/checkPatternMerged.webp)";
 
       const btnArea = document.querySelector(".btn-area");
-      if (btnArea) btnArea.style.display = "none";
-      if (bulbTop) bulbTop.style.display = "none";
-      if (bulbTopBlur) bulbTopBlur.style.display = "none";
+
+      if (btnArea) {
+        profileArea.style.justifyContent = "start";
+        bunTxtArea.style.top = "-0.2dvh";
+      }
+      // if (bulbTop) bulbTop.style.display = "none";
+      // if (bulbTopBlur) bulbTopBlur.style.display = "none";
 
       // html2canvas로 캡처
       const canvas = await html2canvas(element);
 
       element.style.backgroundImage = originalBackgroundImage;
 
-      if (btnArea) btnArea.style.display = "";
-      if (bulbTop) bulbTop.style.display = "";
-      if (bulbTopBlur) bulbTopBlur.style.display = "";
+      // if (btnArea) btnArea.style.display = "";
+      // if (bulbTop) bulbTop.style.display = "";
+      // if (bulbTopBlur) bulbTopBlur.style.display = "";
+      if (btnArea) {
+        profileArea.style.justifyContent = "center";
+        bunTxtArea.style.top = "-1dvh"; // top 속성 올바르게 적용
+      }
 
       const dataURL = canvas.toDataURL("image/png");
 
@@ -267,7 +287,6 @@ function Main() {
 
       // 월간 카운트 업데이트
       setMonthlyCount(monthlyCount);
-
     } catch (error) {
       console.error("서버 데이터 가져오기 실패:", error);
     }
@@ -342,11 +361,79 @@ function Main() {
 
   const closeModal = () => setModalOpen(false);
 
+  const SocialButton = ({ iconPath, onClick, label }) => (
+    <button
+      className="flex justify-center items-center p-2  hover:bg-gray-300 rounded"
+      onClick={onClick}
+      aria-label={label}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        className="bi"
+        viewBox="0 0 16 16"
+      >
+        <path d={iconPath} />
+      </svg>
+    </button>
+  );
+
+  useEffect(() => {
+    const Kakao = typeof window !== "undefined" ? window.Kakao : null;
+    if (Kakao && !Kakao.isInitialized()) {
+      Kakao.init("2f592f29ac8bd230f9554175da46fedd");
+      console.log("Kakao initialized:", Kakao.isInitialized());
+    }
+  }, []);
+
+  const shareKakao = () => {
+    const Kakao = typeof window !== "undefined" ? window.Kakao : null;
+    if (Kakao) {
+      Kakao.Share.sendCustom({
+        templateId: 115802,
+        templateArgs: {
+          PROFILE: "https://bunglog.me/",
+          THUMB: "https://bunglog.me/",
+        },
+      });
+    } else {
+      console.error("Kakao SDK is not initialized.");
+    }
+  };
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = async () => {
+    const htmlContent = `[붕어빵 탐험대]<br>팥냥이와 함께 떠나는 붕어빵 탐험!<br><a href="https://bunglog.me">https://bunglog.me</a>`;
+    const plainText = `[붕어빵 탐험대]\n팥냥이와 함께 떠나는 붕어빵 탐험!\nhttps://bunglog.me`;
+
+    if (navigator.clipboard && navigator.clipboard.write) {
+      try {
+        const htmlBlob = new Blob([htmlContent], { type: "text/html" });
+        const textBlob = new Blob([plainText], { type: "text/plain" });
+        const clipboardItem = new ClipboardItem({
+          "text/html": htmlBlob,
+          "text/plain": textBlob,
+        });
+
+        await navigator.clipboard.write([clipboardItem]);
+        setCopied(true);
+        alert("클립보드에 복사되었습니다!");
+        setTimeout(() => setCopied(false), 2000);
+      } catch (error) {
+        console.error("Failed to copy link:", error);
+        alert("클립보드 복사에 실패했습니다.");
+      }
+    }
+  };
+
   return (
     <div
       className="main-area flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
       style={{
-        backgroundImage: `url(/assets/webp/glitter.webp), url(/assets/webp/checkPattern.webp)`,
+        backgroundImage: `url(/assets/webp/mainBg.webp)`,
       }}
     >
       {/* Modal 컴포넌트 */}
@@ -378,8 +465,9 @@ function Main() {
           >
             <button
               onClick={handlePrev}
-              className={`flex items-center text-sz25 ${currentPage === 0 ? "text-gray-500" : "text-[#650000]"
-                }`}
+              className={`flex items-center text-sz25 ${
+                currentPage === 0 ? "text-gray-500" : "text-[#1069b0]"
+              }`}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -395,10 +483,11 @@ function Main() {
             </button>
             <button
               onClick={handleNext}
-              className={`flex items-center text-sz25 ${currentPage === tutorialPages.length - 1
-                ? "text-gray-500"
-                : "text-[#650000]"
-                }`}
+              className={`flex items-center text-sz25 ${
+                currentPage === tutorialPages.length - 1
+                  ? "text-gray-500"
+                  : "text-[#1069b0]"
+              }`}
             >
               {currentPage === tutorialPages.length - 1
                 ? "마지막 페이지"
@@ -415,83 +504,79 @@ function Main() {
                 <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0M4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5z" />
               </svg>
             </button>
-            {/* <button
-              onClick={() =>
-                setCurrentPage((prev) =>
-                  Math.min(prev + 1, tutorialPages.length - 1)
-                )
-              }
-            >
-              {currentPage === tutorialPages.length - 1
-                ? "Finish"
-                : "다음 페이지"}
-            </button> */}
           </div>
         </div>
       </Modal>
-      <div
-        className={`w-full absolute top-0 absolute ${styles["soft-blink"]} bulbTopBlur`}
-      >
-        <img src="/assets/webp/bulbTopBlur.webp" alt="bulb bottom" />
-      </div>
+
       <div className="w-full absolute top-0 bulbTop">
-        <img src="/assets/webp/bulbTop.webp" alt="bulb bottom" />
-      </div>
-      <div
-        className={`w-full absolute bottom-0 absolute ${styles["soft-blink"]} BulbBtmBlur`}
-      >
-        <img src="/assets/webp/bulbBtmBlur.webp" alt="bulb bottom" />
+        <img src="/assets/webp/mainObjTop.webp" alt="mainObj top" />
       </div>
       <div className="w-full absolute bottom-0 bulbBtm">
-        <img src="/assets/webp/bulbBtm.webp" alt="bulb bottom" />
+        <img src="/assets/webp/mainObjBtm.webp" alt="mainObj bottom" />
       </div>
 
-      <div className="top-btn-area flex absolute top-0 justify-start">
-        <button
-          className="m-[2dvh] text-white bg-[#650000] rounded-full z-10"
-          onClick={openModal}
+      <div className="top-btn-area flex absolute top-0 justify-between items-start w-full px-2 pt-4">
+        <div
+          className="profileArea h-[10dvh] w-[calc(10dvh_*_1277/378)] bg-cover flex flex-col justify-center text-[#9b5d24] nowrap"
+          style={{
+            backgroundImage: `url(/assets/webp/profile.webp)`,
+          }}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6 w-[5dvh] h-[5dvh]"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
-            />
-          </svg>
-        </button>
-      </div>
-      <div className="mid-area mb-8">
-        <div className="text-[#fffed6]">
-          {/* <div className="text-sz20">
-            <span className="text-point-color font-semibold">Lv.1</span>
-            <span className="ps-1">미니붕어</span>
-          </div> */}
-          <div className="text-name font-bold pt-1 drop-shadow-xlRedLight">
-            <span>{nickname}님</span>
+          <div className="text-sz35 font-bold w-full text-center">
+            <span>{nickname}</span>&nbsp;님
           </div>
-          <div className="text-sz20 drop-shadow-smRed">
-            이번달은 붕어빵을{" "}
-            <span className="font-semibold">{monthlyCount}</span>번 먹었어요!
+          <div className="relative w-full h-[2dvh]">
+            <div className="bunTxtArea text-sz20 w-full text-center nowrap absolute top-[-1dvh]">
+              이번달은 붕어빵을{" "}
+              <span className="font-semibold">{monthlyCount}</span>번 먹었어요!
+            </div>
           </div>
         </div>
+        <button className="w-[5dvh] rounded-full z-10" onClick={openModal}>
+          <img
+            src="/assets/webp/modalIcon.webp"
+            alt="show modal button"
+            className=""
+          />
+        </button>
+      </div>
+      <div className="mid-area mb-8 px-3">
         <FishFrame />
       </div>
-      <div className="btn-area w-full flex flex-col items-end absolute bottom-0 h-full justify-end">
+      <div className="btn-area w-full flex items-end absolute bottom-0 h-full justify-end">
         {!isMenuOpen && (
-          <button className="w-[12dvh] m-[2dvh]" onClick={toggleMenu}>
-            <img
-              src="/assets/webp/menuBtn.webp"
-              alt="menu"
-              className="drop-shadow-smGray"
-            />
-          </button>
+          <div className=" w-full p-2">
+            <div className="w-full flex items-end justify-end gap-2">
+              <button className="w-[6.7dvh]" onClick={handleCaptureAndDownload}>
+                <img
+                  src="/assets/webp/captureBtn.webp"
+                  alt="share button"
+                  className=""
+                />
+              </button>
+              <button className="w-[6.7dvh]" onClick={goToCalendar}>
+                <img
+                  src="/assets/webp/calendarBtn.webp"
+                  alt="calendar button"
+                  className=""
+                />
+              </button>
+              <button className="w-[6.7dvh]" onClick={goToBook}>
+                <img
+                  src="/assets/webp/bookBtn.webp"
+                  alt="book button"
+                  className=""
+                />
+              </button>
+              <button className="w-[6.7dvh]" onClick={toggleMenu}>
+                <img
+                  src="/assets/webp/shareBtn.webp"
+                  alt="share button"
+                  className=""
+                />
+              </button>
+            </div>
+          </div>
         )}
         {isMenuOpen && (
           <div
@@ -499,65 +584,29 @@ function Main() {
             onClick={closeMenu}
           >
             <div
-              className="flex flex-col space-y-4 justify-end m-[2dvh]"
+              className="flex flex-col space-y-4 justify-end m-2"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                className="w-[12dvh] mx-auto drop-shadow-smGray"
-                onClick={handleCaptureAndDownload}
-              >
+              <button className="w-[6.7dvh] mx-auto " onClick={shareKakao}>
                 <img
-                  src="/assets/webp/captureBtn.webp"
-                  alt="capture button"
+                  src="/assets/webp/kakaoBtn.webp"
+                  alt="share on kakao button"
                   className=""
                 />
               </button>
-              <button
-                className="w-[12dvh] mx-auto drop-shadow-smGray"
-                onClick={goToCalendar}
-              >
+              <button className="w-[6.7dvh] mx-auto " onClick={handleCopyLink}>
                 <img
-                  src="/assets/webp/calendarBtn.webp"
-                  alt="calendar button"
+                  src="/assets/webp/linkBtn.webp"
+                  alt="copy link button"
                   className=""
                 />
               </button>
-              <button
-                className="w-[12dvh] mx-auto drop-shadow-smGray"
-                onClick={goToBook}
-              >
+              <button className="w-[6.7dvh] mx-auto " onClick={closeMenu}>
                 <img
-                  src="/assets/webp/bookBtn.webp"
-                  alt="book button"
+                  src="/assets/webp/returnBtn.webp"
+                  alt="copy link button"
                   className=""
                 />
-              </button>
-              <button
-                className="relative w-[7dvh] h-[7dvh] flex items-center justify-center ms-auto drop-shadow-smGray"
-                onClick={closeMenu}
-              >
-                {/* 배경 이미지 */}
-                <img
-                  src="/assets/webp/btnBg.webp"
-                  alt="close button"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                {/* SVG 아이콘 */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="text-white z-10 size-8"
-                  alt="close svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
               </button>
             </div>
           </div>
