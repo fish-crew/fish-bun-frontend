@@ -39,7 +39,14 @@ const AddPage = () => {
       setDateToSend(paramDate); // URL 파라미터로 전달된 날짜를 사용
     } else {
       const today = new Date();
-      const formattedToday = today.toISOString().split("T")[0]; // 오늘 날짜를 "YYYY-MM-DD" 형식으로 변환
+
+      // 한국 시간(UTC+9) 적용
+      const koreaTimeOffset = 9 * 60 * 60 * 1000;
+      const localToday = new Date(today.getTime() + koreaTimeOffset);
+
+      // YYYY-MM-DD 형식으로 변환
+      const formattedToday = localToday.toISOString().split("T")[0];
+
       setDateToSend(formattedToday); // 오늘 날짜를 기본값으로 설정
     }
   }, [location]);
