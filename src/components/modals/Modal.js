@@ -9,7 +9,7 @@ const Modal = ({ isOpen, onClose, children, title }) => {
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalHeader}>
-          <div className="title text-sz35 font-semibold text-[#650000]">
+          <div className="title text-sz35 font-semibold text-[#1069b0]">
             {title}
           </div>
           <button className={styles.closeButton} onClick={onClose}>

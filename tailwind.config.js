@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        "point-color": "#650000",
+        "point-color": "#1069b0",
       },
       spacing: {
         dvh: "100dvh",
