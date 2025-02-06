@@ -1,5 +1,5 @@
 :global(.react-calendar) {
-  @apply rounded-xl w-full h-full max-w-[600px] border-none pt-3 font-hakgyo bg-[transparent];
+  @apply rounded-xl w-full h-full max-w-[600px] border-none pt-3 font-Dovemayo_gothic bg-[transparent];
 }
 
 /* :global(.react-calendar__viewContainer) {

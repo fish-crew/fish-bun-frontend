@@ -71,15 +71,15 @@ function SuccessPage() {
         {Array.from({ length: total }, (_, index) => (
           <span
             key={index}
-            className={`w-3 h-3 rounded-full cursor-pointer transition-all ${index === activeIndex ? "bg-[#7f5b41] scale-125" : "bg-gray-300"
-              }`}
+            className={`w-3 h-3 rounded-full cursor-pointer transition-all ${
+              index === activeIndex ? "bg-[#7f5b41] scale-125" : "bg-gray-300"
+            }`}
             onClick={() => onDotClick(index)} // 클릭 시 활성화된 슬라이드 변경
           ></span>
         ))}
       </div>
     );
   };
-
 
   return (
     <div className="flex flex-col justify-around items-center w-full h-full overflow-auto">
@@ -125,10 +125,11 @@ function SuccessPage() {
                     <img
                       src={`/assets/webp/flavorIcons/${item.iconCode}.webp`}
                       alt={item.flavor}
-                      className={`w-full h-full object-contain ${activeIndex === index && animationTrigger
-                        ? "animate__animated animate__bounce"
-                        : ""
-                        }`}
+                      className={`w-full h-full object-contain ${
+                        activeIndex === index && animationTrigger
+                          ? "animate__animated animate__bounce"
+                          : ""
+                      }`}
                       onError={(e) => {
                         e.target.src = "/assets/webp/flavorIcons/notYet.webp"; // 기본 이미지 경로로 대체
                       }}
@@ -145,7 +146,7 @@ function SuccessPage() {
                     }}
                   >
                     <div
-                      className="whitespace-nowrap text-white absolute text-sz30 font-bold font-kyoboHand"
+                      className="whitespace-nowrap text-white absolute text-sz30 font-bold font-Dovemayo_gothic"
                       style={{
                         top: "58%",
                         left: "50%",

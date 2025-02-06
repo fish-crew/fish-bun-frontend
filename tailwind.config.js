@@ -12,6 +12,7 @@ module.exports = {
       fontFamily: {
         hakgyo: ["HakgyoansimGeurimilgiTTF-R", "sans-serif"],
         kyoboHand: ["KyoboHand", "sans-serif"],
+        Dovemayo_gothic: ["Dovemayo_gothic", "sans-serif"],
       },
       fontSize: {
         name: "6dvh",
