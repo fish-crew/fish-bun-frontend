@@ -70,7 +70,7 @@ function NicknamePage() {
         </div>
 
         <button
-          className="mt-4 bg-[#505985] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
+          className="mt-4 bg-[#1069b0] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
           onClick={handleSubmit}
         >
           확인

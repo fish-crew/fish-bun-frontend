@@ -172,62 +172,112 @@ const AddPage = () => {
   };
 
   return (
-    <div
-      className="flex flex-col items-center justify-around p-6 bg-gray-100 overflow-auto relative w-full h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/assets/webp/checkPattern.webp')" }}
-    >
-      <div>
-        <button
-          onClick={handleClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center bg-[#1069b0] hover:bg-gray-300"
+    <div className="w-full flex-grow flex flex-col overflow-y-auto">
+      <div className="w-full h-max">
+        <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
+      </div>
+      <button
+        onClick={handleClose}
+        className="absolute top-6 right-6 w-8 h-8 rounded-full flex items-center justify-center bg-[#1069b0] hover:bg-gray-300 z-10 "
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="w-6 h-6 text-white stroke-[3px]"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth="1.5"
-            stroke="currentColor"
-            className="w-6 h-6 text-white stroke-[3px]"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-      <div className="text-center text-title font-medium text-white drop-shadow-title drop-shadow-xlRed">
-        사진을 추가해주세요
-      </div>
-      <div className="text-center text-sz25 mb-4 text-white drop-shadow-smRed">
-        등록은 하루에 한번만 가능합니다.
-      </div>
-      <div className="flex flex-col flex-grow w-full items-center overflow-y-auto">
-        {/* 이미지 업로드 컴포넌트 */}
-        <ImageUpload />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+      <div
+        className="w-full flex flex-col flex-grow bg-cover px-3 pb-3"
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
+      >
+        <div className="text-center text-title font-medium text-[#1069b0]">
+          사진을 추가해주세요
+        </div>
+        <div className="text-center text-sz25 mb-4 text-gray-700">
+          등록은 하루에 한번만 가능합니다.
+        </div>
+        <div className="flex flex-col flex-grow w-full items-center overflow-y-auto">
+          {/* 이미지 업로드 컴포넌트 */}
+          <ImageUpload />
 
-        {/* 드롭다운 선택 컴포넌트 */}
-        <DropdownSelector options={flavorsList} onSelect={handleOptionSelect} />
+          {/* 드롭다운 선택 컴포넌트 */}
+          <DropdownSelector
+            options={flavorsList}
+            onSelect={handleOptionSelect}
+          />
 
-        {/* 선택된 옵션 표시 */}
-        <div className="mt-4 w-72 flex flex-col flex-grow ">
-          <div className="space-y-1">
-            {Object.keys(selectedOptions).map((option) => (
-              <div
-                key={option}
-                className="flex items-center justify-between p-2 border rounded-md bg-white shadow"
-              >
-                <span className="text-sz25 font-medium w-60 break-normal">
-                  {option}
-                </span>
+          {/* 선택된 옵션 표시 */}
+          <div className="mt-4 w-72 flex flex-col flex-grow ">
+            <div className="space-y-1">
+              {Object.keys(selectedOptions).map((option) => (
+                <div
+                  key={option}
+                  className="flex items-center justify-between p-2 border rounded-md bg-white shadow"
+                >
+                  <span className="text-sz25 font-medium w-60 break-normal">
+                    {option}
+                  </span>
 
-                <div className="flex items-center justify-end w-40">
-                  <div className="flex items-center gap-2">
-                    {/* 수량 감소 버튼 */}
+                  <div className="flex items-center justify-end w-40">
+                    <div className="flex items-center gap-2">
+                      {/* 수량 감소 버튼 */}
+                      <button
+                        onClick={() => handleQuantityChange(option, -1)}
+                        className="items-center justify-center border rounded-full mx-2 font-bold"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6 p-1"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M5 12h14"
+                          />
+                        </svg>
+                      </button>
+                      {/* 수량 표시 */}
+                      <span className="text-sz25">
+                        {selectedOptions[option]}
+                      </span>
+                      {/* 수량 증가 버튼 */}
+                      <button
+                        onClick={() => handleQuantityChange(option, 1)}
+                        className="items-center justify-center border rounded-full mx-2 font-bold "
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="size-6 p-1"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 4.5v15m7.5-7.5h-15"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    {/* 삭제 버튼 */}
                     <button
-                      onClick={() => handleQuantityChange(option, -1)}
-                      className="items-center justify-center border rounded-full mx-2 font-bold"
+                      onClick={() => handleRemoveOption(option)}
+                      className="w-6 h-6 rounded-full flex items-center justify-center ml-1 pl-0.5"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -235,72 +285,32 @@ const AddPage = () => {
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="size-6 p-1"
+                        class="size-5 text-gray-600"
                       >
                         <path
                           stroke-linecap="round"
                           stroke-linejoin="round"
-                          d="M5 12h14"
-                        />
-                      </svg>
-                    </button>
-                    {/* 수량 표시 */}
-                    <span className="text-sz25">{selectedOptions[option]}</span>
-                    {/* 수량 증가 버튼 */}
-                    <button
-                      onClick={() => handleQuantityChange(option, 1)}
-                      className="items-center justify-center border rounded-full mx-2 font-bold "
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="size-6 p-1"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M12 4.5v15m7.5-7.5h-15"
+                          d="M6 18 18 6M6 6l12 12"
                         />
                       </svg>
                     </button>
                   </div>
-                  {/* 삭제 버튼 */}
-                  <button
-                    onClick={() => handleRemoveOption(option)}
-                    className="w-6 h-6 rounded-full flex items-center justify-center ml-1 pl-0.5"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="size-5 text-gray-600"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18 18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* 제출 버튼 */}
-      <button
-        className="mt-4 bg-[#630000] hover:bg-white hover:text-[#630000] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em]"
-        onClick={handleSubmit}
-      >
-        확인
-      </button>
+        {/* 제출 버튼 */}
+        <div className="">
+          <button
+            className="mt-4 bg-[#1069b0] hover:bg-white hover:text-[#1069b0] text-white border-4 font-bold py-2 px-6 rounded-full w-72 text-sz35 tracking-[.25em] w-72"
+            onClick={handleSubmit}
+          >
+            확인
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

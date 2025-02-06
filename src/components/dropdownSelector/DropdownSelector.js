@@ -29,7 +29,7 @@ function DropdownSelector({ options, onSelect }) {
     <div ref={dropdownRef} className="relative w-72 mt-4">
       <button
         onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full rounded-full p-1 text-sz30 bg-[#630000] text-left"
+        className="w-full rounded-full p-1 text-sz30 bg-[#1069b0] text-left"
       >
         <div className="flex items-center rounded-full justify-between text-white">
           <span className="w-full text-center">붕어빵 선택</span>
@@ -42,7 +42,7 @@ function DropdownSelector({ options, onSelect }) {
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="size-6 bg-[#630000] rotate-90"
+              class="size-6 bg-[#1069b0] rotate-90"
             >
               <path
                 fill-rule="evenodd"
