@@ -31,7 +31,7 @@ function ImageUpload() {
   };
 
   return (
-    <div className="w-72 h-32 flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded-lg bg-white drop-shadow-xlRedLight">
+    <div className="w-72 h-32 flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded-lg bg-white">
       {imagePreview ? (
         <div className="w-full h-full flex justify-center">
           {/* 미리보기 이미지 */}
@@ -51,7 +51,7 @@ function ImageUpload() {
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="size-6 bg-[#630000] rounded-full p-0.5"
+              class="size-6 bg-[#1069b0] rounded-full p-0.5"
             >
               <path
                 stroke-linecap="round"
