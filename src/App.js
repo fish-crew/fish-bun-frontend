@@ -21,6 +21,7 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 import BungBalGamePage from "./pages/game/bungBalGamePage";
+import BookDetailPage from './pages/bookDetail/BookDetailPage';
 import { Provider } from "react-redux"; // Provider 임포트
 import store, { persistor } from "./redux/store"; // Store와 Persistor 가져오기
 import { PersistGate } from "redux-persist/integration/react"; // PersistGate 추가
@@ -88,6 +89,14 @@ function AppContent({ isWebPSupported }) {
           element={
             <ProtectedRoute>
               <BookPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/bookDetailPage/:flavorId"
+          element={
+            <ProtectedRoute>
+              <BookDetailPage />
             </ProtectedRoute>
           }
         />
