@@ -1,19 +1,10 @@
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-function Footer() {
-  const location = useLocation();
-  const isSpecialPage = ["/main", "/register/addPage"].includes(
-    location.pathname
-  );
-
-  const footerColor = isSpecialPage
-    ? "bg-[#1069b0] text-[#edebeb]"
-    : "bg-[#f1f0ec] text-[#1069b0]";
-
-  const SocialButton = ({ iconPath, onClick, label }) => (
+function SocialButton({ iconPath, onClick, label }) {
+  return (
     <button
-      className="flex justify-center items-center p-2  hover:bg-gray-300 rounded"
+      className="flex justify-center items-center py-2 ps-2 pe-1 hover:bg-gray-300 rounded"
       onClick={onClick}
       aria-label={label}
     >
@@ -29,73 +20,28 @@ function Footer() {
       </svg>
     </button>
   );
+}
 
-  useEffect(() => {
-    const Kakao = typeof window !== "undefined" ? window.Kakao : null;
-    if (Kakao && !Kakao.isInitialized()) {
-      Kakao.init("2f592f29ac8bd230f9554175da46fedd");
-      console.log("Kakao initialized:", Kakao.isInitialized());
-    }
-  }, []);
+function Footer() {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const shareKakao = () => {
-    const Kakao = typeof window !== "undefined" ? window.Kakao : null;
-    if (Kakao) {
-      Kakao.Share.sendCustom({
-        templateId: 115802,
-        templateArgs: {
-          PROFILE: "https://bunglog.me/",
-          THUMB: "https://bunglog.me/",
-        },
-      });
-    } else {
-      console.error("Kakao SDK is not initialized.");
-    }
-  };
+  const isSpecialPage = ["/main", "/register/addPage"].includes(
+    location.pathname
+  );
+  const isCoupangTxtPage = ["/register/reportPage"].includes(location.pathname);
+  const isBungBalGamePage = location.pathname === "/bungBalGamePage";
 
-  const [copied, setCopied] = useState(false);
+  const footerColor = isSpecialPage
+    ? "bg-[#1069b0] text-[#edebeb]"
+    : "bg-[#f1f0ec] text-[#1069b0]";
 
-  const handleCopyLink = async () => {
-    const htmlContent = `[붕어빵 탐험대]<br>팥냥이와 함께 떠나는 붕어빵 탐험!<br><a href="https://bunglog.me">https://bunglog.me</a>`;
-    const plainText = `[붕어빵 탐험대]\n팥냥이와 함께 떠나는 붕어빵 탐험!\nhttps://bunglog.me`;
-
-    if (navigator.clipboard && navigator.clipboard.write) {
-      try {
-        const htmlBlob = new Blob([htmlContent], { type: "text/html" });
-        const textBlob = new Blob([plainText], { type: "text/plain" });
-        const clipboardItem = new ClipboardItem({
-          "text/html": htmlBlob,
-          "text/plain": textBlob,
-        });
-
-        await navigator.clipboard.write([clipboardItem]);
-        setCopied(true);
-        alert("클립보드에 복사되었습니다!");
-        setTimeout(() => setCopied(false), 2000);
-      } catch (error) {
-        console.error("Failed to copy link:", error);
-        alert("클립보드 복사에 실패했습니다.");
-      }
-    }
-  };
-
-  const buttons = [
-    {
-      label: "Share on Kakao",
-      iconPath:
-        "M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9 9 0 0 0 8 15",
-      onClick: shareKakao,
-    },
-    {
-      label: "Copy Link",
-      iconPath: `
-       M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1z
-        M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z
-      `,
-      onClick: handleCopyLink,
-    },
-  ];
-
+  const goToBungBalGame = useCallback(() => {
+    navigate("/bungBalGamePage");
+  }, [navigate]);
+  const goToMainService = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
   const snsButtons = [
     {
       label: "Visit 붕어빵 탐험대 Instagram",
@@ -111,58 +57,75 @@ function Footer() {
       onClick: () => alert("붕어빵 탐험대 X 방문하기"),
     },
   ];
-
-  const isCoupangTxtPage = ["/register/reportPage"].includes(location.pathname);
-
-  const coupangAds = !isCoupangTxtPage ? (
-    <div className="w-full flex items-center justify-between">
-      <div className="flex justify-center items-center">
-        <div className="pe-1">공유하기</div>
-        {buttons.map((btn, idx) => (
-          <SocialButton
-            key={idx}
-            iconPath={btn.iconPath}
-            onClick={btn.onClick}
-            label={btn.label}
-          />
-        ))}
-      </div>
-      <div className="flex justify-center items-center">
-        <div className="pe-1">붕어빵탐험대</div>
-        {snsButtons.map((btn, idx) => (
-          <SocialButton
-            key={idx}
-            iconPath={btn.iconPath}
-            onClick={btn.onClick}
-            label={btn.label}
-          />
-        ))}
-      </div>
-    </div>
-  ) : (
-    <div className="text-[1.8dvh] text-center w-full text-gray-400">
-      *파트너 활동을 통해 일정액의 수수료를 제공받을 수 있음
-    </div>
-  );
-
   return (
-    <div>
-      <div className="mx-auto bg-gray-200">
-        <div
-          className={`w-full text-sz23 flex px-4 items-center justify-between ${footerColor}`}
-        >
-          {coupangAds} {/* JSX 요소로 직접 삽입 */}
-        </div>
-        <iframe
-          src="https://ads-partners.coupang.com/widgets.html?id=835435&template=carousel&trackingCode=AF6298929&subId=&width=680&height=108&tsource="
-          width="100%"
-          height="90"
-          frameBorder="0"
-          scrolling="no"
-          referrerPolicy="unsafe-url"
-          browsingtopics
-        ></iframe>
+    <div className="mx-auto bg-gray-200 w-full">
+      <div
+        className={`w-full text-sz23 flex px-2 items-center justify-between ${footerColor}`}
+      >
+        {!isCoupangTxtPage ? (
+          isBungBalGamePage ? (
+            <div className="w-full flex items-center">
+              <button
+                className="w-full flex items-center"
+                onClick={goToMainService}
+              >
+                붕어빵 수집하기&nbsp;
+                {isSpecialPage ? (
+                  <img
+                    src="/assets/webp/cal-bun-white.webp"
+                    alt=""
+                    className="w-4"
+                  />
+                ) : (
+                  <img
+                    src="/assets/webp/cal-bun-blue.webp"
+                    alt=""
+                    className="w-4"
+                  />
+                )}
+              </button>
+              <div className="flex justify-center items-center">
+                <div className="">붕어빵탐험대</div>
+                {snsButtons.map((btn, idx) => (
+                  <SocialButton key={idx} {...btn} />
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="w-full flex items-center">
+              <button
+                className="w-full flex items-center"
+                onClick={goToBungBalGame}
+              >
+                붕어빵 취향 테스트&nbsp;
+                <img
+                  src="/assets/webp/cal-bun-white.webp"
+                  alt=""
+                  className="w-4"
+                />
+              </button>
+              <div className="flex justify-center items-center">
+                <div className="">붕어빵탐험대</div>
+                {snsButtons.map((btn, idx) => (
+                  <SocialButton key={idx} {...btn} />
+                ))}
+              </div>
+            </div>
+          )
+        ) : (
+          <div className="text-[1.5dvh] text-center w-full text-gray-400">
+            *파트너 활동을 통해 일정액의 수수료를 제공받을 수 있음
+          </div>
+        )}
       </div>
+      <iframe
+        src="https://ads-partners.coupang.com/widgets.html?id=835435&template=carousel&trackingCode=AF6298929&subId=&width=680&height=108&tsource="
+        width="100%"
+        height="90"
+        frameBorder="0"
+        scrolling="no"
+        referrerPolicy="unsafe-url"
+      ></iframe>
     </div>
   );
 }
