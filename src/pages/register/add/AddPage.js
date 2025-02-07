@@ -206,7 +206,7 @@ const AddPage = () => {
         className="w-full flex flex-col flex-grow bg-cover px-3 pb-3"
         style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
       >
-        <div className="text-center text-title font-medium text-[#1069b0]">
+        <div className="text-center text-sz40 font-medium text-[#1069b0] pt-3">
           사진을 추가해주세요
         </div>
         <div className="text-center text-sz25 mb-4 text-gray-700">
