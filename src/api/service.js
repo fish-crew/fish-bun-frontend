@@ -76,7 +76,9 @@ export async function fetchFlavorData() {
 
 export async function fetchBookDetailData(flavorId) {
   try {
-    const response = await axiosInstance.get(`/fish-bun/book/detail/${flavorId}`);
+    const response = await axiosInstance.get(
+      `/fish-bun/book/detail/${flavorId}`
+    );
     return response.data;
   } catch (error) {
     console.error("데이터 요청 실패:", error);
@@ -140,3 +142,16 @@ export const updateFirstLogin = async () => {
     throw error;
   }
 };
+
+export async function postMbtiData(mbti) {
+  try {
+    const response = await axiosInstance.post(
+      "/bungbal/stats/count", // API 엔드포인트
+      { mbti } // 요청 본문에 전달할 데이터
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}

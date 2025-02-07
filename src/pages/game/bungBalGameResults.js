@@ -1,3 +1,5 @@
+import { postMbtiData } from "../../api/service.js";
+
 const bungBalGameResults = [
   {
     type: "팥 붕어빵",
@@ -298,6 +300,24 @@ export function matchBungBalType(userAnswers) {
     (mbtiScores.J >= mbtiScores.P ? "J" : "P");
 
   // console.log("User MBTI Type:", mbtiType);
+  // 서버로 보내기
+  const handleSubmit = async () => {
+    // 입력값이 공란인지 확인
+    if (!mbtiType.trim()) {
+      return;
+    }
+
+    // 입력값이 정상인 경우 처리
+    // 서버 요청 로직 추가
+    try {
+      // 서버에 데이터 전송
+      const response = await postMbtiData(mbtiType);
+    } catch (error) {
+      console.error("데이터 전송 실패:", error);
+      alert("서버로 데이터를 전송하는 데 실패했습니다.");
+    }
+  };
+  handleSubmit();
 
   // 1. 사용자의 MBTI와 완벽하게 일치하는 붕어빵 찾기
   let bestMatch = bungBalGameResults.find((result) => result.mbti === mbtiType);
