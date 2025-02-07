@@ -1,13 +1,15 @@
-import { useState } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import bungBalGameQuestions from "./bungBalGameData";
 import bungBalGameResults, { matchBungBalType } from "./bungBalGameResults";
+import styles from "./bungBalGamePage.module.css";
+import html2canvas from "html2canvas";
 
 function Button({ onClick, children, className }) {
   return (
     <button
       onClick={onClick}
-      className={`px-4 py-4 bg-[#7b83a8] text-sz25 text-white rounded ${className}`}
+      className={`px-4 py-4 bg-[#1069b0] text-white text-sz25  rounded ${className}`}
     >
       {children}
     </button>
@@ -18,7 +20,7 @@ function Progress({ value }) {
   return (
     <div className="w-full bg-gray-300 h-2 rounded">
       <div
-        className="bg-[#505985] h-2 rounded"
+        className="bg-[#1069b0] h-2 rounded"
         style={{ width: `${value}%` }}
       ></div>
     </div>
@@ -52,18 +54,99 @@ export default function BungBalGamePage() {
   };
 
   const progressPercentage = ((step - 1) / bungBalGameQuestions.length) * 100;
-  const bgImage =
-    step === 0
-      ? `url(/assets/webp/bgBlue.webp)`
-      : `url(/assets/webp/checkPatternBlue.webp)`;
+  const bgImage = step === 0 ? `` : `url(/assets/webp/bgBlue.webp)`;
+
+  useEffect(() => {
+    const Kakao = typeof window !== "undefined" ? window.Kakao : null;
+    if (Kakao && !Kakao.isInitialized()) {
+      Kakao.init("2f592f29ac8bd230f9554175da46fedd");
+      console.log("Kakao initialized:", Kakao.isInitialized());
+    }
+  }, []);
+
+  const shareKakao = () => {
+    const Kakao = typeof window !== "undefined" ? window.Kakao : null;
+    if (Kakao) {
+      Kakao.Share.sendCustom({
+        templateId: 115802,
+        templateArgs: {
+          PROFILE: "https://bunglog.me/",
+          THUMB: "https://bunglog.me/",
+        },
+      });
+    } else {
+      console.error("Kakao SDK is not initialized.");
+    }
+  };
+
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyLink = async () => {
+    const htmlContent = `[붕어빵 탐험대]<br>팥냥이와 함께 떠나는 붕어빵 탐험!<br><a href="https://bunglog.me">https://bunglog.me</a>`;
+    const plainText = `[붕어빵 탐험대]\n팥냥이와 함께 떠나는 붕어빵 탐험!\nhttps://bunglog.me`;
+
+    if (navigator.clipboard && navigator.clipboard.write) {
+      try {
+        const htmlBlob = new Blob([htmlContent], { type: "text/html" });
+        const textBlob = new Blob([plainText], { type: "text/plain" });
+        const clipboardItem = new ClipboardItem({
+          "text/html": htmlBlob,
+          "text/plain": textBlob,
+        });
+
+        await navigator.clipboard.write([clipboardItem]);
+        setCopied(true);
+        alert("클립보드에 복사되었습니다!");
+        setTimeout(() => setCopied(false), 2000);
+      } catch (error) {
+        console.error("Failed to copy link:", error);
+        alert("클립보드 복사에 실패했습니다.");
+      }
+    }
+  };
+
+  const handleCaptureAndDownload = async () => {
+    try {
+      // 캡처 대상 설정
+      const element = document.querySelector(".captureArea");
+
+      // html2canvas로 캡처
+      const canvas = await html2canvas(element);
+
+      const dataURL = canvas.toDataURL("image/png");
+
+      // 현재 날짜와 시간 가져오기
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const date = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+
+      // 파일 이름 포맷팅
+      const fileName = `bungBalGame-${year}-${month}-${date}-${hours}-${minutes}-${seconds}.png`;
+
+      // 다운로드 링크 생성
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = fileName;
+      link.click();
+    } catch (error) {
+      console.error("캡처 오류:", error);
+      alert("화면 캡처 중 오류가 발생했습니다.");
+    }
+  };
+
+  const goToMainService = useCallback(() => {
+    navigate("/");
+  }, [navigate]);
 
   if (step > bungBalGameQuestions.length) {
     const result = matchBungBalType(userAnswers);
     return (
-      <div
-        className="flex flex-grow flex-col justify-center items-center relative w-full h-full bg-cover"
-        style={{ backgroundImage: `url(/assets/webp/checkPatternBlue.webp)` }}
-      >
+      <div className="flex flex-grow flex-col w-full bg-cover overflow-hidden">
+        {/* 상단 네비게이션 바 */}
         <div className="w-full bg-white h-[6dvh] flex justify-between items-center">
           <button
             className="w-10 h-10 flex items-center justify-center"
@@ -79,11 +162,11 @@ export default function BungBalGamePage() {
               width="16"
               height="16"
               fill="currentColor"
-              class="bi bi-chevron-left w-6 h-6"
+              className="bi bi-chevron-left w-6 h-6"
               viewBox="0 0 16 16"
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
               />
             </svg>
@@ -97,20 +180,156 @@ export default function BungBalGamePage() {
           <button className="w-10 h-10 flex items-center justify-center"></button>
         </div>
 
-        <div className="flex w-full h-full max-w-md p-6 flex-col justify-center">
-          <div className="w-full h-full p-6 bg-white rounded-lg shadow-lg flex flex-col justify-evenly items-center">
-            <div className="w-full flex justify-center items-center flex-col">
-              <div className="text-[#4d567d]">나의 붕어빵 타입은...</div>
-              <img className="w-[20dvh]" src={result.image} alt={result.type} />
-              <div className="text-sz30 font-bold">{result.type}</div>
-              <ul className="text-center">
-                <li className="w-full">{result.description}</li>
-              </ul>
+        {/* 콘텐츠 영역 */}
+        <div
+          className="flex w-full max-w-md flex-col justify-start"
+          style={{ height: "calc(100vh - 10dvh - 90px)" }}
+        >
+          <div className="w-full bg-white shadow-lg flex flex-col justify-start items-center h-full overflow-y-auto">
+            <div className="w-full h-max">
+              <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
+            </div>
+            <div
+              className={`resultArea w-full flex flex-col items-center p-3  ${styles.resultArea}`}
+            >
+              <div className="w-full flex flex-col items-center captureArea pb-3 px-2">
+                <div className="">나의 붕어빵 타입은...</div>
+                <img
+                  className="w-[20dvh]"
+                  src={result.image}
+                  alt={result.type}
+                />
+                <div className={`text-sz40 font-bold`}>{result.type}</div>
+                <div className="text-yellow-600 text-sz20 pb-3">
+                  전체 사용자 중 <span className="font-bold">12.4</span>%
+                </div>
+
+                <div className="border-2 border-dashed border-[#b7d3e4] w-full p-3">
+                  <div className={`text-sz30 pb-3  ${styles.highlightArea} `}>
+                    {result.slogan}
+                  </div>
+
+                  <ul
+                    className={`pt-3 w-full flex flex-col items-start ${styles.customList}`}
+                  >
+                    {result.description.map((desc, index) => (
+                      <li key={index} className="text-start">
+                        {desc}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="text-[1.5dvh] text-[#1069b0]">
+                  붕어빵 취향 테스트 by 붕어빵 탐험대
+                </div>
+                <div className="w-full flex gap-3">
+                  <div className="flex flex-col items-center justify-start p-3 border-2 border-dashed border-[#b7d3e4] w-full">
+                    <div
+                      className={`text-sz25 mb-2 ${styles.highlightYellow} `}
+                    >
+                      환상 조합
+                    </div>
+                    <img
+                      className="w-[8dvh]"
+                      src={result.bestMatchImg}
+                      alt={result.bestMatch}
+                    />
+                    <div className="text-sz25">{result.bestMatch}</div>
+                  </div>
+                  <div className="flex flex-col items-center justify-start p-3 border-2 border-dashed border-[#b7d3e4] w-full">
+                    <div
+                      className={`text-sz25 mb-2 ${styles.highlightYellow} `}
+                    >
+                      환장 조합
+                    </div>
+                    <img
+                      className="w-[8dvh]"
+                      src={result.worstMatchImg}
+                      alt={result.worstMatch}
+                    />
+                    <div className="text-sz25">{result.worstMatch}</div>
+                  </div>{" "}
+                </div>
+              </div>
+              <div className="w-full flex gap-5 items-center justify-center p-8">
+                <img
+                  src="/assets/webp/dots.webp"
+                  alt="•"
+                  className="text-[#1069b0] w-4 h-4"
+                />
+                <img
+                  src="/assets/webp/dots.webp"
+                  alt="•"
+                  className="text-[#1069b0] w-4 h-4"
+                />
+                <img
+                  src="/assets/webp/dots.webp"
+                  alt="•"
+                  className="text-[#1069b0] w-4 h-4"
+                />
+              </div>
+              <div className=" w-full flex items-center justify-center flex-col">
+                <div className="text-sz25 pb-1">
+                  내가 먹은 붕어빵 기록하러 가기
+                </div>
+                <button className="w-full " onClick={goToMainService}>
+                  <div className="p-3 border-2 border-dashed border-[#b7d3e4]">
+                    <img
+                      src="/assets/webp/thumbMainRec.webp"
+                      alt="share on kakao button"
+                      className="rounded-lg"
+                    />
+
+                    <div className="">팥냥이와 함께 떠나는 붕어빵 탐험!</div>
+                  </div>
+                </button>
+                <div className="text-sz25 mt-8">테스트 공유하기</div>
+                <div className="w-full flex gap-3 justify-center">
+                  <button
+                    className="w-[6.7dvh]"
+                    onClick={handleCaptureAndDownload}
+                  >
+                    <img
+                      src="/assets/webp/captureBtn.webp"
+                      alt="share button"
+                      className=""
+                    />
+                  </button>
+                  <button className="w-[6.7dvh]" onClick={shareKakao}>
+                    <img
+                      src="/assets/webp/kakaoBtn.webp"
+                      alt="share on kakao button"
+                      className=""
+                    />
+                  </button>
+                  <button className="w-[6.7dvh] " onClick={handleCopyLink}>
+                    <img
+                      src="/assets/webp/linkBtn.webp"
+                      alt="copy link button"
+                      className=""
+                    />
+                  </button>
+                </div>
+              </div>
               <button
                 onClick={handleReset}
-                className="mt-4 px-6 py-2 bg-[#505985] text-white rounded-full"
+                className="w-full px-4 py-2 text-sz30 rounded-full text-white bg-[#1069b0]  mt-8 flex justify-center items-center gap-2"
               >
-                다시하기 🔄
+                테스트 다시하기
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-arrow-clockwise w-[3dvh] h-[3dvh] stroke-white stroke-1"
+                  viewBox="0 0 16 16"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"
+                  />
+                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+                </svg>
               </button>
             </div>
           </div>
@@ -121,10 +340,10 @@ export default function BungBalGamePage() {
 
   return (
     <div
-      className="flex flex-grow flex-col justify-center items-center relative w-full h-full bg-cover"
+      className="flex flex-grow flex-col justify-center items-center relative w-full bg-cover"
       style={{ backgroundImage: bgImage }}
     >
-      <div className="w-full bg-white h-[6dvh] flex justify-between items-center">
+      <div className="w-full bg-white h-[6dvh] flex justify-between items-center border-b border-[rgb(211,211,211)]">
         <button
           className="w-10 h-10 flex items-center justify-center"
           disabled={step == 0}
@@ -158,54 +377,50 @@ export default function BungBalGamePage() {
       </div>
 
       {step === 0 ? (
-        <div className="w-full flex-grow flex flex-col items-center justify-evenly max-w-md p-6">
+        <div className="w-full flex-grow flex flex-col items-center justify-evenly max-w-md p-5">
           <div className="flex flex-col w-full items-center justify-center">
-            <div className="text-sz30 text-white pb-2">
-              나는 어떤 붕어빵일까?
-            </div>
+            <div className="text-sz30  pb-2">나는 어떤 붕어빵일까?</div>
             <img
               className="px-5"
               src="/assets/webp/bungIcons.webp"
               alt="붕어빵"
             />
-            <div className="text-[5dvh] font-bold pt-2 text-white">
+            <div className="text-[5dvh] font-medium pt-2 ">
               붕어빵 취향 테스트
             </div>
           </div>
           <button
             onClick={handleStart}
-            className="w-full px-4 py-2 text-sz30 rounded-full bg-white text-[#505985] font-bold"
+            className="w-full px-4 py-2 text-sz30 rounded-full text-white bg-[#1069b0] font-bold"
           >
             시작하기
           </button>
         </div>
       ) : (
-        <div className="flex w-full h-full max-w-md p-6 flex-col justify-between">
-          <div className="w-full p-6 bg-white rounded-lg shadow-lg flex flex-col justify-between">
+        <div className="flex w-full flex-grow max-w-md p-5 flex-col justify-between">
+          <div className="w-full h-full p-5 bg-white rounded-lg shadow-lg flex flex-col justify-between">
             <div className="w-full">
               <Progress value={progressPercentage} />
             </div>
-            <div className="w-full">
-              <div className="text-sz30 font-bold pb-6 pt-10">
-                {bungBalGameQuestions[step - 1].text}
-              </div>
-              <div className="flex flex-col">
-                {bungBalGameQuestions[step - 1].options.map((option, index) => (
-                  <div key={index} className="w-full">
-                    <Button
-                      onClick={() => handleAnswer(option)}
-                      className="w-full"
-                    >
-                      {option.text}
-                    </Button>
-                    {(index === 0 ||
-                      (bungBalGameQuestions[step - 1].options.length === 3 &&
-                        index === 1)) && (
-                      <div className="text-center font-semibold py-2">VS</div>
-                    )}
-                  </div>
-                ))}
-              </div>
+            <div className="text-sz30 font-bold pb-6 pt-10">
+              {bungBalGameQuestions[step - 1].text}
+            </div>
+            <div className="flex flex-col">
+              {bungBalGameQuestions[step - 1].options.map((option, index) => (
+                <div key={index} className="w-full">
+                  <Button
+                    onClick={() => handleAnswer(option)}
+                    className="w-full"
+                  >
+                    {option.text}
+                  </Button>
+                  {(index === 0 ||
+                    (bungBalGameQuestions[step - 1].options.length === 3 &&
+                      index === 1)) && (
+                    <div className="text-center font-semibold py-2">VS</div>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
           {/* <img className="px-6" src="/assets/webp/bungCat.webp" alt="팥냥이" /> */}
