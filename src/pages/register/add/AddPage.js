@@ -128,6 +128,23 @@ const AddPage = () => {
     });
   };
 
+  // 선택된 옵션 데이터를 기반으로 contents 문자열 생성 함수
+  const computeContents = () => {
+    const processedData = Object.keys(selectedOptions).map((option) => ({
+      flavor: option,
+      count: selectedOptions[option],
+    }));
+
+    if (processedData.length === 0) return "";
+
+    const flavorsWithCount = processedData.map(
+      (item) => `${item.flavor} ${item.count}마리`
+    );
+    const flavorSentence = flavorsWithCount.join(", ");
+    return `오늘은 ${flavorSentence}를 먹었다. 그래서 총 ${processedData.length}종류를 먹었다. 정말 맛있었다!`;
+  };
+
+
   //서버로 보내기
   const handleSubmit = async () => {
     if (!Object.keys(selectedOptions).length) {
@@ -159,6 +176,10 @@ const AddPage = () => {
 
     formData.append("flavors", JSON.stringify(flavorsToSend));
     formData.append("date", dateToSend);
+
+    // computeContents()로 생성한 문자열을 contents 필드에 추가
+    const finalSentence = computeContents();
+    formData.append("contents", finalSentence);
 
     try {
       const result = await postRegisterData(formData);
