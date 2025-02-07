@@ -1,10 +1,10 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import bungBalGameQuestions from "./bungBalGameData";
 import bungBalGameResults, { matchBungBalType } from "./bungBalGameResults";
 import styles from "./bungBalGamePage.module.css";
 import html2canvas from "html2canvas";
-import { fetchBungbalData } from "../../api/service.js";
+import { fetchBungbalData, fetchMbtiData } from "../../api/service.js";
 
 function Button({ onClick, children, className }) {
   return (
@@ -53,6 +53,7 @@ export default function BungBalGamePage() {
     setStep(0);
     setUserAnswers([]);
     fetchUserCountData();
+    setFinalResult(null);
   };
 
   // const fetchUserCountData = async () => {
@@ -173,8 +174,46 @@ export default function BungBalGamePage() {
     navigate("/");
   }, [navigate]);
 
+  const [matchRate, setMatchRate] = useState(null); // 서버에서 가져온 매칭 비율 저장
+  const [finalResult, setFinalResult] = useState(null); // 결과를 저장할 상태
+
+  // 최종 결과를 한 번만 계산하여 저장 (handleReset이 호출되기 전까지 유지됨)
+  const result = useMemo(() => {
+    if (step > bungBalGameQuestions.length && finalResult === null) {
+      const computedResult = matchBungBalType(userAnswers);
+      setFinalResult(computedResult);
+      return computedResult;
+    }
+    return finalResult;
+  }, [step, userAnswers, finalResult]);
+
+  // 결과가 결정된 후 matchRate 가져오기
+  useEffect(() => {
+    if (result && result.mbti) {
+      async function fetchMatchRate() {
+        try {
+          const response = await fetchMbtiData();
+          const data = response?.data?.data;
+          const total = response?.data?.additionalData?.total;
+
+          if (!data || total === undefined) {
+            throw new Error("서버에서 올바른 데이터를 받지 못했습니다.");
+          }
+
+          const mbtiData = data.find((item) => item.mbti === result.mbti);
+          const mbtiCount = mbtiData ? mbtiData.count : 0;
+          const calculatedMatchRate = ((mbtiCount / total) * 100).toFixed(2);
+
+          setMatchRate(calculatedMatchRate);
+        } catch (error) {
+          console.error("MBTI 비율 계산 실패:", error);
+          setMatchRate("?");
+        }
+      }
+      fetchMatchRate();
+    }
+  }, [result]); // result가 변경될 때만 실행
   if (step > bungBalGameQuestions.length) {
-    const result = matchBungBalType(userAnswers);
     return (
       <div className="flex flex-grow flex-col w-full bg-cover overflow-hidden">
         {/* 상단 네비게이션 바 */}
@@ -232,7 +271,11 @@ export default function BungBalGamePage() {
                 />
                 <div className={`text-sz40 font-bold`}>{result.type}</div>
                 <div className="text-yellow-600 text-sz20 pb-3">
-                  전체 사용자 중 <span className="font-bold">12.4</span>%
+                  전체 사용자 중{" "}
+                  <span className="font-bold">
+                    {matchRate !== null ? matchRate : "..."}
+                  </span>
+                  %
                 </div>
 
                 <div className="border-2 border-dashed border-[#b7d3e4] w-full p-3">
