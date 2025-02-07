@@ -214,6 +214,25 @@ export default function BungBalGamePage() {
     }
   }, [result]); // result가 변경될 때만 실행
   if (step > bungBalGameQuestions.length) {
+    setTimeout(() => {
+      const scrollArea = document.querySelector(".overflow-y-auto");
+      if (scrollArea && scrollArea.scrollTop !== 0) {
+        scrollArea.scrollTo({ top: 0, behavior: "smooth" }); // 부드럽게 최상단 이동
+      }
+    }, 0);
+
+    const scrollToBottom = () => {
+      const scrollArea = document.querySelector(".overflow-y-auto");
+      if (scrollArea) {
+        scrollArea.scrollTop = scrollArea.scrollHeight;
+      }
+    };
+
+    // DOM 변경 감지 후 실행
+    const observer = new MutationObserver(() => {
+      scrollToBottom();
+    });
+
     return (
       <div className="flex flex-grow flex-col w-full bg-cover overflow-hidden">
         {/* 상단 네비게이션 바 */}
