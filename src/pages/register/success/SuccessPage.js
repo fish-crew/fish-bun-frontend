@@ -181,14 +181,14 @@ function SuccessPage() {
         <div className="flex justify-center">
           {foundData[activeIndex]?.flavor === "미확인 붕어빵" ? (
             <button
-              className="bg-[#7f5b41] text-white border-4 font-bold py-1 px-6 rounded-full w-64 text-sz30 tracking-[.25em]"
+              className="bg-[#7f5b41] text-white font-bold py-1 px-6 rounded-full w-64 text-sz30 tracking-[.25em]"
               onClick={handleReport}
             >
               제보하기
             </button>
           ) : (
             <button
-              className="bg-[#7f5b41] text-white border-4 font-bold py-1 px-6 rounded-full w-64 text-sz30 tracking-[.25em]"
+              className="bg-[#7f5b41] text-white font-bold py-1 px-6 rounded-full w-64 text-sz30 tracking-[.25em]"
               onClick={handleConfirm}
             >
               확인
