@@ -86,6 +86,16 @@ export async function fetchBookDetailData(flavorId) {
   }
 }
 
+export async function fetchBungbalData() {
+  try {
+    const response = await axiosInstance.get("/bungbal/stats");
+    return response.data?.additionalData?.total || 0;
+  } catch (error) {
+    console.error("데이터 요청 실패:", error);
+    throw error;
+  }
+}
+
 //post
 export async function postNickNameAddData(nickname) {
   try {

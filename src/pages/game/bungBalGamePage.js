@@ -4,6 +4,7 @@ import bungBalGameQuestions from "./bungBalGameData";
 import bungBalGameResults, { matchBungBalType } from "./bungBalGameResults";
 import styles from "./bungBalGamePage.module.css";
 import html2canvas from "html2canvas";
+import { fetchBungbalData } from "../../api/service.js";
 
 function Button({ onClick, children, className }) {
   return (
@@ -51,7 +52,37 @@ export default function BungBalGamePage() {
   const handleReset = () => {
     setStep(0);
     setUserAnswers([]);
+    fetchUserCountData();
   };
+
+  // const fetchUserCountData = async () => {
+  //   try {
+  //     const response = await fetchBungbalData();
+  //     return response;
+  //   } catch (error) {
+  //     console.error("데이터 가져오기 실패:", error);
+  //     // alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+  //   }
+  // };
+
+  //서버에서 데이터 받아오기기
+  const [userCount, setUserCount] = useState();
+
+  // 서버에서 데이터 가져오기 및 초기화 판단
+  const fetchUserCountData = async () => {
+    try {
+      const response = await fetchBungbalData();
+      const userCount = response;
+      setUserCount(userCount);
+    } catch (error) {
+      console.error("서버 데이터 가져오기 실패:", error);
+    }
+  };
+
+  // Main 페이지 로드 시 데이터 가져오기
+  useEffect(() => {
+    fetchUserCountData();
+  }, []);
 
   const progressPercentage = ((step - 1) / bungBalGameQuestions.length) * 100;
   const bgImage = step === 0 ? `` : `url(/assets/webp/bgBlue.webp)`;
@@ -389,12 +420,23 @@ export default function BungBalGamePage() {
               붕어빵 취향 테스트
             </div>
           </div>
-          <button
-            onClick={handleStart}
-            className="w-full px-4 py-2 text-sz30 rounded-full text-white bg-[#1069b0] font-bold"
-          >
-            시작하기
-          </button>
+          <div className="w-full flex flex-col">
+            <button
+              onClick={handleStart}
+              className="w-full px-4 py-2 rounded-full text-white bg-[#1069b0] "
+            >
+              <div className="text-sz30 font-bold">시작하기</div>
+            </button>
+            <div className="text-[#1069b0] pt-1 flex items-center justify-center">
+              총 <span className="text-[#f8bd6f] font-bold">{userCount}</span>
+              마리의 붕어빵이 수집됐어요{" "}
+              <img
+                src="/assets/webp/cal-bun.webp"
+                alt="!"
+                className="w-4 h-4 inline"
+              />
+            </div>
+          </div>
         </div>
       ) : (
         <div className="flex w-full flex-grow max-w-md p-5 flex-col justify-between">

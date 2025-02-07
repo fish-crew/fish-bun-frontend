@@ -299,7 +299,7 @@ export function matchBungBalType(userAnswers) {
     (mbtiScores.T >= mbtiScores.F ? "T" : "F") +
     (mbtiScores.J >= mbtiScores.P ? "J" : "P");
 
-  // console.log("User MBTI Type:", mbtiType);
+  console.log("User MBTI Type:", mbtiType);
   // 서버로 보내기
   const handleSubmit = async () => {
     // 입력값이 공란인지 확인
