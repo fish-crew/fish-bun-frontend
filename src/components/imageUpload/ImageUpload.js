@@ -31,7 +31,7 @@ function ImageUpload() {
   };
 
   return (
-    <div className="w-72 h-32 flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded-lg bg-white">
+    <div className="relative w-72 h-32 flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded-lg bg-white">
       {imagePreview ? (
         <div className="w-full h-full flex justify-center">
           {/* 미리보기 이미지 */}
