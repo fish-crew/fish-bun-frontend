@@ -17,6 +17,10 @@ function DetailsPage() {
   const [eatenFlavors, setEatenFlavors] = useState([]);
   const [date, setDate] = useState(null); // Date 객체를 저장할 state
   const [processedData, setProcessedData] = useState([]);
+
+  const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
+  const [editedContent, setEditedContent] = useState(""); // 편집 내용 상태 추가
+
   // 데이터 요청
   useEffect(() => {
     const getDetailData = async () => {
@@ -92,6 +96,7 @@ function DetailsPage() {
       const finalSentence = `오늘은 ${flavorSentence}를 먹었다. 그래서 총 ${processedData.length}종류를 먹었다. 정말 맛있었다!`;
 
       setContent(finalSentence); // 상태에 저장
+      setEditedContent(finalSentence); // 초기값 설정
     }
   }, [processedData]);
 
@@ -116,6 +121,24 @@ function DetailsPage() {
   const handleClose = () => {
     //이전로 네비게이트
     navigate(-1);
+  };
+
+  // 편집 모드 핸들러
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  // 저장 버튼 핸들러
+  const handleSave = () => {
+    setContent(editedContent); // 수정된 내용 저장
+    setIsEditing(false);
+
+    try {
+      // const response = await updateDetailPageData(id, { content: editedContent });
+      // console.log("업데이트 성공", response.data);
+    } catch (error) {
+      console.error("업데이트 실패", error);
+    }
   };
 
   return (
@@ -190,26 +213,69 @@ function DetailsPage() {
             />
           </div>
 
+          {/* 툴바 추가 */}
+          <div className="relative bg-transparent px-1 pb-1 flex items-start justify-end">
+            {!isEditing ? (
+              <button
+                onClick={handleEdit}
+                className="px-4 bg-blue-300 text-white rounded-md flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487l3.651 3.651-12.046 12.046H4.816v-3.65L16.862 3.487z" />
+                </svg>
+                수정
+              </button>
+            ) : (
+              <button
+                onClick={handleSave}
+                className="px-4 bg-green-500 text-white rounded-md flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                저장
+              </button>
+            )}
+          </div>
+
+
           {/* 텍스트와 선 */}
-          <div className="relative w-full text-sz35 text-start leading-[3rem] px-2">
-            {/* 텍스트 */}
-            <p ref={textRef} className="relative z-10 break-all">
-              {content}
-            </p>
+          <div className="relative w-full text-sz30 text-start leading-[2rem] px-2">
+            {/* 수정 모드일 때는 textarea, 아닐 때는 p 태그로 보여줌 */}
+            {isEditing ? (
+              <textarea
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+                className="relative z-10 break-all w-full rounded-md bg-white text-sz30 leading-[2rem] focus:outline-none focus:border-[2px]"
+                rows="7" // 필요에 따라 행 수 조절
+                style={{
+                  background:
+                    "repeating-linear-gradient(to bottom, transparent, transparent calc(2rem - 1px), #ccc calc(2rem - 1px), #ccc 2rem)"
+                }}
+              />
+            ) : (
+              <p ref={textRef} className="relative z-10 break-all whitespace-pre-wrap">
+                {content}
+              </p>
+            )}
 
             {/* 선 이미지 */}
-            <div className="absolute top-11 left-0 w-full pointer-events-none z-0">
-              {Array.from({ length: lineCount }).map((_, index) => (
-                <img
-                  key={index}
-                  src="/assets/webp/diaryLine.webp"
-                  alt="diaryLine"
-                  className="w-full h-[0.3rem]"
-                  style={{ position: "absolute", top: `${index * 3}rem` }}
-                />
-              ))}
-            </div>
+            {!isEditing && (
+              <div className="absolute top-7 left-0 w-full pointer-events-none z-0">
+                {Array.from({ length: lineCount }).map((_, index) => (
+                  <img
+                    key={index}
+                    src="/assets/webp/diaryLine.webp"
+                    alt="diaryLine"
+                    className="w-full h-[0.3rem]"
+                    style={{ position: "absolute", top: `${index * 2}rem` }}
+                  />
+                ))}
+              </div>
+            )}
+
           </div>
+
         </div>
       </div>
     </div>
