@@ -1,3 +1,5 @@
+import { postMbtiData } from "../../api/service.js";
+
 const bungBalGameResults = [
   {
     type: "팥 붕어빵",
@@ -275,46 +277,77 @@ const bungBalGameResults = [
 export function matchBungBalType(userAnswers) {
   let mbtiScores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
 
-  // 사용자의 MBTI 점수 계산
+  // 사용자의 MBTI 점수 계산 (비중 반영)
   userAnswers.forEach((answerObj) => {
     if (answerObj.mbti) {
       Object.keys(answerObj.mbti).forEach((trait) => {
-        mbtiScores[trait] += answerObj.mbti[trait];
+        mbtiScores[trait] += answerObj.mbti[trait]; // 가중치 적용
       });
     }
   });
 
-  // 정규화 (값이 너무 크거나 작아지는 걸 방지)
+  // 정규화 (값이 너무 커지지 않도록)
   let totalResponses = userAnswers.length || 1;
   Object.keys(mbtiScores).forEach((key) => {
     mbtiScores[key] = Math.round((mbtiScores[key] / totalResponses) * 10);
   });
 
-  // MBTI 유형 결정
+  // MBTI 유형 결정 (높은 점수 기준으로 판별)
   const mbtiType =
     (mbtiScores.E >= mbtiScores.I ? "E" : "I") +
     (mbtiScores.S >= mbtiScores.N ? "S" : "N") +
     (mbtiScores.T >= mbtiScores.F ? "T" : "F") +
     (mbtiScores.J >= mbtiScores.P ? "J" : "P");
 
-  // console.log("User MBTI Type:", mbtiType);
+  console.log("User MBTI Type:", mbtiType);
+  // 서버로 보내기
+  const handleSubmit = async () => {
+    // 입력값이 공란인지 확인
+    if (!mbtiType.trim()) {
+      return;
+    }
 
-  // 1. 사용자의 MBTI와 완벽하게 일치하는 붕어빵 찾기
+    // 입력값이 정상인 경우 처리
+    // 서버 요청 로직 추가
+    try {
+      // 서버에 데이터 전송
+      const response = await postMbtiData(mbtiType);
+    } catch (error) {
+      console.error("데이터 전송 실패:", error);
+      alert("서버로 데이터를 전송하는 데 실패했습니다.");
+    }
+  };
+  handleSubmit();
+
+  // 1. 정확한 MBTI 유형과 일치하는 붕어빵 찾기
   let bestMatch = bungBalGameResults.find((result) => result.mbti === mbtiType);
 
-  // 2. 완벽한 일치가 없으면, 가장 가까운 MBTI 유형 찾기
+  // 2. 완벽한 일치가 없으면, 가장 가까운 MBTI 유형 찾기 (점수 기반 유사도 계산)
   if (!bestMatch) {
     let highestMatchScore = -Infinity;
     let closestMatch = null;
 
     bungBalGameResults.forEach((result) => {
       let similarityScore = 0;
+
       for (let i = 0; i < 4; i++) {
-        if (result.mbti[i] === mbtiType[i]) similarityScore++;
+        if (result.mbti[i] === mbtiType[i]) {
+          similarityScore += 1; // 같은 알파벳이면 +1
+        }
       }
 
-      if (similarityScore > highestMatchScore) {
-        highestMatchScore = similarityScore;
+      // MBTI 개별 점수를 기반으로 유사도 계산
+      let mbtiDiffSum = 0;
+      Object.keys(mbtiScores).forEach((key) => {
+        mbtiDiffSum += Math.abs(
+          mbtiScores[key] - (result.mbtiScores?.[key] || 0)
+        );
+      });
+
+      let finalMatchScore = similarityScore - mbtiDiffSum * 0.1; // 유사도 점수 - 차이 점수 반영
+
+      if (finalMatchScore > highestMatchScore) {
+        highestMatchScore = finalMatchScore;
         closestMatch = result;
       }
     });
@@ -325,5 +358,4 @@ export function matchBungBalType(userAnswers) {
   return bestMatch;
 }
 
-// 🚨 `default export`도 유지
 export default bungBalGameResults;
