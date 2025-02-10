@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { fetchBookDetailData } from "../../api/service.js";
 import { useParams, useNavigate } from "react-router-dom";
-import CloseButton from './../../components/Buttons/CloseButton';
+import CloseButton from "./../../components/Buttons/CloseButton";
+import styles from "./bookDetailPage.module.css";
 
 const BookDetailPage = () => {
   const { flavorId } = useParams(); // URL에서 flavorId 가져오기
@@ -38,19 +39,26 @@ const BookDetailPage = () => {
   };
 
   return (
-    <div className="w-full flex-grow flex flex-col overflow-y-auto">
+    <div
+      className={`w-full flex-grow flex flex-col overflow-y-auto ${styles.scrollArea}`}
+    >
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>
       <CloseButton onClick={handleClose} />
       <div
         className="items-center justify-center px-4"
-        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}>
+        style={{ backgroundImage: "url('/assets/webp/paperOnCheckB.webp')" }}
+      >
         {fishBunFlavor ? (
           <div className="py-4 w-full">
-            <div className="text-center text-sz40 pb-1">{fishBunFlavor.flavor}</div>
+            <div className="text-center text-sz40 pb-1">
+              {fishBunFlavor.flavor}
+            </div>
             {/* 하이라이트 */}
-            <div className="text-center text-sz22 text-yellow-600 px-6">{fishBunFlavor.highlight}</div>
+            <div className="text-center text-sz22 text-yellow-600 px-6">
+              {fishBunFlavor.highlight}
+            </div>
 
             <div className="w-full px-6 py-2">
               {/* 이미지 */}
@@ -66,7 +74,9 @@ const BookDetailPage = () => {
               </div>
 
               {/* 설명 */}
-              <div className="px-5 pt-2 text-gray-700 text-justify text-sz22 whitespace-pre-line break-all">{fishBunFlavor.description}</div>
+              <div className="px-5 pt-2 text-gray-700 text-justify text-sz22 whitespace-pre-line break-all">
+                {fishBunFlavor.description}
+              </div>
             </div>
 
             {/* 날짜별 데이터 */}
@@ -80,20 +90,24 @@ const BookDetailPage = () => {
                     onClick={() => navigate(`/detail/${item.id}`)}
                   >
                     <span className="text-sz25">
-                      {item.date.split('-')[0]}년 {item.date.split('-')[1]}월 {item.date.split('-')[2]}일
+                      {item.date.split("-")[0]}년 {item.date.split("-")[1]}월{" "}
+                      {item.date.split("-")[2]}일
                     </span>
-                    <span className="text-sz25 text-yellow-600">{item.count}개</span>
+                    <span className="text-sz25 text-yellow-600">
+                      {item.count}개
+                    </span>
                   </div>
                 ))}
               </ul>
             </div>
           </div>
         ) : (
-          <p className="text-center text-gray-500">붕어빵 정보를 불러오는 중...</p>
-        )
-        }
-      </div >
-    </div >
+          <p className="text-center text-gray-500">
+            붕어빵 정보를 불러오는 중...
+          </p>
+        )}
+      </div>
+    </div>
   );
 };
 

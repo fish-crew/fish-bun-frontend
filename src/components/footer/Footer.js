@@ -98,11 +98,19 @@ function Footer() {
                 onClick={goToBungBalGame}
               >
                 붕어빵 취향 테스트&nbsp;
-                <img
-                  src="/assets/webp/cal-bun-white.webp"
-                  alt=""
-                  className="w-4"
-                />
+                {isSpecialPage ? (
+                  <img
+                    src="/assets/webp/cal-bun-white.webp"
+                    alt=""
+                    className="w-4"
+                  />
+                ) : (
+                  <img
+                    src="/assets/webp/cal-bun-blue.webp"
+                    alt=""
+                    className="w-4"
+                  />
+                )}
               </button>
               <div className="flex justify-center items-center">
                 <div className="">붕어빵탐험대</div>

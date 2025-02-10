@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import styles from "./DetailPage.module.css";
 
 import { fetchDetailPageData, updateCalendarDetailContents } from "../../api/service.js";
 
@@ -87,7 +88,9 @@ function DetailsPage() {
   };
 
   return (
-    <div className="flex flex-col justify-start h-full overflow-y-auto relative">
+    <div
+      className={`flex flex-col justify-start h-full overflow-y-auto relative ${styles.scrollArea}`}
+    >
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>

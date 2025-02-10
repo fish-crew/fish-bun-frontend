@@ -7,19 +7,19 @@ const bungBalGameQuestions = [
         core: "head_first",
         text: "머리부터 🔝",
         sub: ["crispy"],
-        mbti: { J: 1, S: 1 },
+        mbti: { J: 1 }, // 논리적이고 계획적인 성향
       },
       {
         core: "tail_first",
         text: "꼬리부터 🔚",
         sub: ["soft"],
-        mbti: { P: 1, F: 1 },
+        mbti: { J: 1 }, // 감성적이고 유연한 성향
       },
       {
         core: "random_pick",
         text: "집히는대로 ✋",
         sub: ["balanced"],
-        mbti: { N: 1, P: 1 },
+        mbti: { P: 1 }, // 즉흥적이고 직관적인 성향
       },
     ],
   },
@@ -31,13 +31,13 @@ const bungBalGameQuestions = [
         core: "red_bean",
         text: "팥 붕어빵이 근본이지! 🫘",
         sub: ["traditional"],
-        mbti: { S: 1, J: 1 },
+        mbti: { S: 0.1, J: 0.1 }, // 전통과 원칙을 중시하는 성향
       },
       {
         core: "custard",
         text: "슈크림같은 부드러움이 좋아 🍦",
         sub: ["sweet"],
-        mbti: { N: 1, F: 1 },
+        mbti: { F: 0.1, P: 0.1 }, // 감각적이고 부드러운 것을 선호하는 성향
       },
     ],
   },
@@ -49,13 +49,13 @@ const bungBalGameQuestions = [
         core: "crispy",
         text: "바삭해야 해! 🍪",
         sub: ["strong_taste"],
-        mbti: { T: 1, J: 1 },
+        mbti: { T: 0.1, J: 0.1 }, // 강한 질감을 선호하는 논리적 성향
       },
       {
         core: "soft",
         text: "부드러워야 해! 🍞",
         sub: ["gentle"],
-        mbti: { F: 1, P: 1 },
+        mbti: { F: 0.1, P: 0.1 }, // 부드럽고 따뜻한 감성을 선호하는 성향
       },
     ],
   },
@@ -67,37 +67,37 @@ const bungBalGameQuestions = [
         core: "one_only",
         text: "하나만 먹고 만족 😊",
         sub: ["minimalist"],
-        mbti: { I: 1, J: 1 },
+        mbti: { I: 0.1, J: 0.1 }, // 절제하고 계획적인 성향
       },
       {
         core: "three",
         text: "3개는 먹어야지 😋",
         sub: ["moderate"],
-        mbti: { E: 1, S: 1 },
+        mbti: { E: 0.1, S: 0.1 }, // 균형 잡힌 선택을 선호하는 성향
       },
       {
         core: "unlimited",
         text: "무한대로 먹을 수 있지 😤",
         sub: ["excessive"],
-        mbti: { E: 2, P: 1 },
+        mbti: { E: 0.1, P: 0.1 }, // 충동적이고 즉흥적인 성향
       },
     ],
   },
   {
     id: 5,
-    text: "붕어빵과 최고의 조합은?",
+    text: "친구가 색다른 붕어빵을 먹고 맛없다고 했을 때 나는?",
     options: [
       {
-        core: "milk",
-        text: "우유랑 함께 🥛",
-        sub: ["smooth"],
-        mbti: { S: 1, F: 1 },
+        core: "validate_feelings",
+        text: "헐 진짜?  아쉽다.. 기대했을 텐데 ㅠㅠ🥲",
+        sub: ["empathetic"],
+        mbti: { F: 1 }, // 친구의 감정을 공감하고 존중하는 성향
       },
       {
-        core: "coffee",
-        text: "커피와 함께 ☕",
-        sub: ["strong"],
-        mbti: { T: 1, N: 1 },
+        core: "objective_opinion",
+        text: "왜? 무슨 맛이길래? 🤔",
+        sub: ["analytical"],
+        mbti: { T: 1 }, // 논리적으로 원인을 분석하고 피드백하는 성향
       },
     ],
   },
@@ -109,13 +109,13 @@ const bungBalGameQuestions = [
         core: "mini",
         text: "미니 붕어빵 🐭",
         sub: ["fun"],
-        mbti: { P: 1, E: 1 },
+        mbti: { P: 0.1, F: 0.5 }, // 귀엽고 가벼운 걸 선호하는 감각적인 성향
       },
       {
         core: "king",
         text: "대왕 붕어빵 🦖",
         sub: ["big"],
-        mbti: { J: 1, T: 1 },
+        mbti: { T: 0.5, J: 0.1 }, // 크고 확실한 선택을 선호하는 성향
       },
     ],
   },
@@ -127,31 +127,31 @@ const bungBalGameQuestions = [
         core: "accept",
         text: "그냥 먹는다 😅",
         sub: ["easygoing"],
-        mbti: { P: 1, F: 1 },
+        mbti: { I: 0.5, P: 1, F: 1 }, // 유연하고 관대한 성향
       },
       {
         core: "complain",
         text: "가게에 가서 따진다 💢",
         sub: ["strict"],
-        mbti: { J: 1, T: 1 },
+        mbti: { E: 0.5, J: 1, T: 1 }, // 원칙을 중요시하는 성향
       },
     ],
   },
   {
     id: 8,
-    text: "색다른 붕어빵에 도전한다면?",
+    text: "팥붕어빵을 사러갔는데.. 맛있어보이는 붕어빵이 새로 출시됐다면?",
     options: [
       {
-        core: "kimchi",
-        text: "김치 붕어빵 🌶",
-        sub: ["spicy"],
-        mbti: { T: 1, E: 1 },
+        core: "try_new",
+        text: "새로운거? 궁금한데! 도전한다.",
+        sub: ["adventurous"],
+        mbti: { N: 1, P: 1 }, // 도전적이고 유연한 성향
       },
       {
-        core: "pizza",
-        text: "피자 붕어빵 🍕",
-        sub: ["savory"],
-        mbti: { N: 1, P: 1 },
+        core: "stick_to_known",
+        text: "생각보다 맛이 없으면 어떡하지? 아는 맛만 먹는다.",
+        sub: ["cautious"],
+        mbti: { S: 1, J: 1 }, // 전통적이고 신중한 성향
       },
     ],
   },
@@ -163,13 +163,13 @@ const bungBalGameQuestions = [
         core: "split_evenly",
         text: "반으로 똑같이 나눈다 ✂️",
         sub: ["fair"],
-        mbti: { F: 1, J: 1 },
+        mbti: { J: 0.5, T: 0.5 }, // 공평한 규칙을 중시하는 성향
       },
       {
         core: "take_a_bite",
         text: "그냥 적당히 베어 먹고 넘긴다 😋",
         sub: ["spontaneous"],
-        mbti: { P: 1, E: 1 },
+        mbti: { P: 0.5, F: 0.5 }, // 즉흥적이고 유연한 성향
       },
     ],
   },
@@ -181,13 +181,13 @@ const bungBalGameQuestions = [
         core: "traditional",
         text: "정석대로 만든다 🧑‍🏫",
         sub: ["classic"],
-        mbti: { S: 1, J: 1 },
+        mbti: { S: 0.5 }, // 기존 방식을 따르는 성향
       },
       {
         core: "creative",
         text: "나만의 특별한 레시피로 만든다 🧑‍🍳",
         sub: ["unique"],
-        mbti: { N: 1, P: 1 },
+        mbti: { N: 0.5 }, // 창의적이고 실험적인 성향
       },
     ],
   },
@@ -199,13 +199,13 @@ const bungBalGameQuestions = [
         core: "savor",
         text: "음미하면서 먹기 😌",
         sub: ["patient"],
-        mbti: { I: 1, F: 1 },
+        mbti: { I: 0.1, J: 0.1 }, // 신중하고 계획적인 성향
       },
       {
         core: "big_bite",
         text: "크게 베어 먹기 😮",
         sub: ["impulsive"],
-        mbti: { E: 1, P: 1 },
+        mbti: { E: 0.1, P: 0.1 }, // 즉흥적이고 다이나믹한 성향
       },
     ],
   },
@@ -217,31 +217,31 @@ const bungBalGameQuestions = [
         core: "filled",
         text: "속이 비칠 정도로 가득 🫘🫘🫘",
         sub: ["rich"],
-        mbti: { F: 1, P: 1 },
+        mbti: { T: 0.1, J: 0.1 }, // 감각적이고 풍부한 것을 선호하는 성향
       },
       {
         core: "balanced",
         text: "반죽과 적당한 비율 🫘",
         sub: ["moderate"],
-        mbti: { S: 1, J: 1 },
+        mbti: { S: 0.1, J: 0.1 }, // 균형과 논리를 중시하는 성향
       },
     ],
   },
   {
     id: 13,
-    text: "붕어빵을 사는 곳은?",
+    text: "처음 가는 동네에서 붕어빵을 산다면?",
     options: [
       {
         core: "street_vendor",
         text: "길거리에서 즉석으로 사먹기 🚶‍♂️",
         sub: ["casual"],
-        mbti: { S: 1, P: 1 },
+        mbti: { P: 1, S: 0.5 }, // 즉흥적이고 현실적인 선택을 선호하는 성향
       },
       {
         core: "shop",
-        text: "전문점에서 다양한 붕어빵 사먹기 🏬",
+        text: "유명하고 맛있는 곳으로 찾아가기 🗺️",
         sub: ["premium"],
-        mbti: { N: 1, J: 1 },
+        mbti: { J: 1, N: 0.5 }, // 계획적이고 차별화된 선택을 선호하는 성향
       },
     ],
   },
@@ -253,31 +253,31 @@ const bungBalGameQuestions = [
         core: "leave_it",
         text: "(앗...) 그대로 둔다 😳",
         sub: ["neat"],
-        mbti: { I: 1, J: 1 },
+        mbti: { I: 1.5, P: 0.5, F: 0.5 },
       },
       {
         core: "keep_extra",
         text: "잘라내지 말고 주세요! 😱",
         sub: ["maximalist"],
-        mbti: { E: 1, P: 1 },
+        mbti: { E: 1.5, J: 0.5, T: 0.5 },
       },
     ],
   },
   {
     id: 15,
-    text: "같은 가격이라면?",
+    text: "SNS에서 유명한 붕어빵을 찾아갔는데 줄이 길다면?",
     options: [
       {
-        core: "three_normal",
-        text: "3마리에 2000원 하는 보통 붕어빵 🐟🐟🐟",
-        sub: ["practical"],
-        mbti: { S: 1, J: 1 },
+        core: "wait",
+        text: "유명한 데에는 다 이유가 있겠지. 기다린다. 🧘",
+        sub: ["patient"],
+        mbti: { J: 1, N: 0.5 },
       },
       {
-        core: "one_large",
-        text: "한 마리에 2,000원 하는 큰 붕어빵 🏆🐟",
-        sub: ["luxury"],
-        mbti: { N: 1, P: 1 },
+        core: "leave",
+        text: "붕어빵이 뭐 거기서 거기지. 다른 곳으로 간다. 🏃‍♂️",
+        sub: ["efficient"],
+        mbti: { P: 1, S: 0.5 },
       },
     ],
   },
