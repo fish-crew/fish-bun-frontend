@@ -175,3 +175,16 @@ export async function postMbtiData(mbti) {
     throw error;
   }
 }
+
+export async function updateCalendarDetailContents(calendarId, contents) {
+  try {
+    const response = await axiosInstance.post(
+      "/fish-bun/calendar/detail/mod-contents",
+      { calendarId, contents } // 요청 본문에 전달할 데이터
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styles from "./DetailPage.module.css";
 
-import { fetchFlavorData, fetchDetailPageData } from "../../api/service.js";
+import { fetchDetailPageData, updateCalendarDetailContents } from "../../api/service.js";
 
 function DetailsPage() {
   const navigate = useNavigate();
@@ -14,10 +14,11 @@ function DetailsPage() {
   const [lineCount, setLineCount] = useState(0); // 텍스트 줄 수 저장
 
   const [detailData, setDetailData] = useState({}); // 데이터 저장
-  const [flavorsData, setFlavorsData] = useState([]); // 데이터 저장
-  const [eatenFlavors, setEatenFlavors] = useState([]);
   const [date, setDate] = useState(null); // Date 객체를 저장할 state
-  const [processedData, setProcessedData] = useState([]);
+
+  const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
+  const [editedContent, setEditedContent] = useState(""); // 편집 내용 상태 추가
+
   // 데이터 요청
   useEffect(() => {
     const getDetailData = async () => {
@@ -25,30 +26,13 @@ function DetailsPage() {
         const detailResponse = await fetchDetailPageData(id); // 상세 APi
         setDetailData(detailResponse.data); // 서버에서 받은 데이터의 "data"만 저장
 
-        const flavorsArray = detailResponse.data.flavors;
-        setEatenFlavors(flavorsArray);
-
         const dateString = detailResponse.data.date; // 서버에서 받은 날짜 문자열
         const dateObject = new Date(dateString); // 문자열을 Date 객체로 변환
         setDate(dateObject); // 상태에 저장
 
-        const flavorsResponse = await fetchFlavorData(); // 전체 맛 api
-        // "미확인 붕어빵" 분리
-        const unknownFlavor = flavorsResponse.data.find(
-          (item) => item.flavor === "미확인 붕어빵"
-        );
-        const filteredFlavors = flavorsResponse.data.filter(
-          (item) => item.flavor !== "미확인 붕어빵"
-        );
-
-        // seq 기준 정렬
-        const sortedFlavors = filteredFlavors.sort((a, b) => a.seq - b.seq);
-
-        // 마지막에 "미확인 붕어빵" 추가
-        const finalFlavors = unknownFlavor
-          ? [...sortedFlavors, unknownFlavor]
-          : sortedFlavors;
-        setFlavorsData(finalFlavors); // 응답 데이터 저장
+        const finalSentence = detailResponse.data.contents; // 서버에서 받은 내용
+        setContent(finalSentence); // 상태에 저장
+        setEditedContent(finalSentence); // 초기값 설정
       } catch (error) {
         if (error.response && error.response.status === 403) {
           alert("접근 권한이 없습니다. 캘린더 페이지로 이동합니다.");
@@ -61,40 +45,6 @@ function DetailsPage() {
 
     getDetailData();
   }, []);
-
-  // 두 번째 useEffect: flavorsData 업데이트 후 실행
-  useEffect(() => {
-    if (flavorsData.length > 0 && eatenFlavors.length > 0) {
-      // flavorsData와 eatenFlavors를 이용한 후속 작업 실행
-      const mergedData = eatenFlavors.map((eaten) => {
-        const matchedFlavor = flavorsData.find(
-          (flavor) => flavor.id === eaten.flavorId
-        );
-        return {
-          ...matchedFlavor,
-          count: eaten.count,
-        };
-      });
-      setProcessedData(mergedData);
-    }
-  }, [flavorsData, eatenFlavors]); // flavorsData와 eatenFlavors 변경 시 실행
-
-  useEffect(() => {
-    if (processedData.length > 0) {
-      // flavor와 count를 결합한 문자열 배열 생성
-      const flavorsWithCount = processedData.map(
-        (item) => `${item.flavor} ${item.count}마리`
-      );
-
-      // 배열을 콤마(,)로 연결한 문장 생성
-      const flavorSentence = flavorsWithCount.join(", ");
-
-      // 최종 문장 생성
-      const finalSentence = `오늘은 ${flavorSentence}를 먹었다. 그래서 총 ${processedData.length}종류를 먹었다. 정말 맛있었다!`;
-
-      setContent(finalSentence); // 상태에 저장
-    }
-  }, [processedData]);
 
   // 텍스트 줄 수 계산
   useEffect(() => {
@@ -117,6 +67,24 @@ function DetailsPage() {
   const handleClose = () => {
     //이전로 네비게이트
     navigate(-1);
+  };
+
+  // 편집 모드 핸들러
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  // 저장 버튼 핸들러
+  const handleSave = async () => {
+    setContent(editedContent); // 수정된 내용 저장
+    setIsEditing(false);
+
+    try {
+      const response = await updateCalendarDetailContents(id, editedContent);
+      console.log("업데이트 성공", response.result);
+    } catch (error) {
+      console.error("업데이트 실패", error);
+    }
   };
 
   return (
@@ -193,26 +161,69 @@ function DetailsPage() {
             />
           </div>
 
+          {/* 툴바 추가 */}
+          <div className="relative bg-transparent px-1 pb-1 flex items-start justify-end">
+            {!isEditing ? (
+              <button
+                onClick={handleEdit}
+                className="px-4 bg-blue-300 text-white rounded-md flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487l3.651 3.651-12.046 12.046H4.816v-3.65L16.862 3.487z" />
+                </svg>
+                수정
+              </button>
+            ) : (
+              <button
+                onClick={handleSave}
+                className="px-4 bg-green-500 text-white rounded-md flex items-center gap-2"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                저장
+              </button>
+            )}
+          </div>
+
+
           {/* 텍스트와 선 */}
-          <div className="relative w-full text-sz35 text-start leading-[3rem] px-2">
-            {/* 텍스트 */}
-            <p ref={textRef} className="relative z-10 break-all">
-              {content}
-            </p>
+          <div className="relative w-full text-sz30 text-start leading-[2rem] px-2">
+            {/* 수정 모드일 때는 textarea, 아닐 때는 p 태그로 보여줌 */}
+            {isEditing ? (
+              <textarea
+                value={editedContent}
+                onChange={(e) => setEditedContent(e.target.value)}
+                className="relative z-10 break-all w-full rounded-md bg-white text-sz30 leading-[2rem] focus:outline-none focus:border-[2px]"
+                rows="7" // 필요에 따라 행 수 조절
+                style={{
+                  background:
+                    "repeating-linear-gradient(to bottom, transparent, transparent calc(2rem - 1px), #ccc calc(2rem - 1px), #ccc 2rem)"
+                }}
+              />
+            ) : (
+              <p ref={textRef} className="relative z-10 break-all whitespace-pre-wrap">
+                {content}
+              </p>
+            )}
 
             {/* 선 이미지 */}
-            <div className="absolute top-11 left-0 w-full pointer-events-none z-0">
-              {Array.from({ length: lineCount }).map((_, index) => (
-                <img
-                  key={index}
-                  src="/assets/webp/diaryLine.webp"
-                  alt="diaryLine"
-                  className="w-full h-[0.3rem]"
-                  style={{ position: "absolute", top: `${index * 3}rem` }}
-                />
-              ))}
-            </div>
+            {!isEditing && (
+              <div className="absolute top-7 left-0 w-full pointer-events-none z-0">
+                {Array.from({ length: lineCount }).map((_, index) => (
+                  <img
+                    key={index}
+                    src="/assets/webp/diaryLine.webp"
+                    alt="diaryLine"
+                    className="w-full h-[0.3rem]"
+                    style={{ position: "absolute", top: `${index * 2}rem` }}
+                  />
+                ))}
+              </div>
+            )}
+
           </div>
+
         </div>
       </div>
     </div>
