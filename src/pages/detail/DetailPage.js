@@ -92,7 +92,7 @@ function DetailsPage() {
 
   return (
     <div
-      className={`flex flex-col justify-start h-full overflow-y-auto relative ${styles.scrollArea}`}
+      className={`flex flex-col justify-start flex-grow overflow-y-auto relative ${styles.scrollArea}`}
     >
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
