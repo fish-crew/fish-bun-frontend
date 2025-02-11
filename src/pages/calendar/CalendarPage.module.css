@@ -2,10 +2,6 @@
   @apply rounded-xl w-full h-full max-w-[600px] border-none pt-3 font-Dovemayo_gothic bg-[transparent];
 }
 
-/* :global(.react-calendar__viewContainer) {
-  @apply mb-3;
-} */
-
 :global(.react-calendar__month-view__weekdays__weekday abbr) {
   @apply no-underline text-sz30;
   /* 요일 스타일 */
@@ -25,7 +21,7 @@
 }
 
 :global(.react-calendar__navigation__arrow) {
-  @apply pb-1 text-sz45;
+  @apply pb-1 text-sz35;
 }
 
 /* :global(.react-calendar__navigation__label__labelText) {
@@ -45,10 +41,13 @@
   @apply rounded-full text-white font-semibold;
 }
 
-:global(.react-calendar__tile:enabled:hover),
+/* :global(.react-calendar__tile:enabled:hover),
 :global(.react-calendar__tile:enabled:focus),
 :global(.react-calendar__tile--active) {
   @apply text-black rounded-lg bg-[#1069b07f];
   @apply transition-all duration-150 ease-in-out;
-  /* 애니메이션 효과 추가 */
+} */
+
+:global(.overflow-y-auto) {
+  @apply scroll-smooth scrollbar-none;
 }
