@@ -21,11 +21,13 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 import BungBalGamePage from "./pages/game/bungBalGamePage";
-import BookDetailPage from './pages/bookDetail/BookDetailPage';
+import BookDetailPage from "./pages/bookDetail/BookDetailPage";
 import { Provider } from "react-redux"; // Provider 임포트
 import store, { persistor } from "./redux/store"; // Store와 Persistor 가져오기
 import { PersistGate } from "redux-persist/integration/react"; // PersistGate 추가
 import ProtectedRoute from "./components/routes/ProtectedRoute";
+import { HelmetProvider } from "react-helmet-async";
+import MetaTags from "./components/MetaTags";
 
 // WebP 감지 로직
 const detectWebP = () => {
@@ -55,9 +57,11 @@ function App() {
       {/* Redux Store 제공 */}
       {/* Redux 상태 복원을 위한 PersistGate */}
       <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter>
-          <AppContent isWebPSupported={isWebPSupported} />
-        </BrowserRouter>
+        <HelmetProvider>
+          <BrowserRouter>
+            <AppContent isWebPSupported={isWebPSupported} />
+          </BrowserRouter>
+        </HelmetProvider>
       </PersistGate>
     </Provider>
   );
@@ -65,9 +69,12 @@ function App() {
 
 function AppContent({ isWebPSupported }) {
   const location = useLocation();
+  const isBungBalGamePage = location.pathname === "/bungBalGamePage"; // ✅ 경로 확인
 
   return (
     <div className="App flex flex-col h-[100dvh] justify-between">
+      {isBungBalGamePage && <MetaTags />}
+
       <Header />
       <Routes>
         <Route path="/" element={<Navigate to="/loadingPage" replace />} />
