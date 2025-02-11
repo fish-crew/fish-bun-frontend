@@ -7,19 +7,19 @@ const bungBalGameQuestions = [
         core: "head_first",
         text: "머리부터 🔝",
         sub: ["crispy"],
-        mbti: { J: 1 }, // 논리적이고 계획적인 성향
+        mbti: { J: 0.5 }, // 논리적이고 계획적인 성향
       },
       {
         core: "tail_first",
         text: "꼬리부터 🔚",
         sub: ["soft"],
-        mbti: { J: 1 }, // 감성적이고 유연한 성향
+        mbti: { J: 0.5 }, // 감성적이고 유연한 성향
       },
       {
         core: "random_pick",
         text: "집히는대로 ✋",
         sub: ["balanced"],
-        mbti: { P: 1 }, // 즉흥적이고 직관적인 성향
+        mbti: { P: 0.5 }, // 즉흥적이고 직관적인 성향
       },
     ],
   },
@@ -37,7 +37,7 @@ const bungBalGameQuestions = [
         core: "custard",
         text: "슈크림같은 부드러움이 좋아 🍦",
         sub: ["sweet"],
-        mbti: { F: 0.1, P: 0.1 }, // 감각적이고 부드러운 것을 선호하는 성향
+        mbti: { N: 0.1, F: 0.1, P: 0.1 }, // 감각적이고 부드러운 것을 선호하는 성향
       },
     ],
   },
@@ -127,13 +127,13 @@ const bungBalGameQuestions = [
         core: "accept",
         text: "그냥 먹는다 😅",
         sub: ["easygoing"],
-        mbti: { I: 0.5, P: 1, F: 1 }, // 유연하고 관대한 성향
+        mbti: { I: 0.5, P: 1, F: 0.8 }, // 유연하고 관대한 성향
       },
       {
         core: "complain",
-        text: "가게에 가서 따진다 💢",
+        text: "가게에 가서 이야기한다 🗣",
         sub: ["strict"],
-        mbti: { E: 0.5, J: 1, T: 1 }, // 원칙을 중요시하는 성향
+        mbti: { E: 0.5, J: 1, T: 0.8 }, // 원칙을 중요시하는 성향
       },
     ],
   },
@@ -145,13 +145,13 @@ const bungBalGameQuestions = [
         core: "try_new",
         text: "새로운거? 궁금한데! 도전한다.",
         sub: ["adventurous"],
-        mbti: { N: 1, P: 1 }, // 도전적이고 유연한 성향
+        mbti: { N: 0.5, P: 1 }, // 도전적이고 유연한 성향
       },
       {
         core: "stick_to_known",
         text: "생각보다 맛이 없으면 어떡하지? 아는 맛만 먹는다.",
         sub: ["cautious"],
-        mbti: { S: 1, J: 1 }, // 전통적이고 신중한 성향
+        mbti: { S: 0.5, J: 1 }, // 전통적이고 신중한 성향
       },
     ],
   },
@@ -175,19 +175,19 @@ const bungBalGameQuestions = [
   },
   {
     id: 10,
-    text: "내가 직접 붕어빵을 만든다면?",
+    text: "직접 붕어빵을 만들고싶은데 밀가루가 부족하다면?",
     options: [
       {
         core: "traditional",
-        text: "정석대로 만든다 🧑‍🏫",
+        text: "정석대로 만들어야지. 부족한 재료를 사온다 🧑‍🏫",
         sub: ["classic"],
-        mbti: { S: 0.5 }, // 기존 방식을 따르는 성향
+        mbti: { J: 1 }, // 기존 방식을 따르는 성향
       },
       {
         core: "creative",
-        text: "나만의 특별한 레시피로 만든다 🧑‍🍳",
+        text: "없으면 어때? 대체할 재료를 찾아본다 🧑‍🍳",
         sub: ["unique"],
-        mbti: { N: 0.5 }, // 창의적이고 실험적인 성향
+        mbti: { P: 1 }, // 창의적이고 실험적인 성향
       },
     ],
   },
@@ -217,31 +217,31 @@ const bungBalGameQuestions = [
         core: "filled",
         text: "속이 비칠 정도로 가득 🫘🫘🫘",
         sub: ["rich"],
-        mbti: { T: 0.1, J: 0.1 }, // 감각적이고 풍부한 것을 선호하는 성향
+        mbti: { N: 0.1 }, // 감각적이고 풍부한 것을 선호하는 성향
       },
       {
         core: "balanced",
-        text: "반죽과 적당한 비율 🫘",
+        text: "반죽과 적당한 비율. even하게 🫘",
         sub: ["moderate"],
-        mbti: { S: 0.1, J: 0.1 }, // 균형과 논리를 중시하는 성향
+        mbti: { S: 0.1 }, // 균형과 논리를 중시하는 성향
       },
     ],
   },
   {
     id: 13,
-    text: "처음 가는 동네에서 붕어빵을 산다면?",
+    text: "길을 걷다가 붕어빵 냄새가 난다. 바로 앞에 붕어빵 집이?!",
     options: [
       {
         core: "street_vendor",
-        text: "길거리에서 즉석으로 사먹기 🚶‍♂️",
+        text: "맛있겠다! 바로 도전해보기 👊",
         sub: ["casual"],
-        mbti: { P: 1, S: 0.5 }, // 즉흥적이고 현실적인 선택을 선호하는 성향
+        mbti: { P: 1, N: 0.5 }, // 즉흥적이고 감각적인 성향
       },
       {
         core: "shop",
-        text: "유명하고 맛있는 곳으로 찾아가기 🗺️",
+        text: "맛있을까? 고민해보고 결정하기 🤔",
         sub: ["premium"],
-        mbti: { J: 1, N: 0.5 }, // 계획적이고 차별화된 선택을 선호하는 성향
+        mbti: { J: 1, S: 0.5 }, // 계획적이고 이성적인 성향
       },
     ],
   },
@@ -253,13 +253,13 @@ const bungBalGameQuestions = [
         core: "leave_it",
         text: "(앗...) 그대로 둔다 😳",
         sub: ["neat"],
-        mbti: { I: 1.5, P: 0.5, F: 0.5 },
+        mbti: { I: 1, P: 0.5, F: 0.5 },
       },
       {
         core: "keep_extra",
         text: "잘라내지 말고 주세요! 😱",
         sub: ["maximalist"],
-        mbti: { E: 1.5, J: 0.5, T: 0.5 },
+        mbti: { E: 1, J: 0.5, T: 0.5 },
       },
     ],
   },
@@ -269,13 +269,13 @@ const bungBalGameQuestions = [
     options: [
       {
         core: "wait",
-        text: "유명한 데에는 다 이유가 있겠지. 기다린다. 🧘",
+        text: "유명한 데에는 다 이유가 있겠지. 기다린다 🧘",
         sub: ["patient"],
         mbti: { J: 1, N: 0.5 },
       },
       {
         core: "leave",
-        text: "붕어빵이 뭐 거기서 거기지. 다른 곳으로 간다. 🏃‍♂️",
+        text: "붕어빵이 뭐 거기서 거기지. 다른 곳으로 간다 🏃‍♂️",
         sub: ["efficient"],
         mbti: { P: 1, S: 0.5 },
       },
