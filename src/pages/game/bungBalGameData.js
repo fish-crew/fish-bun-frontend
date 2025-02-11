@@ -59,27 +59,22 @@ const bungBalGameQuestions = [
       },
     ],
   },
+
   {
     id: 4,
-    text: "붕최몇? (한 번에 몇 마리까지?)",
+    text: "붕어빵 가게를 지나가다가 당신은?",
     options: [
       {
-        core: "one_only",
-        text: "하나만 먹고 만족 😊",
-        sub: ["minimalist"],
-        mbti: { I: 0.1, J: 0.1 }, // 절제하고 계획적인 성향
+        core: "filled",
+        text: "오! 여기 붕어빵 가게 있네? 가게 이름이 뭐지? 몇 마리 사갈까? 🧐",
+        sub: ["rich"],
+        mbti: { S: 1 }, // 감각적이고 풍부한 것을 선호하는 성향
       },
       {
-        core: "three",
-        text: "3개는 먹어야지 😋",
+        core: "balanced",
+        text: "오! 붕어빵 냄새 난다! 추운 날에 따끈한 붕어빵이라니 딱이야~ 🤩",
         sub: ["moderate"],
-        mbti: { E: 0.1, S: 0.1 }, // 균형 잡힌 선택을 선호하는 성향
-      },
-      {
-        core: "unlimited",
-        text: "무한대로 먹을 수 있지 😤",
-        sub: ["excessive"],
-        mbti: { E: 0.1, P: 0.1 }, // 충동적이고 즉흥적인 성향
+        mbti: { N: 1 }, // 균형과 논리를 중시하는 성향
       },
     ],
   },
@@ -211,25 +206,31 @@ const bungBalGameQuestions = [
   },
   {
     id: 12,
-    text: "붕어빵 속의 적당량은?",
+    text: "붕최몇? (한 번에 몇 마리까지?)",
     options: [
       {
-        core: "filled",
-        text: "속이 비칠 정도로 가득 🫘🫘🫘",
-        sub: ["rich"],
-        mbti: { N: 0.1 }, // 감각적이고 풍부한 것을 선호하는 성향
+        core: "one_only",
+        text: "하나만 먹고 만족 😊",
+        sub: ["minimalist"],
+        mbti: { I: 0.1, J: 0.1 }, // 절제하고 계획적인 성향
       },
       {
-        core: "balanced",
-        text: "반죽과 적당한 비율. even하게 🫘",
+        core: "three",
+        text: "3개는 먹어야지 😋",
         sub: ["moderate"],
-        mbti: { S: 0.1 }, // 균형과 논리를 중시하는 성향
+        mbti: { E: 0.1, S: 0.1 }, // 균형 잡힌 선택을 선호하는 성향
+      },
+      {
+        core: "unlimited",
+        text: "무한대로 먹을 수 있지 😤",
+        sub: ["excessive"],
+        mbti: { E: 0.1, P: 0.1 }, // 충동적이고 즉흥적인 성향
       },
     ],
   },
   {
     id: 13,
-    text: "길을 걷다가 붕어빵 냄새가 난다. 바로 앞에 붕어빵 집이?!",
+    text: "동네에 새로 생긴 붕어빵 집을 발견했다.",
     options: [
       {
         core: "street_vendor",
