@@ -5,10 +5,10 @@ const bungBalGameResults = [
     type: "팥 붕어빵",
     mbti: "ISTJ",
     slogan: "근본은 영원하다!",
-    bestMatch: "치즈 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/cheese.webp",
-    worstMatch: "타코야끼 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/tako.webp",
+    bestMatch: "콘치즈 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/corn-cheese.webp",
+    worstMatch: "팥 크림치즈 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
     description: [
       "신뢰성과 원칙을 중시하는 성향으로, 붕어빵의 대표격인 팥 붕어빵과 닮았어요.",
       "붕어빵 하면 떠오르는 대표적인 맛, 전통적이고 익숙한 클래식함.",
@@ -22,10 +22,10 @@ const bungBalGameResults = [
     type: "슈크림 붕어빵",
     mbti: "ESFP",
     slogan: "달콤함이 인생의 묘미!",
-    bestMatch: "콘치즈 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/corn-cheese.webp",
-    worstMatch: "흑임자 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/black-sesame.webp",
+    bestMatch: "치즈 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/cheese.webp",
+    worstMatch: "대왕 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/king.webp",
     description: [
       "사교적이고 에너지가 넘치는 성격, 누구에게나 사랑받는 슈크림 붕어빵과 닮았어요.",
       "한 입 베어 물면 달콤하고 부드러운 매력으로 사람들을 기분 좋게 만들어요.",
@@ -39,10 +39,10 @@ const bungBalGameResults = [
     type: "초코 붕어빵",
     mbti: "ENFP",
     slogan: "언제나 새롭고 짜릿하게!",
-    bestMatch: "애플시나몬 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/apple-cinnamon.webp",
-    worstMatch: "매콤이 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/maecom.webp",
+    bestMatch: "흑임자 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/black-sesame.webp",
+    worstMatch: "뿌링클 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/bburing.webp",
     description: [
       "창의적이고 자유로운 영혼, 초코 붕어빵처럼 항상 새롭고 흥미로운 걸 찾아다녀요.",
       "남들과 똑같은 건 싫어! 톡톡 튀는 개성과 매력을 가진 타입이에요.",
@@ -56,10 +56,10 @@ const bungBalGameResults = [
     type: "고구마 붕어빵",
     mbti: "INFJ",
     slogan: "속 깊은 따뜻함!",
-    bestMatch: "팥 크림치즈 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
-    worstMatch: "김치 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/kimchi.webp",
+    bestMatch: "애플시나몬 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/apple-cinnamon.webp",
+    worstMatch: "팥 크림치즈 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
     description: [
       "조용하고 따뜻한 성격, 고구마 붕어빵처럼 속이 깊고 부드러워요.",
       "말은 많지 않지만, 한 번 친해지면 진정성 있는 관계를 유지해요.",
@@ -73,10 +73,10 @@ const bungBalGameResults = [
     type: "미니 붕어빵",
     mbti: "ISFP",
     slogan: "소소하지만 확실한 행복!",
-    bestMatch: "초코 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/choco.webp",
-    worstMatch: "매콤이 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/maecom.webp",
+    bestMatch: "매콤이 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/maecom.webp",
+    worstMatch: "흑임자 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/black-sesame.webp",
     description: [
       "자유롭고 감각적인 성격, 미니 붕어빵처럼 부담 없고 귀여운 매력이 있어요.",
       "혼자만의 시간을 소중히 여기면서도, 좋아하는 사람들과의 소통을 즐겨요.",
@@ -90,10 +90,10 @@ const bungBalGameResults = [
     type: "김치 붕어빵",
     mbti: "ESTP",
     slogan: "매력 폭발! 어디서든 주인공",
-    bestMatch: "타코야끼 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/tako.webp",
-    worstMatch: "고구마 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/guma.webp",
+    bestMatch: "뿌링클 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/bburing.webp",
+    worstMatch: "초코 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/choco.webp",
     description: [
       "즉흥적이고 에너제틱한 성격, 김치 붕어빵처럼 강렬하고 개성이 넘쳐요.",
       "한 번 맛보면 잊을 수 없는 강한 존재감!",
@@ -107,10 +107,10 @@ const bungBalGameResults = [
     type: "피자 붕어빵",
     mbti: "INTP",
     slogan: "이론과 분석, 그게 나야!",
-    bestMatch: "흑임자 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/black-sesame.webp",
-    worstMatch: "콘치즈 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/corn-cheese.webp",
+    bestMatch: "타코야끼 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/tako.webp",
+    worstMatch: "슈크림 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/custard.webp",
     description: [
       "논리적이고 분석적인 성향으로, 피자 붕어빵처럼 기존의 틀을 깨는 스타일이에요.",
       "새로운 조합을 연구하고, 항상 더 나은 방법을 찾으려 해요.",
@@ -124,8 +124,8 @@ const bungBalGameResults = [
     type: "팥 크림치즈 붕어빵",
     mbti: "INFP",
     slogan: "감성 충만, 따뜻한 위로!",
-    bestMatch: "고구마 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/guma.webp",
+    bestMatch: "애플시나몬 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/apple-cinnamon.webp",
     worstMatch: "매콤이 붕어빵",
     worstMatchImg: "/assets/webp/flavorIcons/maecom.webp",
     description: [
@@ -141,10 +141,10 @@ const bungBalGameResults = [
     type: "치즈 붕어빵",
     mbti: "ISFJ",
     slogan: "포근함과 안정감의 대명사!",
-    bestMatch: "팥 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/redbean.webp",
-    worstMatch: "타코야끼 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/tako.webp",
+    bestMatch: "콘치즈 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/corn-cheese.webp",
+    worstMatch: "피자 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/pizza.webp",
     description: [
       "따뜻하고 포근한 성격으로, 치즈 붕어빵처럼 사람들에게 편안함을 줘요.",
       "세심하고 배려심이 많아 주변 사람들을 잘 챙겨요.",
@@ -158,10 +158,10 @@ const bungBalGameResults = [
     type: "콘치즈 붕어빵",
     mbti: "ESFJ",
     slogan: "함께할 때 더 빛나는!",
-    bestMatch: "슈크림 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/custard.webp",
-    worstMatch: "피자 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/pizza.webp",
+    bestMatch: "치즈 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/cheese.webp",
+    worstMatch: "타코야끼 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/tako.webp",
     description: [
       "사람들과 함께하는 걸 좋아하며, 콘치즈 붕어빵처럼 따뜻한 분위기를 만들어줘요.",
       "친절하고 사교적이며, 주변 사람들에게 신경을 많이 써요.",
@@ -175,8 +175,8 @@ const bungBalGameResults = [
     type: "매콤이 붕어빵",
     mbti: "ESTJ",
     slogan: "원칙과 카리스마!",
-    bestMatch: "대왕 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/king.webp",
+    bestMatch: "미니 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/mini.webp",
     worstMatch: "초코 붕어빵",
     worstMatchImg: "/assets/webp/flavorIcons/choco.webp",
     description: [
@@ -192,9 +192,9 @@ const bungBalGameResults = [
     type: "대왕 붕어빵",
     mbti: "ENTJ",
     slogan: "크게 보고, 크게 이끌다!",
-    bestMatch: "매콤이 붕어빵",
+    bestMatch: "팥 크림치즈 붕어빵",
     bestMatchImg: "/assets/webp/flavorIcons/maecom.webp",
-    worstMatch: "팥 크림치즈 붕어빵",
+    worstMatch: "미니 붕어빵",
     worstMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
     description: [
       "스케일이 크고, 강한 추진력을 가진 대왕 붕어빵 같은 성격이에요.",
@@ -209,10 +209,10 @@ const bungBalGameResults = [
     type: "타코야끼 붕어빵",
     mbti: "ENTP",
     slogan: "엉뚱한데 매력적인!",
-    bestMatch: "김치 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/kimchi.webp",
-    worstMatch: "팥 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/redbean.webp",
+    bestMatch: "고구마 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/guma.webp",
+    worstMatch: "치즈 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/cheese.webp",
     description: [
       "창의적이고 재치 넘치는 성격으로, 타코야끼 붕어빵처럼 독특한 매력을 가졌어요.",
       "즉흥적인 아이디어가 많고, 사람들과 논쟁하는 걸 즐겨요.",
@@ -226,10 +226,10 @@ const bungBalGameResults = [
     type: "뿌링클 붕어빵",
     mbti: "ISTP",
     slogan: "한 입 베어 물면 중독!",
-    bestMatch: "흑임자 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/black-sesame.webp",
-    worstMatch: "콘치즈 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/corn-cheese.webp",
+    bestMatch: "김치 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/kimchi.webp",
+    worstMatch: "애플시나몬 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/apple-cinnamon.webp",
     description: [
       "조용하지만 강한 개성을 가진 타입으로, 뿌링클 붕어빵처럼 중독성이 있어요.",
       "관찰력이 뛰어나고, 현실적이면서도 실용적인 선택을 선호해요.",
@@ -243,10 +243,10 @@ const bungBalGameResults = [
     type: "애플시나몬 붕어빵",
     mbti: "ENFJ",
     slogan: "따뜻한 리더, 달콤한 향기!",
-    bestMatch: "초코 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/choco.webp",
-    worstMatch: "흑임자 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/black-sesame.webp",
+    bestMatch: "팥 크림치즈 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
+    worstMatch: "뿌링클 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/bburing.webp",
     description: [
       "따뜻하고 배려심 넘치는 성격으로, 애플시나몬 붕어빵처럼 향기로운 존재예요.",
       "사람들에게 긍정적인 영향을 주고, 조화로운 분위기를 만들어가요.",
@@ -260,10 +260,10 @@ const bungBalGameResults = [
     type: "흑임자 붕어빵",
     mbti: "INTJ",
     slogan: "고요하지만 강렬하게!",
-    bestMatch: "피자 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/pizza.webp",
-    worstMatch: "슈크림 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/custard.webp",
+    bestMatch: "초코 붕어빵",
+    bestMatchImg: "/assets/webp/flavorIcons/choco.webp",
+    worstMatch: "미니 붕어빵",
+    worstMatchImg: "/assets/webp/flavorIcons/mini.webp",
     description: [
       "전략적이고 분석적인 성격으로, 흑임자 붕어빵처럼 고급스럽고 깊이 있는 타입이에요.",
       "독립적이고 자기주장이 강하며, 남의 의견보다 자신의 판단을 더 신뢰해요.",
@@ -286,20 +286,34 @@ export function matchBungBalType(userAnswers) {
     }
   });
 
-  // 정규화 (값이 너무 커지지 않도록)
-  let totalResponses = userAnswers.length || 1;
+  // Min-Max 정규화 적용
+  let minScore = Math.min(...Object.values(mbtiScores));
+  let maxScore = Math.max(...Object.values(mbtiScores));
+
   Object.keys(mbtiScores).forEach((key) => {
-    mbtiScores[key] = Math.round((mbtiScores[key] / totalResponses) * 10);
+    if (maxScore - minScore > 0) {
+      mbtiScores[key] =
+        ((mbtiScores[key] - minScore) / (maxScore - minScore)) * 10;
+    } else {
+      mbtiScores[key] = 5; // 모든 값이 동일하면 중간 값
+    }
   });
 
-  // MBTI 유형 결정 (높은 점수 기준으로 판별)
-  const mbtiType =
-    (mbtiScores.E >= mbtiScores.I ? "E" : "I") +
-    (mbtiScores.S >= mbtiScores.N ? "S" : "N") +
-    (mbtiScores.T >= mbtiScores.F ? "T" : "F") +
-    (mbtiScores.J >= mbtiScores.P ? "J" : "P");
+  // MBTI 유형 결정 (동점일 경우 랜덤 선택)
+  function resolveTie(a, b) {
+    if (mbtiScores[a] > mbtiScores[b]) return a;
+    if (mbtiScores[a] < mbtiScores[b]) return b;
+    return Math.random() < 0.5 ? a : b; // 동점이면 랜덤 선택
+  }
 
-  console.log("User MBTI Type:", mbtiType);
+  const mbtiType =
+    resolveTie("E", "I") +
+    resolveTie("S", "N") +
+    resolveTie("T", "F") +
+    resolveTie("J", "P");
+
+  // console.log("User MBTI Type:", mbtiType);
+
   // 서버로 보내기
   const handleSubmit = async () => {
     // 입력값이 공란인지 확인
@@ -322,7 +336,7 @@ export function matchBungBalType(userAnswers) {
   // 1. 정확한 MBTI 유형과 일치하는 붕어빵 찾기
   let bestMatch = bungBalGameResults.find((result) => result.mbti === mbtiType);
 
-  // 2. 완벽한 일치가 없으면, 가장 가까운 MBTI 유형 찾기 (점수 기반 유사도 계산)
+  // 2. 완벽한 일치가 없으면, 가장 가까운 MBTI 유형 찾기 (유사도 계산)
   if (!bestMatch) {
     let highestMatchScore = -Infinity;
     let closestMatch = null;
@@ -332,11 +346,21 @@ export function matchBungBalType(userAnswers) {
 
       for (let i = 0; i < 4; i++) {
         if (result.mbti[i] === mbtiType[i]) {
-          similarityScore += 1; // 같은 알파벳이면 +1
+          similarityScore += 2; // 같은 알파벳이면 +2
+        } else if (
+          (result.mbti[i] === "E" && mbtiType[i] === "I") ||
+          (result.mbti[i] === "I" && mbtiType[i] === "E") ||
+          (result.mbti[i] === "S" && mbtiType[i] === "N") ||
+          (result.mbti[i] === "N" && mbtiType[i] === "S") ||
+          (result.mbti[i] === "T" && mbtiType[i] === "F") ||
+          (result.mbti[i] === "F" && mbtiType[i] === "T") ||
+          (result.mbti[i] === "J" && mbtiType[i] === "P") ||
+          (result.mbti[i] === "P" && mbtiType[i] === "J")
+        ) {
+          similarityScore += 1; // 반대 유형이면 +1
         }
       }
 
-      // MBTI 개별 점수를 기반으로 유사도 계산
       let mbtiDiffSum = 0;
       Object.keys(mbtiScores).forEach((key) => {
         mbtiDiffSum += Math.abs(
@@ -344,7 +368,7 @@ export function matchBungBalType(userAnswers) {
         );
       });
 
-      let finalMatchScore = similarityScore - mbtiDiffSum * 0.1; // 유사도 점수 - 차이 점수 반영
+      let finalMatchScore = similarityScore - mbtiDiffSum * 0.05; // 가중치 감소 반영
 
       if (finalMatchScore > highestMatchScore) {
         highestMatchScore = finalMatchScore;
