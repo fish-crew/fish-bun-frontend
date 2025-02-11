@@ -286,20 +286,34 @@ export function matchBungBalType(userAnswers) {
     }
   });
 
-  // 정규화 (값이 너무 커지지 않도록)
-  let totalResponses = userAnswers.length || 1;
+  // Min-Max 정규화 적용
+  let minScore = Math.min(...Object.values(mbtiScores));
+  let maxScore = Math.max(...Object.values(mbtiScores));
+
   Object.keys(mbtiScores).forEach((key) => {
-    mbtiScores[key] = Math.round((mbtiScores[key] / totalResponses) * 10);
+    if (maxScore - minScore > 0) {
+      mbtiScores[key] =
+        ((mbtiScores[key] - minScore) / (maxScore - minScore)) * 10;
+    } else {
+      mbtiScores[key] = 5; // 모든 값이 동일하면 중간 값
+    }
   });
 
-  // MBTI 유형 결정 (높은 점수 기준으로 판별)
-  const mbtiType =
-    (mbtiScores.E >= mbtiScores.I ? "E" : "I") +
-    (mbtiScores.S >= mbtiScores.N ? "S" : "N") +
-    (mbtiScores.T >= mbtiScores.F ? "T" : "F") +
-    (mbtiScores.J >= mbtiScores.P ? "J" : "P");
+  // MBTI 유형 결정 (동점일 경우 랜덤 선택)
+  function resolveTie(a, b) {
+    if (mbtiScores[a] > mbtiScores[b]) return a;
+    if (mbtiScores[a] < mbtiScores[b]) return b;
+    return Math.random() < 0.5 ? a : b; // 동점이면 랜덤 선택
+  }
 
-  console.log("User MBTI Type:", mbtiType);
+  const mbtiType =
+    resolveTie("E", "I") +
+    resolveTie("S", "N") +
+    resolveTie("T", "F") +
+    resolveTie("J", "P");
+
+  // console.log("User MBTI Type:", mbtiType);
+
   // 서버로 보내기
   const handleSubmit = async () => {
     // 입력값이 공란인지 확인
@@ -322,7 +336,7 @@ export function matchBungBalType(userAnswers) {
   // 1. 정확한 MBTI 유형과 일치하는 붕어빵 찾기
   let bestMatch = bungBalGameResults.find((result) => result.mbti === mbtiType);
 
-  // 2. 완벽한 일치가 없으면, 가장 가까운 MBTI 유형 찾기 (점수 기반 유사도 계산)
+  // 2. 완벽한 일치가 없으면, 가장 가까운 MBTI 유형 찾기 (유사도 계산)
   if (!bestMatch) {
     let highestMatchScore = -Infinity;
     let closestMatch = null;
@@ -332,11 +346,21 @@ export function matchBungBalType(userAnswers) {
 
       for (let i = 0; i < 4; i++) {
         if (result.mbti[i] === mbtiType[i]) {
-          similarityScore += 1; // 같은 알파벳이면 +1
+          similarityScore += 2; // 같은 알파벳이면 +2
+        } else if (
+          (result.mbti[i] === "E" && mbtiType[i] === "I") ||
+          (result.mbti[i] === "I" && mbtiType[i] === "E") ||
+          (result.mbti[i] === "S" && mbtiType[i] === "N") ||
+          (result.mbti[i] === "N" && mbtiType[i] === "S") ||
+          (result.mbti[i] === "T" && mbtiType[i] === "F") ||
+          (result.mbti[i] === "F" && mbtiType[i] === "T") ||
+          (result.mbti[i] === "J" && mbtiType[i] === "P") ||
+          (result.mbti[i] === "P" && mbtiType[i] === "J")
+        ) {
+          similarityScore += 1; // 반대 유형이면 +1
         }
       }
 
-      // MBTI 개별 점수를 기반으로 유사도 계산
       let mbtiDiffSum = 0;
       Object.keys(mbtiScores).forEach((key) => {
         mbtiDiffSum += Math.abs(
@@ -344,7 +368,7 @@ export function matchBungBalType(userAnswers) {
         );
       });
 
-      let finalMatchScore = similarityScore - mbtiDiffSum * 0.1; // 유사도 점수 - 차이 점수 반영
+      let finalMatchScore = similarityScore - mbtiDiffSum * 0.05; // 가중치 감소 반영
 
       if (finalMatchScore > highestMatchScore) {
         highestMatchScore = finalMatchScore;
