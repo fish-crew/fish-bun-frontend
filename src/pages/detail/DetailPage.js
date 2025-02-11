@@ -3,7 +3,10 @@ import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styles from "./DetailPage.module.css";
 
-import { fetchDetailPageData, updateCalendarDetailContents } from "../../api/service.js";
+import {
+  fetchDetailPageData,
+  updateCalendarDetailContents,
+} from "../../api/service.js";
 
 function DetailsPage() {
   const navigate = useNavigate();
@@ -144,86 +147,115 @@ function DetailsPage() {
           <div>날씨:어쨌든맑음</div>
         </div>
         <div className="flex flex-col px-3 pb-3 flex-grow justify-start w-full">
-          <div className="relative flex justify-center items-center w-full h-[calc(100vw_*_336/600)] md:h-[12rem]">
-            {/* 가운데 배치할 이미지 */}
-            <div className="absolute top-0 h-full flex justify-center items-center overflow-hidden">
+          <div className="w-full flex-col flex-grow">
+            <div className="relative flex justify-center items-center w-full h-[calc(100vw_*_336/600)] md:h-[12rem]">
+              {/* 가운데 배치할 이미지 */}
+              <div className="absolute top-0 h-full flex justify-center items-center overflow-hidden">
+                <img
+                  src={detailData.fileUrl}
+                  alt="bunImage"
+                  className="max-w-[95%] max-h-[90%] md:max-h-[95%] object-contain"
+                />
+              </div>
+              {/* 테두리 이미지 */}
               <img
-                src={detailData.fileUrl}
-                alt="bunImage"
-                className="max-w-[95%] max-h-[90%] md:max-h-[95%] object-contain"
+                src="/assets/webp/diaryphotoBox.webp"
+                alt="diaryPhotoBox"
+                className="absolute top-0 w-full h-full object-contain pointer-events-none"
               />
             </div>
-            {/* 테두리 이미지 */}
-            <img
-              src="/assets/webp/diaryphotoBox.webp"
-              alt="diaryPhotoBox"
-              className="absolute top-0 w-full h-full object-contain pointer-events-none"
-            />
+
+            {/* 텍스트와 선 */}
+            <div className="relative text-sz30 text-start leading-[2rem] w-full mt-2">
+              {/* 수정 모드일 때는 textarea, 아닐 때는 p 태그로 보여줌 */}
+              {isEditing ? (
+                <textarea
+                  value={editedContent}
+                  onChange={(e) => setEditedContent(e.target.value)}
+                  className="relative z-10 break-all w-full rounded-md bg-white text-sz30 leading-[2rem] focus:outline-none focus:border-[2px]"
+                  rows="7" // 필요에 따라 행 수 조절
+                  style={{
+                    background:
+                      "repeating-linear-gradient(to bottom, transparent, transparent calc(2rem - 1px), #ccc calc(2rem - 1px), #ccc 2rem)",
+                  }}
+                />
+              ) : (
+                <p
+                  ref={textRef}
+                  className="relative z-10 break-all whitespace-pre-wrap px-2"
+                >
+                  {content}
+                </p>
+              )}
+
+              {/* 선 이미지 */}
+              {!isEditing && (
+                <div className="absolute top-7 left-0 w-full pointer-events-none z-0">
+                  {Array.from({ length: lineCount }).map((_, index) => (
+                    <img
+                      key={index}
+                      src="/assets/webp/diaryLine.webp"
+                      alt="diaryLine"
+                      className="w-full h-[0.3rem]"
+                      style={{ position: "absolute", top: `${index * 2}rem` }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* 툴바 추가 */}
-          <div className="relative bg-transparent px-1 pb-1 flex items-start justify-end">
+          <div className="relative bg-transparent px-1 pb-1 flex w-full items-center justify-center">
             {!isEditing ? (
               <button
                 onClick={handleEdit}
-                className="px-4 bg-blue-300 text-white rounded-md flex items-center gap-2"
+                className="mt-4 bg-[#1069b0] hover:bg-white hover:text-[#1069b0] text-white 
+                border-4 py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-72 
+                 flex items-center gap-2 justify-center"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487l3.651 3.651-12.046 12.046H4.816v-3.65L16.862 3.487z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.862 3.487l3.651 3.651-12.046 12.046H4.816v-3.65L16.862 3.487z"
+                  />
                 </svg>
                 수정
               </button>
             ) : (
               <button
                 onClick={handleSave}
-                className="px-4 bg-green-500 text-white rounded-md flex items-center gap-2"
+                className="
+                mt-4 bg-[#1069b0] hover:bg-white hover:text-[#1069b0] text-white 
+                border-4 py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-72 
+                 flex items-center gap-2 justify-center"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  stroke="currentColor"
+                  className="w-5 h-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
                 저장
               </button>
             )}
           </div>
-
-
-          {/* 텍스트와 선 */}
-          <div className="relative w-full text-sz30 text-start leading-[2rem] px-2">
-            {/* 수정 모드일 때는 textarea, 아닐 때는 p 태그로 보여줌 */}
-            {isEditing ? (
-              <textarea
-                value={editedContent}
-                onChange={(e) => setEditedContent(e.target.value)}
-                className="relative z-10 break-all w-full rounded-md bg-white text-sz30 leading-[2rem] focus:outline-none focus:border-[2px]"
-                rows="7" // 필요에 따라 행 수 조절
-                style={{
-                  background:
-                    "repeating-linear-gradient(to bottom, transparent, transparent calc(2rem - 1px), #ccc calc(2rem - 1px), #ccc 2rem)"
-                }}
-              />
-            ) : (
-              <p ref={textRef} className="relative z-10 break-all whitespace-pre-wrap">
-                {content}
-              </p>
-            )}
-
-            {/* 선 이미지 */}
-            {!isEditing && (
-              <div className="absolute top-7 left-0 w-full pointer-events-none z-0">
-                {Array.from({ length: lineCount }).map((_, index) => (
-                  <img
-                    key={index}
-                    src="/assets/webp/diaryLine.webp"
-                    alt="diaryLine"
-                    className="w-full h-[0.3rem]"
-                    style={{ position: "absolute", top: `${index * 2}rem` }}
-                  />
-                ))}
-              </div>
-            )}
-
-          </div>
-
         </div>
       </div>
     </div>
