@@ -42,7 +42,7 @@ function SuccessPage() {
   };
 
   const handleConfirm = () => {
-    navigate("/main");
+    navigate(-2);
   };
 
   const handleSlideChange = (swiper) => {
@@ -71,9 +71,8 @@ function SuccessPage() {
         {Array.from({ length: total }, (_, index) => (
           <span
             key={index}
-            className={`w-3 h-3 rounded-full cursor-pointer transition-all ${
-              index === activeIndex ? "bg-[#7f5b41] scale-125" : "bg-gray-300"
-            }`}
+            className={`w-3 h-3 rounded-full cursor-pointer transition-all ${index === activeIndex ? "bg-[#7f5b41] scale-125" : "bg-gray-300"
+              }`}
             onClick={() => onDotClick(index)} // 클릭 시 활성화된 슬라이드 변경
           ></span>
         ))}
@@ -125,11 +124,10 @@ function SuccessPage() {
                     <img
                       src={`/assets/webp/flavorIcons/${item.iconCode}.webp`}
                       alt={item.flavor}
-                      className={`w-full h-full object-contain ${
-                        activeIndex === index && animationTrigger
-                          ? "animate__animated animate__bounce"
-                          : ""
-                      }`}
+                      className={`w-full h-full object-contain ${activeIndex === index && animationTrigger
+                        ? "animate__animated animate__bounce"
+                        : ""
+                        }`}
                       onError={(e) => {
                         e.target.src = "/assets/webp/flavorIcons/notYet.webp"; // 기본 이미지 경로로 대체
                       }}

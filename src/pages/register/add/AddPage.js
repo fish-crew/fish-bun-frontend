@@ -196,7 +196,7 @@ const AddPage = () => {
 
   const handleClose = () => {
     //메인 페이지로 네비게이트
-    navigate("/main");
+    navigate(-1);
   };
 
   return (
