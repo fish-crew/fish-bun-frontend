@@ -173,7 +173,7 @@ function DetailsPage() {
                   value={editedContent}
                   onChange={(e) => setEditedContent(e.target.value)}
                   className="relative z-10 break-all w-full rounded-md bg-white text-sz30 leading-[2rem] focus:outline-none focus:border-[2px]"
-                  rows="7" // 필요에 따라 행 수 조절
+                  rows="5" // 필요에 따라 행 수 조절
                   style={{
                     background:
                       "repeating-linear-gradient(to bottom, transparent, transparent calc(2rem - 1px), #ccc calc(2rem - 1px), #ccc 2rem)",
