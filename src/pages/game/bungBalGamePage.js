@@ -234,7 +234,7 @@ export default function BungBalGamePage() {
     });
 
     return (
-      <div className="flex flex-grow flex-col w-full bg-cover overflow-hidden">
+      <div className="flex flex-grow flex-col w-full bg-cover">
         {/* 상단 네비게이션 바 */}
         <div className="w-full bg-white h-[6dvh] flex justify-between items-center">
           <button
