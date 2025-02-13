@@ -22,9 +22,9 @@ import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 import BungBalGamePage from "./pages/game/bungBalGamePage";
 import BookDetailPage from "./pages/bookDetail/BookDetailPage";
-import { Provider } from "react-redux"; // Provider 임포트
-import store, { persistor } from "./redux/store"; // Store와 Persistor 가져오기
-import { PersistGate } from "redux-persist/integration/react"; // PersistGate 추가
+import { Provider } from "react-redux";
+import store, { persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { HelmetProvider } from "react-helmet-async";
 import MetaTags from "./components/MetaTags";
@@ -69,12 +69,12 @@ function App() {
 
 function AppContent({ isWebPSupported }) {
   const location = useLocation();
-  const isBungBalGamePage = location.pathname === "/bungBalGamePage"; // ✅ 경로 확인
+  // const isBungBalGamePage = location.pathname === "/bungBalGamePage";
 
   return (
     <div className="App flex flex-col h-[100dvh] justify-between">
-      {isBungBalGamePage && <MetaTags />}
-
+      {/* {isBungBalGamePage && <MetaTags />} */}
+      <MetaTags />
       <Header />
       <Routes>
         <Route path="/" element={<Navigate to="/loadingPage" replace />} />
@@ -159,6 +159,8 @@ function AppContent({ isWebPSupported }) {
         {/* 잘못된 경로일 때 */}
         <Route path="*" element={<Navigate to="/main" replace />} />
       </Routes>
+
+      {/* 로그인과로딩 페이지에서는 푸터 숨김 */}
       {!["/loginPage", "/loadingPage"].includes(location.pathname) && (
         <Footer />
       )}
