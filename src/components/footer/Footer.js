@@ -62,67 +62,61 @@ function Footer() {
       <div
         className={`w-full text-sz23 flex px-2 items-center justify-between ${footerColor}`}
       >
-        {!isCoupangTxtPage ? (
-          isBungBalGamePage ? (
-            <div className="w-full flex items-center">
-              <button
-                className="w-full flex items-center"
-                onClick={goToMainService}
-              >
-                붕어빵 수집하기&nbsp;
-                {isSpecialPage ? (
-                  <img
-                    src="/assets/webp/cal-bun-white.webp"
-                    alt=""
-                    className="w-4"
-                  />
-                ) : (
-                  <img
-                    src="/assets/webp/cal-bun-blue.webp"
-                    alt=""
-                    className="w-4"
-                  />
-                )}
-              </button>
-              <div className="flex justify-center items-center">
-                <div className="">붕어빵탐험대</div>
-                {snsButtons.map((btn, idx) => (
-                  <SocialButton key={idx} {...btn} />
-                ))}
-              </div>
+        {isBungBalGamePage ? (
+          <div className="w-full flex items-center">
+            <button
+              className="w-full flex items-center"
+              onClick={goToMainService}
+            >
+              붕어빵 수집하기&nbsp;
+              {isSpecialPage ? (
+                <img
+                  src="/assets/webp/cal-bun-white.webp"
+                  alt=""
+                  className="w-4"
+                />
+              ) : (
+                <img
+                  src="/assets/webp/cal-bun-blue.webp"
+                  alt=""
+                  className="w-4"
+                />
+              )}
+            </button>
+            <div className="flex justify-center items-center">
+              <div className="">붕어빵탐험대</div>
+              {snsButtons.map((btn, idx) => (
+                <SocialButton key={idx} {...btn} />
+              ))}
             </div>
-          ) : (
-            <div className="w-full flex items-center">
-              <button
-                className="w-full flex items-center"
-                onClick={goToBungBalGame}
-              >
-                붕어빵 취향 테스트&nbsp;
-                {isSpecialPage ? (
-                  <img
-                    src="/assets/webp/cal-bun-white.webp"
-                    alt=""
-                    className="w-4"
-                  />
-                ) : (
-                  <img
-                    src="/assets/webp/cal-bun-blue.webp"
-                    alt=""
-                    className="w-4"
-                  />
-                )}
-              </button>
-              <div className="flex justify-center items-center">
-                <div className="">붕어빵탐험대</div>
-                {snsButtons.map((btn, idx) => (
-                  <SocialButton key={idx} {...btn} />
-                ))}
-              </div>
-            </div>
-          )
+          </div>
         ) : (
-          <div className="text-[1.5dvh] text-center w-full text-gray-400">
-            *파트너 활동을 통해 일정액의 수수료를 제공받을 수 있음
+          <div className="w-full flex items-center">
+            <button
+              className="w-full flex items-center"
+              onClick={goToBungBalGame}
+            >
+              붕어빵 취향 테스트&nbsp;
+              {isSpecialPage ? (
+                <img
+                  src="/assets/webp/cal-bun-white.webp"
+                  alt=""
+                  className="w-4"
+                />
+              ) : (
+                <img
+                  src="/assets/webp/cal-bun-blue.webp"
+                  alt=""
+                  className="w-4"
+                />
+              )}
+            </button>
+            <div className="flex justify-center items-center">
+              <div className="">붕어빵탐험대</div>
+              {snsButtons.map((btn, idx) => (
+                <SocialButton key={idx} {...btn} />
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -134,6 +128,9 @@ function Footer() {
         scrolling="no"
         referrerPolicy="unsafe-url"
       ></iframe>
+      <div className="text-[1.3dvh] text-center w-full text-gray-400">
+        *파트너 활동을 통해 일정액의 수수료를 제공받을 수 있음
+      </div>
     </div>
   );
 }
