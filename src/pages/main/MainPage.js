@@ -4,7 +4,7 @@ import html2canvas from "html2canvas";
 import styles from "./MainPage.module.css";
 import Modal from "../../components/modals/Modal.js";
 import modalStyles from "../../components/modals/Modal.module.css";
-
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 import tutorialPages from "../../components/modals/TutorialData.js";
 import {
   fetchUserData,
@@ -71,7 +71,10 @@ function FishFrame() {
   const goToAdd = () => {
     if (eatenDays[todayEnglish]) {
       //키가 존재하는지 확인
-      alert("오늘은 이미 붕어빵을 등록하셨습니다!");
+      // alert("오늘은 이미 붕어빵을 등록하셨습니다!");
+      {
+        showAlert("오늘은 이미 붕어빵을 등록하셨습니다!");
+      }
       return;
     }
     // 버튼 클릭 시 sessionStorage에 플래그 저장
@@ -272,7 +275,9 @@ function Main() {
       link.click();
     } catch (error) {
       console.error("캡처 오류:", error);
-      alert("화면 캡처 중 오류가 발생했습니다.");
+      {
+        showAlert("화면 캡처 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -308,7 +313,9 @@ function Main() {
 
   const handleNext = () => {
     if (currentPage === tutorialPages.length - 1) {
-      alert("마지막 페이지 입니다!");
+      {
+        showAlert("마지막 페이지 입니다!");
+      }
     } else {
       setCurrentPage((prev) => Math.min(prev + 1, tutorialPages.length - 1));
     }
@@ -316,7 +323,9 @@ function Main() {
 
   const handlePrev = () => {
     if (currentPage === 0) {
-      alert("첫 페이지 입니다!");
+      {
+        showAlert("첫 페이지 입니다!");
+      }
     } else {
       setCurrentPage((prev) => Math.max(prev - 1, 0));
     }
@@ -352,7 +361,9 @@ function Main() {
         }
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
-        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        {
+          showAlert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        }
       }
     };
 
@@ -420,11 +431,15 @@ function Main() {
 
         await navigator.clipboard.write([clipboardItem]);
         setCopied(true);
-        alert("클립보드에 복사되었습니다!");
+        {
+          showAlert("클립보드에 복사되었습니다!");
+        }
         setTimeout(() => setCopied(false), 2000);
       } catch (error) {
         console.error("Failed to copy link:", error);
-        alert("클립보드 복사에 실패했습니다.");
+        {
+          showAlert("클립보드 복사에 실패했습니다.");
+        }
       }
     }
   };
@@ -507,6 +522,7 @@ function Main() {
           </div>
         </div>
       </Modal>
+      <AlertModal />
 
       <div className="w-full absolute top-0 bulbTop">
         <img src="/assets/webp/mainObjTop.webp" alt="mainObj top" />

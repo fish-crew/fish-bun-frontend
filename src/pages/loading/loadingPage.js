@@ -65,7 +65,7 @@ function LoadingPage() {
 
   return (
     <div
-      className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
+      className="main-area flex flex-col justify-between h-full items-center bg-cover bg-center relative"
       style={{ backgroundImage: `url(${bgBlue})` }}
     >
       <div className="w-full absolute top-[12%] px-14 z-20 drop-shadow-2xl">

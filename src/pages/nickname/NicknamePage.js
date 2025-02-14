@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import style from "./NicknamePage.module.css";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 import { postNickNameAddData } from "../../api/service.js";
 
@@ -14,7 +15,9 @@ function NicknamePage() {
 
     // 최대 길이 초과 시 alert
     if (value.length > 7) {
-      alert("닉네임은 공백 포함 최대 7글자까지 입력할 수 있습니다.");
+      {
+        showAlert("닉네임은 공백 포함 최대 7글자까지 입력할 수 있습니다.");
+      }
       return;
     }
 
@@ -25,7 +28,9 @@ function NicknamePage() {
   const handleSubmit = async () => {
     // 입력값이 공란인지 확인
     if (!nickname.trim()) {
-      alert("닉네임을 입력해주세요.");
+      {
+        showAlert("닉네임을 입력해주세요.");
+      }
       return;
     }
 
@@ -36,17 +41,22 @@ function NicknamePage() {
       const response = await postNickNameAddData(nickname);
 
       // 서버 응답에 따라 처리
-      alert("닉네임이 성공적으로 등록되었습니다!");
+      {
+        showAlert("닉네임이 성공적으로 등록되었습니다!");
+      }
     } catch (error) {
       console.error("데이터 전송 실패:", error);
-      alert("서버로 데이터를 전송하는 데 실패했습니다.");
+      {
+        showAlert("서버로 데이터를 전송하는 데 실패했습니다.");
+      }
     }
 
     navigate("/main");
   };
 
   return (
-    <div className="w-full flex-grow flex flex-col">
+    <div className="main-area w-full flex-grow flex flex-col">
+      <AlertModal />
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnBlueCheckT.webp" alt="상단 배너" />
       </div>

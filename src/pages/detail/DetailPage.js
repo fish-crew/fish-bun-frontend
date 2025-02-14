@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import styles from "./DetailPage.module.css";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 import {
   fetchDetailPageData,
@@ -38,7 +39,9 @@ function DetailsPage() {
         setEditedContent(finalSentence); // 초기값 설정
       } catch (error) {
         if (error.response && error.response.status === 403) {
-          alert("접근 권한이 없습니다. 캘린더 페이지로 이동합니다.");
+          {
+            showAlert("접근 권한이 없습니다. 캘린더 페이지로 이동합니다.");
+          }
           navigate(-1); // 403 에러 발생 시 이전 페이지로
         } else {
           console.error("데이터 요청 실패:", error);
@@ -84,6 +87,9 @@ function DetailsPage() {
 
     try {
       const response = await updateCalendarDetailContents(id, editedContent);
+      {
+        showAlert("저장되었습니다.");
+      }
       console.log("업데이트 성공", response.result);
     } catch (error) {
       console.error("업데이트 실패", error);
@@ -92,8 +98,9 @@ function DetailsPage() {
 
   return (
     <div
-      className={`flex flex-col justify-start flex-grow overflow-y-auto relative ${styles.scrollArea}`}
+      className={`main-area flex flex-col justify-start flex-grow overflow-y-auto relative ${styles.scrollArea}`}
     >
+      <AlertModal />
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>

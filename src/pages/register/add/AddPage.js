@@ -3,6 +3,9 @@ import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import ImageUpload from "../../../components/imageUpload/ImageUpload";
 import DropdownSelector from "../../../components/dropdownSelector/DropdownSelector";
 import { fetchFlavorData, postRegisterData } from "../../../api/service.js";
+import AlertModal, {
+  showAlert,
+} from "../../../components/modals/AlertModal.js";
 
 // 커스텀 훅: sessionStorage에서 플래그 확인 후 삭제
 function useAccessGuard() {
@@ -144,11 +147,12 @@ const AddPage = () => {
     return `오늘은 ${flavorSentence}를 먹었다. 그래서 총 ${processedData.length}종류를 먹었다. 정말 맛있었다!`;
   };
 
-
   //서버로 보내기
   const handleSubmit = async () => {
     if (!Object.keys(selectedOptions).length) {
-      alert("옵션을 선택해주세요.");
+      {
+        showAlert("옵션을 선택해주세요.");
+      }
       return;
     }
 
@@ -157,7 +161,9 @@ const AddPage = () => {
     // 이미지 추가
     const imageFile = document.querySelector("#image-upload").files[0];
     if (!imageFile) {
-      alert("이미지를 업로드해주세요.");
+      {
+        showAlert("이미지를 업로드해주세요.");
+      }
       return;
     }
     formData.append("picture", imageFile);
@@ -185,12 +191,14 @@ const AddPage = () => {
       const result = await postRegisterData(formData);
       console.log(result);
       const id = result.data; // 서버에서 받은 ID 값 (예: 81)
-
-      alert("등록되었습니다.");
-      navigate(`/register/successPage/${id}`);
+      showAlert("등록되었습니다.", () => {
+        navigate(`/register/successPage/${id}`); // ✅ 모달 닫힌 후 이동
+      });
     } catch (error) {
       console.error("전송 중 오류:", error);
-      alert("전송 중 오류가 발생했습니다.");
+      {
+        showAlert("전송 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -200,7 +208,8 @@ const AddPage = () => {
   };
 
   return (
-    <div className="w-full flex-grow flex flex-col overflow-y-auto">
+    <div className="main-area w-full flex-grow flex flex-col overflow-y-auto">
+      <AlertModal />
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>

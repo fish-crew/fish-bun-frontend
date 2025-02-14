@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import styles from "./BookPage.module.css";
 import { useSelector } from "react-redux"; //Redux Store에서 가져오기
 import { fetchBookPageData, fetchFlavorData } from "../../api/service.js";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 function CustomArrow(props) {
   const { className, style, onClick } = props;
@@ -79,7 +80,9 @@ function BookPage() {
         );
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
-        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        {
+          showAlert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        }
       }
     };
 
@@ -95,11 +98,12 @@ function BookPage() {
   const goToFishDetail = (fishId) => {
     return () => {
       navigate(`/bookDetailPage/${fishId}`);
-    }
-  }
+    };
+  };
 
   return (
-    <div className="w-full flex-grow flex flex-col">
+    <div className="w-full flex-grow flex flex-col main-area">
+      <AlertModal />
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>
@@ -144,10 +148,11 @@ function BookPage() {
                     {page.map((fish) => (
                       <div
                         key={fish.id}
-                        className={`flex flex-col items-center justify-center h-max ${collectedFish.includes(fish.id)
-                          ? "opacity-100"
-                          : "opacity-25"
-                          }`}
+                        className={`flex flex-col items-center justify-center h-max ${
+                          collectedFish.includes(fish.id)
+                            ? "opacity-100"
+                            : "opacity-25"
+                        }`}
                         onClick={goToFishDetail(fish.id)}
                       >
                         <img
