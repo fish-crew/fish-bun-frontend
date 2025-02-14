@@ -4,6 +4,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import moment from "moment";
 import styles from "./CalendarPage.module.css"; // CSS 모듈 불러오기
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 import { fetchCalendarPageData } from "../../api/service.js";
 
@@ -40,7 +41,9 @@ function CalendarPage() {
       setEatenCount(eatenCnt);
     } catch (error) {
       console.error("데이터 가져오기 실패:", error);
-      alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+      {
+        showAlert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+      }
     }
   };
 
@@ -84,7 +87,8 @@ function CalendarPage() {
   };
 
   return (
-    <div className="w-full flex-grow flex flex-col overflow-y-auto">
+    <div className="main-area w-full flex-grow flex flex-col overflow-y-auto">
+      <AlertModal />
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>

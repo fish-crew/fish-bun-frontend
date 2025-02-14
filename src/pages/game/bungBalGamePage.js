@@ -5,6 +5,7 @@ import bungBalGameResults, { matchBungBalType } from "./bungBalGameResults";
 import styles from "./bungBalGamePage.module.css";
 import html2canvas from "html2canvas";
 import { fetchBungbalData, fetchMbtiData } from "../../api/service.js";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 function Button({ onClick, children, className }) {
   return (
@@ -114,8 +115,8 @@ export default function BungBalGamePage() {
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = async () => {
-    const htmlContent = `[붕어빵 탐험대]<br>팥냥이와 함께 떠나는 붕어빵 탐험!<br><a href="https://bunglog.me">https://bunglog.me</a>`;
-    const plainText = `[붕어빵 탐험대]\n팥냥이와 함께 떠나는 붕어빵 탐험!\nhttps://bunglog.me`;
+    const htmlContent = `[붕어빵 취향 테스트]<br>나는 어떤 붕어빵일까?<br>테스트 하러 가기!<br><a href="https://bunglog.me/bungBalGamePage">https://bunglog.me/bungBalGamePage</a>`;
+    const plainText = `[붕어빵 취향 테스트]\n나는 어떤 붕어빵일까?\n테스트 하러 가기!\nhttps://bunglog.me/bungBalGamePage`;
 
     if (navigator.clipboard && navigator.clipboard.write) {
       try {
@@ -128,11 +129,15 @@ export default function BungBalGamePage() {
 
         await navigator.clipboard.write([clipboardItem]);
         setCopied(true);
-        alert("클립보드에 복사되었습니다!");
+        {
+          showAlert("클립보드에 복사되었습니다!");
+        }
         setTimeout(() => setCopied(false), 2000);
       } catch (error) {
         console.error("Failed to copy link:", error);
-        alert("클립보드 복사에 실패했습니다.");
+        {
+          showAlert("클립보드 복사에 실패했습니다.");
+        }
       }
     }
   };
@@ -166,7 +171,9 @@ export default function BungBalGamePage() {
       link.click();
     } catch (error) {
       console.error("캡처 오류:", error);
-      alert("화면 캡처 중 오류가 발생했습니다.");
+      {
+        showAlert("화면 캡처 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -234,7 +241,8 @@ export default function BungBalGamePage() {
     });
 
     return (
-      <div className="flex flex-grow flex-col w-full bg-cover">
+      <div className="main-area flex flex-grow flex-col w-full bg-cover">
+        <AlertModal />
         {/* 상단 네비게이션 바 */}
         <div className="w-full bg-white h-[6dvh] flex justify-between items-center">
           <button

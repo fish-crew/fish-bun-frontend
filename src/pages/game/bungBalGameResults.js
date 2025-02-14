@@ -1,4 +1,5 @@
 import { postMbtiData } from "../../api/service.js";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 const bungBalGameResults = [
   {
@@ -328,7 +329,9 @@ export function matchBungBalType(userAnswers) {
       const response = await postMbtiData(mbtiType);
     } catch (error) {
       console.error("데이터 전송 실패:", error);
-      alert("서버로 데이터를 전송하는 데 실패했습니다.");
+      {
+        showAlert("서버로 데이터를 전송하는 데 실패했습니다.");
+      }
     }
   };
   handleSubmit();

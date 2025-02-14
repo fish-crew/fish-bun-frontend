@@ -3,6 +3,7 @@ import { fetchBookDetailData } from "../../api/service.js";
 import { useParams, useNavigate } from "react-router-dom";
 import CloseButton from "./../../components/Buttons/CloseButton";
 import styles from "./bookDetailPage.module.css";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 const BookDetailPage = () => {
   const { flavorId } = useParams(); // URL에서 flavorId 가져오기
@@ -20,11 +21,15 @@ const BookDetailPage = () => {
           setFishBunFlavor(response.data.fishBunFlavor); // 붕어빵 맛 데이터 저장
         } else {
           console.error("서버 응답 실패:", response);
-          alert("데이터를 가져오는 데 실패했습니다.");
+          {
+            showAlert("데이터를 가져오는 데 실패했습니다.");
+          }
         }
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
-        alert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        {
+          showAlert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+        }
       }
     };
 
@@ -40,8 +45,9 @@ const BookDetailPage = () => {
 
   return (
     <div
-      className={`w-full flex-grow flex flex-col overflow-y-auto ${styles.scrollArea}`}
+      className={`w-full flex-grow flex flex-col overflow-y-auto main-area ${styles.scrollArea}`}
     >
+      <AlertModal />
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>

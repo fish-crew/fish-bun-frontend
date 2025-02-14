@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import addPicBtn from "../../assets/addPicBtn.png";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal";
 
 function ImageUpload() {
   const [imagePreview, setImagePreview] = useState(null); // 이미지 미리보기
@@ -9,14 +10,19 @@ function ImageUpload() {
     const file = e.target.files[0]; // 선택한 파일
 
     if (!file) {
-      alert(
-        "파일을 선택하지 못했습니다. 사진 보관함 또는 카메라 권한을 확인해주세요."
-      );
+      {
+        showAlert(
+          "파일을 선택하지 못했습니다. 사진 보관함 또는 카메라 권한을 확인해주세요."
+        );
+      }
+
       return;
     }
 
     if (!file.type.startsWith("image/")) {
-      alert("이미지 파일만 업로드할 수 있습니다.");
+      {
+        showAlert("이미지 파일만 업로드할 수 있습니다.");
+      }
       return;
     }
 
@@ -32,6 +38,7 @@ function ImageUpload() {
 
   return (
     <div className="relative w-72 h-32 flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded-lg bg-white">
+      <AlertModal />
       {imagePreview ? (
         <div className="w-full h-full flex justify-center">
           {/* 미리보기 이미지 */}

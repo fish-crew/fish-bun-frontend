@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { postReportData } from "../../../api/service.js";
+import AlertModal, {
+  showAlert,
+} from "../../../components/modals/AlertModal.js";
 
 function ReportPage() {
   const navigate = useNavigate();
@@ -16,7 +19,9 @@ function ReportPage() {
   const handleSubmit = async () => {
     // 입력값이 공란인지 확인
     if (!newBungeobbangsName.trim()) {
-      alert("붕어빵의 이름을 입력해주세요.");
+      {
+        showAlert("붕어빵의 이름을 입력해주세요.");
+      }
       return;
     }
 
@@ -27,11 +32,14 @@ function ReportPage() {
       const response = await postReportData(newBungeobbangsName);
 
       // 서버 응답에 따라 처리
-      alert("붕어빵이 성공적으로 등록되었습니다!");
-      navigate("/main");
+      showAlert("등록되었습니다.", () => {
+        navigate("/main"); // ✅ 모달 닫힌 후 이동
+      });
     } catch (error) {
       console.error("데이터 전송 실패:", error);
-      alert("서버로 데이터를 전송하는 데 실패했습니다.");
+      {
+        showAlert("서버로 데이터를 전송하는 데 실패했습니다.");
+      }
     }
   };
 
@@ -41,7 +49,8 @@ function ReportPage() {
   };
 
   return (
-    <div className="w-full flex-grow flex flex-col">
+    <div className="main-area w-full flex-grow flex flex-col">
+      <AlertModal />
       <div className="w-full h-max">
         <img src="/assets/webp/paperOnCheckT.webp" alt="상단 배너" />
       </div>

@@ -15,7 +15,7 @@ function LoginPage() {
 
   return (
     <div
-      className="flex flex-col justify-between h-full items-center bg-cover bg-center relative"
+      className="main-area flex flex-col justify-between h-full items-center bg-cover bg-center relative"
       style={{
         backgroundImage: `url(/assets/webp/loginIllustWithoutBun.webp)`, // WebP 배경 이미지
       }}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { getCookie } from "../../api/cookie";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 const ProtectedRoute = ({ children }) => {
   const [alertShown, setAlertShown] = useState(false);
@@ -9,7 +10,9 @@ const ProtectedRoute = ({ children }) => {
   if (!accessToken) {
     if (!alertShown) {
       // console.warn("로그인이 필요합니다.");
-      alert("로그인이 필요합니다.");
+      {
+        showAlert("로그인이 필요합니다.");
+      }
       setAlertShown(true);
     }
     return <Navigate to="/loginPage" replace />;
