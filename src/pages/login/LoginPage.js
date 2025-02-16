@@ -9,7 +9,7 @@ function LoginPage() {
 
   useEffect(() => {
     if (accessToken) {
-      navigate("/main", { replace: true }); // 메인 페이지로 리다이렉트
+      navigate("/main", { replace: true });
     }
   }, [accessToken, navigate]);
 
@@ -17,7 +17,7 @@ function LoginPage() {
     <div
       className="main-area flex flex-col justify-between h-full items-center bg-cover bg-center relative"
       style={{
-        backgroundImage: `url(/assets/webp/loginIllustWithoutBun.webp)`, // WebP 배경 이미지
+        backgroundImage: `url(/assets/webp/loginIllustWithoutBun.webp)`,
       }}
     >
       <div
@@ -29,7 +29,7 @@ function LoginPage() {
       <button className="flex justify-center absolute bottom-[15%] w-[80%] drop-shadow-smGray">
         <a href="/api/oauth2/authorization/kakao">
           <img
-            src="/assets/webp/kakao_login_large_wide.webp" // WebP 카카오 로그인 버튼
+            src="/assets/webp/kakao_login_large_wide.webp"
             alt="카카오 로그인 버튼"
             className="w-full h-full object-cover"
           />

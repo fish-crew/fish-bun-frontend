@@ -116,10 +116,8 @@ function FishFrame() {
       const id = eatenDays[day] || null;
 
       if (id) {
-        console.log(`${day} 클릭됨, ID: ${id}`);
+        // console.log(`${day} 클릭됨, ID: ${id}`);
         navigate(`/detail/${id}`);
-      } else {
-        console.log(`${day} 클릭됨, 등록된 데이터 없음`);
       }
     } else {
       console.error(`${day}에 해당하는 영어 요일이 없습니다.`);
@@ -354,7 +352,6 @@ function Main() {
 
           try {
             const response = await updateFirstLogin();
-            console.log("First login status updated:", response);
           } catch (error) {
             console.error("Failed to update first login status:", error);
           }
@@ -395,7 +392,7 @@ function Main() {
     const Kakao = typeof window !== "undefined" ? window.Kakao : null;
     if (Kakao && !Kakao.isInitialized()) {
       Kakao.init("2f592f29ac8bd230f9554175da46fedd");
-      console.log("Kakao initialized:", Kakao.isInitialized());
+      // console.log("Kakao initialized:", Kakao.isInitialized());
     }
   }, []);
 

@@ -54,7 +54,7 @@ function LoadingPage() {
     preloadSingleImage(bgBlue)
       .then(() => Promise.all([preloadImages(images), minimumDelay]))
       .then(() => {
-        console.log("All images loaded successfully!");
+        // console.log("All images loaded successfully!");
         navigate("/loginPage");
       })
       .catch((error) => {

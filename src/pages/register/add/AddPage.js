@@ -189,7 +189,6 @@ const AddPage = () => {
 
     try {
       const result = await postRegisterData(formData);
-      console.log(result);
       const id = result.data; // 서버에서 받은 ID 값 (예: 81)
       showAlert("등록되었습니다.", () => {
         navigate(`/register/successPage/${id}`); // ✅ 모달 닫힌 후 이동

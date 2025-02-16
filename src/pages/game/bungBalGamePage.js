@@ -93,7 +93,7 @@ export default function BungBalGamePage() {
     const Kakao = typeof window !== "undefined" ? window.Kakao : null;
     if (Kakao && !Kakao.isInitialized()) {
       Kakao.init("2f592f29ac8bd230f9554175da46fedd");
-      console.log("Kakao initialized:", Kakao.isInitialized());
+      // console.log("Kakao initialized:", Kakao.isInitialized());
     }
   }, []);
 
