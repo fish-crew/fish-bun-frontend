@@ -52,8 +52,7 @@ const tutorialPages = [
             이번주에 등록한 붕어빵은
             접시의 <span class="text-[#1069b0]">요일별 위치</span>에 채워집니다. 아직 등록되지 않은 날은 회색 붕어빵으로
             표시되어 7일 동안 매일 붕어빵을 등록하면 접시 가득 붕어빵을 채울 수 있어요!<br/>
-            과거에 수집한 붕어빵은 붕어빵 틀에서 요일을 선택하거나 
-            더 이전의 날짜는  <img
+            과거에 수집한 붕어빵은 <img
               src="/assets/webp/calendarBtn.webp"
               alt="일지"
               className="h-[3.5vh] align-middle inline"
@@ -94,7 +93,7 @@ const tutorialPages = [
               alt="◆"
             /> <span class="text-[#1069b0] text-sz30">메뉴 버튼 이용하기</span>
             </p>
-            메인 화면화단에는 붕어빵 탐험을 위한 메뉴가 추가적으로 준비되어있어요. 
+            메인 화면 하단에는 붕어빵 탐험을 위한 메뉴가 추가적으로 준비되어있어요. 
             <img
               src="/assets/webp/captureBtn.webp"
               alt="캡처"
