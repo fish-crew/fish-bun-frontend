@@ -104,13 +104,13 @@ const bungBalGameQuestions = [
         core: "mini",
         text: "미니 붕어빵 🐭",
         sub: ["fun"],
-        mbti: { P: 0.1, F: 0.5 }, // 귀엽고 가벼운 걸 선호하는 감각적인 성향
+        mbti: { P: 0.1, F: 0.1 }, // 귀엽고 가벼운 걸 선호하는 감각적인 성향
       },
       {
         core: "king",
         text: "대왕 붕어빵 🦖",
         sub: ["big"],
-        mbti: { T: 0.5, J: 0.1 }, // 크고 확실한 선택을 선호하는 성향
+        mbti: { T: 0.1, J: 0.1 }, // 크고 확실한 선택을 선호하는 성향
       },
     ],
   },
@@ -120,15 +120,21 @@ const bungBalGameQuestions = [
     options: [
       {
         core: "accept",
-        text: "그냥 먹는다 😅",
+        text: "귀찮으니까 그냥 먹는다 🫠",
         sub: ["easygoing"],
-        mbti: { I: 0.5, P: 1, F: 0.8 }, // 유연하고 관대한 성향
+        mbti: { I: 0.5, P: 0.8 },
+      },
+      {
+        core: "accept",
+        text: "사장님이 난처할 수도 있으니 그냥 먹는다 🥺",
+        sub: ["considerate"],
+        mbti: { I: 0.5, P: 0.5, F: 1.5 },
       },
       {
         core: "complain",
-        text: "가게에 가서 이야기한다 🗣",
-        sub: ["strict"],
-        mbti: { E: 0.5, J: 1, T: 0.8 }, // 원칙을 중요시하는 성향
+        text: "내가 주문한 맛이 아니니 가게에 가서 이야기한다 🗣",
+        sub: ["assertive"],
+        mbti: { E: 0.5, J: 1, T: 0.7 },
       },
     ],
   },
@@ -156,15 +162,15 @@ const bungBalGameQuestions = [
     options: [
       {
         core: "split_evenly",
-        text: "반으로 똑같이 나눈다 ✂️",
+        text: "최대한 반으로 똑같이 나눈다 ✂️",
         sub: ["fair"],
-        mbti: { J: 0.5, T: 0.5 }, // 공평한 규칙을 중시하는 성향
+        mbti: { J: 0.5 }, // 공평한 규칙을 중시하는 성향
       },
       {
         core: "take_a_bite",
         text: "그냥 적당히 베어 먹고 넘긴다 😋",
         sub: ["spontaneous"],
-        mbti: { P: 0.5, F: 0.5 }, // 즉흥적이고 유연한 성향
+        mbti: { P: 0.5 }, // 즉흥적이고 유연한 성향
       },
     ],
   },
