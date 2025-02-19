@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 function SocialButton({ iconPath, onClick, label }) {
   return (
     <button
-      className="flex justify-center items-center py-2 px-2 hover:bg-gray-300 rounded"
+      className="flex justify-center items-center py-2 px-2 "
       onClick={onClick}
       aria-label={label}
     >

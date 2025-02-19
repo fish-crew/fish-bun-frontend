@@ -90,7 +90,7 @@ function DetailsPage() {
       {
         showAlert("저장되었습니다.");
       }
-      console.log("업데이트 성공", response.result);
+      // console.log("업데이트 성공", response.result);
     } catch (error) {
       console.error("업데이트 실패", error);
     }
@@ -241,7 +241,7 @@ function DetailsPage() {
               <button
                 onClick={handleSave}
                 className="
-                mt-4 bg-[#1069b0] hover:bg-white hover:text-[#1069b0] text-white 
+                mt-4 bg-[#1069b0] active:bg-white active:text-[#1069b0] text-white 
                 border-4 py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-72 
                  flex items-center gap-2 justify-center"
               >
