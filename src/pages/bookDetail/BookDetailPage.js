@@ -18,7 +18,7 @@ const BookDetailPage = () => {
 
         if (response.result === "success" && response.statusCode === "200") {
           setDateList(response.data.dateList); // 날짜별 데이터 저장
-          setFishBunFlavor(response.data.fishBunFlavor); // 붕어빵 맛 데이터 저장
+          setFishBunFlavor(response.data.fishBunFlavorEntity); // 붕어빵 맛 데이터 저장
         } else {
           console.error("서버 응답 실패:", response);
           {
@@ -96,7 +96,7 @@ const BookDetailPage = () => {
                     onClick={() => navigate(`/detail/${item.id}`)}
                   >
                     <span className="text-sz25">
-                      {item.date.split("-")[0]}년 {item.date.split("-")[1]}월{" "}
+                      {item.date.split("-")[0]}년 {item.date.split("-")[1]}월
                       {item.date.split("-")[2]}일
                     </span>
                     <span className="text-sz25 text-yellow-600">
