@@ -194,9 +194,9 @@ const bungBalGameResults = [
     mbti: "ENTJ",
     slogan: "크게 보고, 크게 이끌다!",
     bestMatch: "팥 크림치즈 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/maecom.webp",
+    bestMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
     worstMatch: "미니 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
+    worstMatchImg: "/assets/webp/flavorIcons/mini.webp",
     description: [
       "스케일이 크고, 강한 추진력을 가진 대왕 붕어빵 같은 성격이에요.",
       "야망이 크고, 목표를 향해 체계적으로 나아가요.",
