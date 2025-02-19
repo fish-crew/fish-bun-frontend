@@ -53,7 +53,6 @@ function App() {
 
   return (
     <Provider store={store}>
-      {" "}
       {/* Redux Store 제공 */}
       {/* Redux 상태 복원을 위한 PersistGate */}
       <PersistGate loading={null} persistor={persistor}>

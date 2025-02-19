@@ -540,7 +540,7 @@ function Main() {
           </div>
           <div className="relative w-full h-[2dvh]">
             <div className="bunTxtArea text-sz20 w-full text-center nowrap absolute top-[-1dvh]">
-              이번달은 붕어빵을{" "}
+              이번달은 붕어빵을
               <span className="font-semibold">{monthlyCount}</span>번 먹었어요!
             </div>
           </div>

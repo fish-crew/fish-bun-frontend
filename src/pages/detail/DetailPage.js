@@ -131,8 +131,8 @@ function DetailsPage() {
           <div>
             {date ? (
               <>
-                <span>{date.getMonth() + 1}</span>월{" "}
-                <span>{date.getDate()}</span>일{" "}
+                <span>{date.getMonth() + 1}</span>월
+                <span>{date.getDate()}</span>일
                 <span>
                   {
                     [
