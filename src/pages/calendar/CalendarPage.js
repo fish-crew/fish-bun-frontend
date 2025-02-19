@@ -178,7 +178,6 @@ function CalendarPage() {
             }}
           />
           <div className="pb-3">
-            {" "}
             <img
               src="/assets/webp/diaryLine.webp"
               alt="Special"
@@ -187,8 +186,8 @@ function CalendarPage() {
           </div>
         </div>
         <div className="text-sz22 items-center">
-          이번달은{" "}
-          <span className="text-orange-500 font-bold">{monthlyCount}</span>번,{" "}
+          이번달은
+          <span className="text-orange-500 font-bold">{monthlyCount}</span>번,
           <span className="text-orange-500 font-bold">{eatenCount}</span>마리의
           붕어빵을 먹었어요!
         </div>

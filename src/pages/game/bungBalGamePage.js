@@ -340,7 +340,7 @@ export default function BungBalGamePage() {
                 />
                 <div className={`text-sz40 font-bold`}>{result.type}</div>
                 <div className="text-yellow-600 text-sz20 pb-3">
-                  전체 사용자 중{" "}
+                  전체 사용자 중
                   <span className="font-bold">
                     {matchRate !== null ? matchRate : "..."}
                   </span>
@@ -391,7 +391,7 @@ export default function BungBalGamePage() {
                       alt={result.worstMatch}
                     />
                     <div className="text-sz25">{result.worstMatch}</div>
-                  </div>{" "}
+                  </div>
                 </div>
               </div>
               <div className="w-full flex gap-5 items-center justify-center p-8">
@@ -562,7 +562,7 @@ export default function BungBalGamePage() {
             </button>
             <div className="text-[#1069b0] pt-1 flex items-center justify-center">
               총 <span className="text-[#f8bd6f] font-bold">{userCount}</span>
-              마리의 붕어빵이 수집됐어요{" "}
+              마리의 붕어빵이 수집됐어요
               <img
                 src="/assets/webp/cal-bun.webp"
                 alt="!"
