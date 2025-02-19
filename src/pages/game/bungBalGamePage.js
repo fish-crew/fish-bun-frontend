@@ -81,14 +81,6 @@ export default function BungBalGamePage() {
     }
   };
 
-  // Main 페이지 로드 시 데이터 가져오기
-  useEffect(() => {
-    fetchUserCountData();
-  }, []);
-
-  const progressPercentage = ((step - 1) / bungBalGameQuestions.length) * 100;
-  const bgImage = step === 0 ? `` : `url(/assets/webp/bgBlue.webp)`;
-
   useEffect(() => {
     const Kakao = typeof window !== "undefined" ? window.Kakao : null;
     if (Kakao && !Kakao.isInitialized()) {
@@ -97,50 +89,13 @@ export default function BungBalGamePage() {
     }
   }, []);
 
-  const shareKakao = () => {
-    const Kakao = typeof window !== "undefined" ? window.Kakao : null;
-    if (Kakao) {
-      Kakao.Share.sendCustom({
-        templateId: 115802,
-        templateArgs: {
-          PROFILE: "https://bunglog.me/",
-          THUMB: "https://bunglog.me/",
-        },
-      });
-    } else {
-      console.error("Kakao SDK is not initialized.");
-    }
-  };
+  // Main 페이지 로드 시 데이터 가져오기
+  useEffect(() => {
+    fetchUserCountData();
+  }, []);
 
-  const [copied, setCopied] = useState(false);
-
-  const handleCopyLink = async () => {
-    const htmlContent = `[붕어빵 취향 테스트]<br>나는 어떤 붕어빵일까?<br>테스트 하러 가기!<br><a href="https://bunglog.me/bungBalGamePage">https://bunglog.me/bungBalGamePage</a>`;
-    const plainText = `[붕어빵 취향 테스트]\n나는 어떤 붕어빵일까?\n테스트 하러 가기!\nhttps://bunglog.me/bungBalGamePage`;
-
-    if (navigator.clipboard && navigator.clipboard.write) {
-      try {
-        const htmlBlob = new Blob([htmlContent], { type: "text/html" });
-        const textBlob = new Blob([plainText], { type: "text/plain" });
-        const clipboardItem = new ClipboardItem({
-          "text/html": htmlBlob,
-          "text/plain": textBlob,
-        });
-
-        await navigator.clipboard.write([clipboardItem]);
-        setCopied(true);
-        {
-          showAlert("클립보드에 복사되었습니다!");
-        }
-        setTimeout(() => setCopied(false), 2000);
-      } catch (error) {
-        console.error("Failed to copy link:", error);
-        {
-          showAlert("클립보드 복사에 실패했습니다.");
-        }
-      }
-    }
-  };
+  const progressPercentage = ((step - 1) / bungBalGameQuestions.length) * 100;
+  const bgImage = step === 0 ? `` : `url(/assets/webp/bgBlue.webp)`;
 
   const handleCaptureAndDownload = async () => {
     try {
@@ -183,6 +138,7 @@ export default function BungBalGamePage() {
 
   const [matchRate, setMatchRate] = useState(null); // 서버에서 가져온 매칭 비율 저장
   const [finalResult, setFinalResult] = useState(null); // 결과를 저장할 상태
+  const [copied, setCopied] = useState(false);
 
   // 최종 결과를 한 번만 계산하여 저장 (handleReset이 호출되기 전까지 유지됨)
   const result = useMemo(() => {
@@ -193,7 +149,6 @@ export default function BungBalGamePage() {
     }
     return finalResult;
   }, [step, userAnswers, finalResult]);
-
   // 결과가 결정된 후 matchRate 가져오기
   useEffect(() => {
     if (result && result.mbti) {
@@ -220,11 +175,12 @@ export default function BungBalGamePage() {
       fetchMatchRate();
     }
   }, [result]); // result가 변경될 때만 실행
+
   if (step > bungBalGameQuestions.length) {
     setTimeout(() => {
       const scrollArea = document.querySelector(".overflow-y-auto");
       if (scrollArea && scrollArea.scrollTop !== 0) {
-        scrollArea.scrollTo({ top: 0, behavior: "smooth" }); // 부드럽게 최상단 이동
+        scrollArea.scrollTo({ top: 0, behavior: "smooth" });
       }
     }, 0);
 
@@ -232,6 +188,92 @@ export default function BungBalGamePage() {
       const scrollArea = document.querySelector(".overflow-y-auto");
       if (scrollArea) {
         scrollArea.scrollTop = scrollArea.scrollHeight;
+      }
+    };
+
+    const shareKakaoResult = () => {
+      const Kakao = typeof window !== "undefined" ? window.Kakao : null;
+      const imageName = finalResult.image.split("/").pop().split(".")[0];
+
+      if (Kakao) {
+        Kakao.Share.sendCustom({
+          templateId: 117313,
+          templateArgs: {
+            result: finalResult.type,
+            typeImg: `https://bunglog.me/assets/webp/flavorIconsThumb/${imageName}.webp`,
+            bestMatch: finalResult.bestMatch,
+            worstMatch: finalResult.worstMatch,
+          },
+        });
+      } else {
+        console.error("Kakao SDK is not initialized.");
+      }
+    };
+
+    const shareKakaoLink = () => {
+      const Kakao = typeof window !== "undefined" ? window.Kakao : null;
+
+      if (Kakao) {
+        Kakao.Share.sendCustom({
+          templateId: 117601,
+        });
+      } else {
+        console.error("Kakao SDK is not initialized.");
+      }
+    };
+
+    const handleCopyResult = async () => {
+      const htmlContent = `[붕어빵 취향 테스트]<br>내 붕어빵 타입은 ${finalResult.type}!<br><br>나는 어떤 붕어빵일까?<br>나도 테스트 하러 가기!<br><a href="https://bunglog.me/bungBalGamePage">https://bunglog.me/bungBalGamePage</a>`;
+      const plainText = `[붕어빵 취향 테스트]\n내 붕어빵 타입은  ${finalResult.type}!\n\n나는 어떤 붕어빵일까?\n나도 테스트 하러 가기!\nhttps://bunglog.me/bungBalGamePage`;
+
+      if (navigator.clipboard && navigator.clipboard.write) {
+        try {
+          const htmlBlob = new Blob([htmlContent], { type: "text/html" });
+          const textBlob = new Blob([plainText], { type: "text/plain" });
+          const clipboardItem = new ClipboardItem({
+            "text/html": htmlBlob,
+            "text/plain": textBlob,
+          });
+
+          await navigator.clipboard.write([clipboardItem]);
+          setCopied(true);
+          {
+            showAlert("클립보드에 복사되었습니다!");
+          }
+          setTimeout(() => setCopied(false), 2000);
+        } catch (error) {
+          console.error("Failed to copy link:", error);
+          {
+            showAlert("클립보드 복사에 실패했습니다.");
+          }
+        }
+      }
+    };
+    const handleCopyLink = async () => {
+      const htmlContent = `[붕어빵 취향 테스트]<br>나는 어떤 붕어빵일까?<br>테스트 해보기<br><a href="https://bunglog.me/bungBalGamePage">https://bunglog.me/bungBalGamePage</a>`;
+      const plainText = `[붕어빵 취향 테스트]\n나는 어떤 붕어빵일까?\n테스트 해보기\nhttps://bunglog.me/bungBalGamePage`;
+
+      if (navigator.clipboard && navigator.clipboard.write) {
+        try {
+          const htmlBlob = new Blob([htmlContent], { type: "text/html" });
+          const textBlob = new Blob([plainText], { type: "text/plain" });
+          const clipboardItem = new ClipboardItem({
+            "text/html": htmlBlob,
+            "text/plain": textBlob,
+          });
+
+          await navigator.clipboard.write([clipboardItem]);
+          setCopied(true);
+          {
+            showAlert("클립보드에 복사되었습니다!");
+          }
+          setTimeout(() => setCopied(false), 2000);
+        } catch (error) {
+          console.error("Failed to copy link:", error);
+          {
+            showAlert("클립보드 복사에 실패했습니다.");
+          }
+        }
       }
     };
 
@@ -384,7 +426,11 @@ export default function BungBalGamePage() {
                     <div className="">팥냥이와 함께 떠나는 붕어빵 탐험!</div>
                   </div>
                 </button>
-                <div className="text-sz25 mt-8">테스트 공유하기</div>
+                <div
+                  className={`text-sz25 mt-8 mb-3 ${styles.highlightYellow} `}
+                >
+                  내 테스트 결과 공유하기
+                </div>
                 <div className="w-full flex gap-3 justify-center">
                   <button
                     className="w-[6.7dvh]"
@@ -396,7 +442,24 @@ export default function BungBalGamePage() {
                       className=""
                     />
                   </button>
-                  <button className="w-[6.7dvh]" onClick={shareKakao}>
+                  <button className="w-[6.7dvh]" onClick={shareKakaoResult}>
+                    <img
+                      src="/assets/webp/kakaoBtn.webp"
+                      alt="share on kakao button"
+                      className=""
+                    />
+                  </button>
+                  <button className="w-[6.7dvh] " onClick={handleCopyResult}>
+                    <img
+                      src="/assets/webp/linkBtn.webp"
+                      alt="copy link button"
+                      className=""
+                    />
+                  </button>
+                </div>
+                <div className="text-sz25 mt-8">테스트 링크만 공유하기</div>
+                <div className="w-full flex gap-3 justify-center">
+                  <button className="w-[6.7dvh]" onClick={shareKakaoLink}>
                     <img
                       src="/assets/webp/kakaoBtn.webp"
                       alt="share on kakao button"
