@@ -21,6 +21,7 @@ import SuccessPage from "./pages/register/success/SuccessPage";
 import ReportPage from "./pages/register/report/ReportPage";
 import DetailPage from "./pages/detail/DetailPage";
 import BungBalGamePage from "./pages/game/bungBalGamePage";
+import BungBalResultPage from "./pages/game/result/resultPage";
 import BookDetailPage from "./pages/bookDetail/BookDetailPage";
 import { Provider } from "react-redux";
 import store, { persistor } from "./redux/store";
@@ -155,6 +156,10 @@ function AppContent({ isWebPSupported }) {
           }
         />
         <Route path="/bungBalGamePage" element={<BungBalGamePage />} />
+        <Route
+          path="/bungBalGamePage/result/:flavorId"
+          element={<BungBalResultPage />}
+        />
         {/* 잘못된 경로일 때 */}
         <Route path="*" element={<Navigate to="/main" replace />} />
       </Routes>
