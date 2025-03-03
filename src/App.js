@@ -29,6 +29,10 @@ import { PersistGate } from "redux-persist/integration/react";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { HelmetProvider } from "react-helmet-async";
 import MetaTags from "./components/MetaTags";
+import MapPage from "./pages/map/MapPage";
+import RegisterPage from "./pages/map/RegisterPage";
+import MapSelectionPage from "./pages/map/MapSelectionPage";
+import StoreDetailPage from "./pages/map/StoreDetailPage";
 
 // WebP 감지 로직
 const detectWebP = () => {
@@ -160,6 +164,15 @@ function AppContent({ isWebPSupported }) {
           path="/bungBalGamePage/result/:flavorId"
           element={<BungBalResultPage />}
         />
+        {/* MAP */}
+        <Route path="/map" element={<MapPage />} />
+        <Route path="/map/register" element={<RegisterPage />} />
+        <Route
+          path="/map/register/map-selection"
+          element={<MapSelectionPage />}
+        />
+        <Route path="/map/store/:id" element={<StoreDetailPage />} />
+
         {/* 잘못된 경로일 때 */}
         <Route path="*" element={<Navigate to="/main" replace />} />
       </Routes>

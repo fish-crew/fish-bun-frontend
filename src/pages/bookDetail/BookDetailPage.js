@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchBookDetailData } from "../../api/service.js";
 import { useParams, useNavigate } from "react-router-dom";
-import CloseButton from "./../../components/Buttons/CloseButton";
+import CloseButton from "../../components/Button/CloseButton.js";
 import styles from "./bookDetailPage.module.css";
 import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
