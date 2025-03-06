@@ -8,10 +8,10 @@ export default function Marker({ map, location, markerType = "default" }) {
       let imageSrc;
       switch (markerType) {
         case "user":
-          imageSrc = "/assets/webp/cat.webp";
+          imageSrc = "/assets/png/blueCat.png";
           break;
         case "new":
-          imageSrc = "/assets/png/unknown-with-line.png";
+          imageSrc = "/assets/png/unknownWithLine.png";
           break;
         default:
           imageSrc = "/assets/webp/bun-frame-filled.webp";
