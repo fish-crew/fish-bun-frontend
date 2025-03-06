@@ -106,6 +106,16 @@ export async function fetchMbtiData() {
   }
 }
 
+export async function fetchDebateListData() {
+  try {
+    const response = await axiosInstance.get("/fish-bun/community");
+    return response.data;
+  } catch (error) {
+    console.error("데이터 요청 실패:", error);
+    throw error;
+  }
+}
+
 //post
 export async function postNickNameAddData(nickname) {
   try {
