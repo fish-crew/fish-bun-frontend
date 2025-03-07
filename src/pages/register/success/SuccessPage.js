@@ -15,6 +15,7 @@ function SuccessPage() {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0); // 현재 활성화된 슬라이드 인덱스
   const [animationTrigger, setAnimationTrigger] = useState(true); // 애니메이션 트리거 상태 (초기값 true)
+  const [swiperInstance, setSwiperInstance] = useState(null);
 
   const [foundData, setFoundData] = useState([]);
   useEffect(() => {
@@ -103,7 +104,10 @@ function SuccessPage() {
             centeredSlides={true}
             pagination={{ clickable: true }}
             onSlideChange={handleSlideChange} // 활성화된 슬라이드 변경
-            onSwiper={(swiper) => setActiveIndex(swiper.activeIndex)} // 초기 활성화 슬라이드 설정
+            onSwiper={(swiper) => {
+              setSwiperInstance(swiper);
+              setActiveIndex(swiper.activeIndex);
+            }} // 초기 활성화 슬라이드 설정
           >
             {foundData.map((item, index) => (
               <SwiperSlide
@@ -173,6 +177,9 @@ function SuccessPage() {
           onDotClick={(index) => {
             setActiveIndex(index); // 슬라이드 인덱스 변경
             resetAnimation(); // 애니메이션 초기화
+            if (swiperInstance) {
+              swiperInstance.slideTo(index); // Swiper 슬라이드 이동
+            }
           }}
         />
 
