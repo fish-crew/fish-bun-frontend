@@ -12,13 +12,18 @@ import { setRegisterStore } from "../../redux/slices/map";
 const MapSelectionPage = () => {
   const navigate = useNavigate();
 
-  const [map, setMap] = useState(null);
-  const [location, setLocation] = useState(null);
-
   const dispatch = useDispatch();
-  const { registerStore } = useSelector((state) => state.map);
+  const { registerStore, userLocation } = useSelector((state) => state.map);
 
+  const [map, setMap] = useState(null);
+  const [location, setLocation] = useState(
+    registerStore.lat && registerStore.lng
+      ? { lat: registerStore.lat, lng: registerStore.lng }
+      : userLocation
+  );
   const [debounceLocation, setDebounceLocation] = useState(location);
+
+  const [address, setAddress] = useState("");
 
   const handleLocation = useCallback(() => {
     if (navigator.geolocation) {
@@ -39,6 +44,7 @@ const MapSelectionPage = () => {
         ...registerStore,
         lat: debounceLocation.lat,
         lng: debounceLocation.lng,
+        address,
       })
     );
     navigate("/map/register");
@@ -54,25 +60,6 @@ const MapSelectionPage = () => {
         window.kakao.maps.event.addListener(map, "center_changed", () => {
           const location = map.getCenter();
           setLocation({ lat: location.getLat(), lng: location.getLng() });
-
-          // TODO: 주소 구하는 로직
-          // const geocoder = new window.kakao.maps.services.Geocoder();
-          // const latlng = new window.kakao.maps.LatLng(
-          //   location.getLat(),
-          //   location.getLng()
-          // );
-
-          // geocoder.coord2RegionCode(
-          //   location.getLng(),
-          //   location.getLat(),
-          //   function (result, status) {
-          //     if (status === window.kakao.maps.GeocoderStatus.OK) {
-          //       console.log(result[0].formatted_address);
-          //     } else {
-          //       console.error("지오코더가 실패했습니다. 상태: " + status);
-          //     }
-          //   }
-          // );
         });
       });
     }
@@ -81,6 +68,20 @@ const MapSelectionPage = () => {
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       setDebounceLocation(location);
+
+      // 좌표로 주소 구하는 로직
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.coord2Address(
+        location.lng,
+        location.lat,
+        function (result, status) {
+          if (status === "OK") {
+            setAddress(result[0].road_address.address_name);
+          } else {
+            console.error("지오코더가 실패했습니다. 상태: " + status);
+          }
+        }
+      );
     }, 300);
 
     return () => clearTimeout(debounceTimer);
@@ -94,7 +95,7 @@ const MapSelectionPage = () => {
         <Toolbox map={map} handleLocation={handleLocation} />
       </div>
       <div className="p-4 bg-white shadow w-full text-center">
-        <p className="text-center text-sz20">{registerStore.address}</p>
+        <p className="text-center text-sz20">{address}</p>
         <Button onClick={handleRegister}>등록하기</Button>
       </div>
     </>

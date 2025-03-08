@@ -16,7 +16,9 @@ const AddressSearch = ({ setAddress }) => {
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
 
-    setAddress(fullAddress);
+    if (setAddress) {
+      setAddress(fullAddress);
+    }
   };
 
   const openPostcode = useDaumPostcodePopup();

@@ -1,10 +1,13 @@
 import React from "react";
 import { MdMyLocation } from "react-icons/md";
+import { DEFAULT_ZOOM } from "../../redux/slices/map";
 
-const Toolbox = ({ map, handleLocation, handleRegister, address }) => {
+const Toolbox = ({ map, handleLocation, handleRegister }) => {
   const handleCurrentLocation = () => {
     handleLocation();
-    map.setLevel(3);
+    if (map) {
+      map.setLevel(DEFAULT_ZOOM);
+    }
   };
 
   return (

@@ -11,8 +11,12 @@ export const calculateDistance = (lat1, lon1, lat2, lon2) => {
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
 
-  if (isNaN(d)) return "0m";
-  return d < 1 ? distanceInM(d) : distanceInKm(d);
+  return isNaN(d) ? 0 : d;
+};
+
+export const calcaulateDistanceWithUnit = (lat1, lng1, lat2, lng2) => {
+  const distance = calculateDistance(lat1, lng1, lat2, lng2);
+  return distance < 1 ? distanceInM(distance) : distanceInKm(distance);
 };
 
 const deg2rad = (deg) => deg * (Math.PI / 180);

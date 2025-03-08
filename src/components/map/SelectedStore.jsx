@@ -1,16 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setRegisterStore, setSelectedStore } from "../../redux/slices/map";
 
 import JornalList from "./JornalList";
 
-import { calculateDistance } from "../../utils";
+import { calcaulateDistanceWithUnit } from "../../utils";
 
-const SelectedStore = ({ store, location }) => {
+const SelectedStore = ({ store }) => {
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
+  const userLocation = useSelector((state) => state.map.userLocation);
 
   const handleNavigate = () => {
     if (store?.id) {
@@ -27,11 +29,11 @@ const SelectedStore = ({ store, location }) => {
     navigate("/map/register");
   };
 
-  const distance = calculateDistance(
+  const distance = calcaulateDistanceWithUnit(
     store?.lat,
     store?.lng,
-    location?.lat,
-    location?.lng
+    userLocation?.lat,
+    userLocation?.lng
   );
 
   return (

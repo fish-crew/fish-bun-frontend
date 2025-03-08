@@ -18,18 +18,15 @@ import {
   INITIAL_STORE,
 } from "../../redux/slices/map";
 
+import { calculateDistance } from "../../utils";
+
 const MapPage = () => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { stores, selectedStore, userLocation } = useSelector(
-    (state) => state.map
-  );
+  const { selectedStore, userLocation } = useSelector((state) => state.map);
 
   const [map, setMap] = useState(null);
-
-  // 지도 최초 렌더링을 위한 조건
-  const [mapLoaded, setMapLoaded] = useState(false);
 
   const [selectedMarker, setSelectedMarker] = useState(selectedStore);
   const handleSelectedMarker = (store) => {
@@ -42,10 +39,10 @@ const MapPage = () => {
     }
   };
 
-  // 사용자 위치
+  // 지도 중심 위치
   const [location, setLocation] = useState(null);
 
-  const handleLocation = useCallback(
+  const handleUserLocation = useCallback(
     (withCenter = true) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -69,8 +66,13 @@ const MapPage = () => {
               alert(
                 "위치 정보를 가져오는 데 실패했습니다. 위치 공유를 허용해주세요."
               );
+            } else if (error.code === 2) {
+              alert(
+                "위치 업데이트를 사용할 수 없습니다. 나중에 다시 시도해주세요."
+              );
             }
-          }
+          },
+          { enableHighAccuracy: true }
         );
       }
     },
@@ -82,6 +84,21 @@ const MapPage = () => {
     navigate("/map/register");
   };
 
+  // bounds가 변경될 때마다 가게 정보를 다시 호출하는 로직
+  const handleStoreInfo = useCallback(() => {
+    if (map) {
+      const bounds = map.getBounds();
+      fetchStoreInfo({
+        maxLat: bounds.pa,
+        maxLng: bounds.oa,
+        minLat: bounds.qa,
+        minLng: bounds.ha,
+      }).then((res) => {
+        dispatch(setStores(res.data));
+      });
+    }
+  }, [map, dispatch]);
+
   useEffect(() => {
     if (map && location) {
       map.setCenter(new window.kakao.maps.LatLng(location.lat, location.lng));
@@ -89,23 +106,6 @@ const MapPage = () => {
   }, [map, location]);
 
   useEffect(() => {
-    if (mapLoaded) return;
-
-    // bounds가 변경될 때마다 가게 정보를 다시 호출하는 로직
-    const handleMapIdle = () => {
-      if (map) {
-        const bounds = map.getBounds();
-        fetchStoreInfo({
-          maxLat: bounds.pa,
-          maxLng: bounds.oa,
-          minLat: bounds.qa,
-          minLng: bounds.ha,
-        }).then((res) => {
-          dispatch(setStores(res.data));
-        });
-      }
-    };
-
     if (map) {
       // 가게 상세정보 페이지에서 온 경우
       if (selectedStore) {
@@ -117,41 +117,58 @@ const MapPage = () => {
 
       // 사용자 위치 설정
       // 가게 상세정보 페이지에서 온 경우 중심 이동 제외
-      handleLocation(!selectedStore);
+      handleUserLocation(!selectedStore);
 
+      handleStoreInfo();
       // bounds가 변경될 때마다 가게 정보를 다시 호출하는 로직
-      map.addListener("idle", handleMapIdle);
-
-      // 지도 최초 렌더링 완료
-      setMapLoaded(true);
+      map.addListener("idle", handleStoreInfo);
     }
 
     return () => {
       if (map) {
-        map.removeListener("idle", handleMapIdle);
+        map.removeListener("idle", handleStoreInfo);
       }
     };
-  }, [map, mapLoaded, handleLocation, selectedStore, dispatch]);
+  }, [map, handleUserLocation, handleStoreInfo, dispatch]);
+
+  // 사용자 위치 50m마다 업데이트
+  useEffect(() => {
+    if (navigator.geolocation && userLocation) {
+      const watchId = navigator.geolocation.watchPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const distance = calculateDistance(
+            latitude,
+            longitude,
+            userLocation?.lat,
+            userLocation?.lng
+          );
+          if (distance > 0.05) {
+            dispatch(setUserLocation({ lat: latitude, lng: longitude }));
+          }
+        },
+        (error) => {
+          console.error(error);
+        },
+        { enableHighAccuracy: true }
+      );
+      return () => navigator.geolocation.clearWatch(watchId);
+    }
+  }, [dispatch, userLocation]);
 
   return (
     <div className="relative overflow-hidden w-full h-[calc(100vh-120px)]">
       <Map setMap={setMap} location={location} />
-      {location && (
+      {userLocation && (
         <Marker map={map} location={userLocation} markerType="user" />
       )}
-      <Markers
-        map={map}
-        stores={stores}
-        handleSelectedMarker={handleSelectedMarker}
-      />
+      <Markers map={map} handleSelectedMarker={handleSelectedMarker} />
       <Toolbox
         map={map}
-        handleLocation={handleLocation}
+        handleLocation={handleUserLocation}
         handleRegister={handleRegister}
       />
-      {selectedMarker && (
-        <SelectedStore store={selectedMarker} location={userLocation} />
-      )}
+      {selectedMarker && <SelectedStore store={selectedMarker} />}
     </div>
   );
 };

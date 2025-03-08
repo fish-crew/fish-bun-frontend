@@ -19,38 +19,51 @@ const RegisterPage = () => {
 
   const [store, setStore] = useState(registerStore || INITIAL_STORE);
 
+  const gocoderCallback = (address) => (result, status) => {
+    if (status === "OK") {
+      dispatch(
+        setRegisterStore({ ...store, lat: result[0].y, lng: result[0].x })
+      );
+
+      const updatedStore = {
+        detail: store.detail,
+        lat: result[0].y,
+        lng: result[0].x,
+        name: store.name,
+        address,
+      };
+
+      if (registerStore?.id) {
+        patchStoreInfo(registerStore.id, updatedStore).then((response) => {
+          if (response.statusCode === "200") {
+            alert("가게 정보가 수정되었습니다.");
+            handleBack();
+          } else {
+            alert("가게 정보 수정에 실패했습니다. 다시 시도해주세요.");
+          }
+        });
+      } else {
+        postStoreInfo(updatedStore).then((response) => {
+          if (response.statusCode === "200") {
+            alert("가게 정보가 등록되었습니다.");
+            handleBack();
+          } else {
+            alert("가게 등록에 실패했습니다. 다시 시도해주세요.");
+          }
+        });
+      }
+    } else {
+      console.error("좌표 변환에 실패했습니다. 상태: " + status);
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    //TODO: 좌표 구하는 로직
-
-    const updatedStore = {
-      detail: store.detail,
-      lat: store.lat,
-      lng: store.lng,
-      name: store.name,
-      address: e.target.address.value + e.target.detailAddress.value,
-    };
-
-    if (registerStore?.id) {
-      patchStoreInfo(registerStore.id, updatedStore).then((response) => {
-        if (response.statusCode === "200") {
-          alert("가게 정보가 수정되었습니다.");
-          handleBack();
-        } else {
-          alert("가게 정보 수정에 실패했습니다. 다시 시도해주세요.");
-        }
-      });
-    } else {
-      postStoreInfo(updatedStore).then((response) => {
-        if (response.statusCode === "200") {
-          alert("가게 정보가 등록되었습니다.");
-          handleBack();
-        } else {
-          alert("가게 등록에 실패했습니다. 다시 시도해주세요.");
-        }
-      });
-    }
+    //주소 정보로 좌표 구하는 로직
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    const address = e.target.address.value + e.target.detailAddress.value;
+    geocoder.addressSearch(address, gocoderCallback(address));
   };
 
   const handleBack = () => {
@@ -95,7 +108,9 @@ const RegisterPage = () => {
               onChange={(e) => setStore({ ...store, address: e.target.value })}
               readOnly
             />
-            <AddressSearch />
+            <AddressSearch
+              setAddress={(address) => setStore({ ...store, address })}
+            />
           </div>
         </div>
         <div className="flex flex-col items-start gap-2 w-full">

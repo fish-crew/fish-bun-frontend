@@ -17,11 +17,16 @@ export default function Marker({ map, location, markerType = "default" }) {
           imageSrc = "/assets/webp/bun-frame-filled.webp";
       }
 
-      const imageSize = new window.kakao.maps.Size(40, 40);
+      const imageSize = new window.kakao.maps.Size(30, 30);
+      const markerOffset = new window.kakao.maps.Point(
+        imageSize.width / 2,
+        imageSize.height / 2
+      );
 
       const markerImage = new window.kakao.maps.MarkerImage(
         imageSrc,
-        imageSize
+        imageSize,
+        markerOffset
       );
 
       const markerPosition = new window.kakao.maps.LatLng(

@@ -1,6 +1,9 @@
 import { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
 
-export default function Markers({ map, stores, handleSelectedMarker }) {
+export default function Markers({ map, handleSelectedMarker }) {
+  const { stores } = useSelector((state) => state.map);
+
   const loadKakaoMarkers = useCallback(() => {
     if (map && stores) {
       stores.forEach((store) => {

@@ -19,7 +19,7 @@ export const INITIAL_STORE = {
 const mapSlice = createSlice({
   name: "map",
   initialState: {
-    userLocation: { lat: DEFAULT_LAT, lng: DEFAULT_LNG },
+    userLocation: null,
     stores: [],
     selectedStore: null,
     registerStore: INITIAL_STORE,

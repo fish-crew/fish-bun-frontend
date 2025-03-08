@@ -5,13 +5,14 @@ import Map from "../../components/map/Map";
 import Marker from "../../components/map/Marker";
 import JornalList from "../../components/map/JornalList";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setRegisterStore } from "../../redux/slices/map";
 
 import { fetchStoreDetail } from "../../api/map";
-import { calculateDistance } from "../../utils";
+import { calcaulateDistanceWithUnit } from "../../utils";
 
-import { useSelector } from "react-redux";
+const DEFAULT_STORE_NAME = "붕어빵";
+const DEFAULT_NICKNAME = "팥붕이";
 
 const StoreDetailPage = () => {
   const { id } = useParams();
@@ -36,13 +37,6 @@ const StoreDetailPage = () => {
     navigate(-1);
   };
 
-  const distance = calculateDistance(
-    store?.lat,
-    store?.lng,
-    userLocation?.lat,
-    userLocation?.lng
-  );
-
   useEffect(() => {
     if (id) {
       fetchStoreDetail(id).then(({ data }) => {
@@ -61,7 +55,7 @@ const StoreDetailPage = () => {
         <div className="flex justify-between items-start mt-3 w-full">
           <div className="flex items-center gap-1 w-4/6">
             <h2 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap max-w-2/3">
-              {store.name}
+              {store.name || DEFAULT_STORE_NAME}
             </h2>
             <button onClick={toggleBookmark} className="min-w-[24px]">
               {/* TODO: 즐겨찾기 추가 api 호출 */}
@@ -92,10 +86,18 @@ const StoreDetailPage = () => {
         <p className="text-xs text-gray-800">{store.address}</p>
         <div className="flex justify-between w-full">
           <p className="text-xs text-point-color mb-3">
-            탐험까지 거리 <span className="font-bold">{distance}</span>
+            탐험까지 거리
+            <span className="font-bold">
+              {calcaulateDistanceWithUnit(
+                store?.lat,
+                store?.lng,
+                userLocation?.lat,
+                userLocation?.lng
+              )}
+            </span>
           </p>
           <div className="bg-point-color text-white rounded-full h-fit text-[0.65rem] leading-3 font-bold px-2 py-1">{`최초 발견자 : ${
-            store.nickname || "팥붕이"
+            store.nickname || DEFAULT_NICKNAME
           }`}</div>
         </div>
 
