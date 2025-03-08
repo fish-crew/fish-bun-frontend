@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { FaChevronLeft, FaMap, FaCheck } from "react-icons/fa";
+import { FaMap, FaCheck } from "react-icons/fa";
+import { FaChevronLeft } from "react-icons/fa6";
 
 import AddressSearch from "../../components/map/AddressSearch";
 import CurrentLocationSearch from "../../components/map/CurrentLocationSearch";
@@ -72,13 +73,20 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="fixed top-0 w-full md:max-w-[calc(100vh_*_10/19.5)] h-full bg-white z-10 py-4 px-2">
-      <div className="flex items-center">
-        <FaChevronLeft size={20} onClick={handleBack} />
-        <div className="w-full h-full bg-white">붕어빵 가게 등록</div>
+    <div className="fixed top-0 w-full md:max-w-[calc(100vh_*_10/19.5)] h-full bg-white z-10">
+      <div className="flex items-center w-full gap-1 border-b border-gray-300 px-2">
+        <button onClick={handleBack} className="h-[6dvh]">
+          <FaChevronLeft size={24} />
+        </button>
+        <span className="flex w-full justify-center text-black font-bold">
+          <img
+            className="h-[6dvh] p-2"
+            src="/assets/webp/logoBalck.webp"
+            alt="붕어빵 탐험대"
+          />
+        </span>
       </div>
-
-      <div className="flex justify-between items-center mt-6">
+      <div className="flex justify-between items-center mt-6 px-2">
         <CurrentLocationSearch
           setAddress={(address) => setStore({ ...store, address })}
         />
@@ -91,7 +99,7 @@ const RegisterPage = () => {
         </button>
       </div>
       <form
-        className="flex flex-col gap-2 space-y-4 mt-4"
+        className="flex flex-col gap-2 space-y-4 mt-4 px-2"
         onSubmit={handleSubmit}
       >
         <div className="flex flex-col items-start w-full">

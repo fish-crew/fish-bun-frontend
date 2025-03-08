@@ -75,7 +75,11 @@ const MapSelectionPage = () => {
         location.lat,
         function (result, status) {
           if (status === "OK") {
-            setAddress(result[0].road_address.address_name);
+            setAddress(
+              result[0].road_address
+                ? result[0].road_address.address_name
+                : result[0].address.address_name
+            );
           } else {
             console.error("지오코더가 실패했습니다. 상태: " + status);
           }

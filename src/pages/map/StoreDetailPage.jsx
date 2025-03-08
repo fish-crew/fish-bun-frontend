@@ -11,6 +11,8 @@ import { setRegisterStore } from "../../redux/slices/map";
 import { fetchStoreDetail } from "../../api/map";
 import { calcaulateDistanceWithUnit } from "../../utils";
 
+import { FaChevronLeft } from "react-icons/fa6";
+
 const DEFAULT_STORE_NAME = "붕어빵";
 const DEFAULT_NICKNAME = "팥붕이";
 
@@ -46,13 +48,21 @@ const StoreDetailPage = () => {
   }, [id]);
 
   return (
-    <div className="bg-white p-2.5 overflow-auto h-full">
-      <div className="flex flex-col items-start px-2 mb-1 font-hakgyo">
-        <hr
-          className="w-1/4 mx-auto border-2 rounded-full border-gray-400"
-          onClick={handleGoBack}
-        />
-        <div className="flex justify-between items-start mt-3 w-full">
+    <div className="bg-white overflow-auto h-full">
+      <div className="flex flex-col items-start mb-1 font-hakgyo">
+        <div className="flex items-center w-full gap-1 border-b border-gray-300 px-2">
+          <button onClick={handleGoBack} className="h-[6dvh]">
+            <FaChevronLeft size={24} />
+          </button>
+          <span className="flex w-full justify-center text-black font-bold">
+            <img
+              className="h-[6dvh] p-2"
+              src="/assets/webp/logoBalck.webp"
+              alt="붕어빵 탐험대"
+            />
+          </span>
+        </div>
+        <div className="flex justify-between items-start mt-3 w-full p-2.5">
           <div className="flex items-center gap-1 w-4/6">
             <h2 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap max-w-2/3">
               {store.name || DEFAULT_STORE_NAME}
@@ -118,9 +128,9 @@ const StoreDetailPage = () => {
                 />
               </div>
             )}
-            <p className="text-xs text-gray-800 mt-2 text-start">
+            <pre className="text-xs text-gray-800 mt-2 text-start text-wrap break-words">
               {store.detail}
-            </p>
+            </pre>
           </div>
           <div className="w-full flex gap-5 items-center justify-center p-8">
             {[...Array(3)].map((_, index) => (
