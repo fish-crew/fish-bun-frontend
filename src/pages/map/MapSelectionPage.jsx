@@ -37,7 +37,6 @@ const MapSelectionPage = () => {
   }, []);
 
   const handleRegister = () => {
-    console.log({ location, address: registerStore.address });
     // address 정보 저장
     dispatch(
       setRegisterStore({
