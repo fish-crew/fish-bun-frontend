@@ -46,3 +46,19 @@ export const patchStoreInfo = async (id, store) => {
     throw error;
   }
 };
+
+export const postStoreLikes = async ({ storeId }) => {
+  try {
+    if (!storeId) {
+      console.error("storeId가 없습니다.");
+      return;
+    }
+    const response = await axiosInstance.post(
+      `/fish-bun/store-likes/${storeId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("가게 좋아요를 누르는 데 실패했습니다:", error);
+    throw error;
+  }
+};

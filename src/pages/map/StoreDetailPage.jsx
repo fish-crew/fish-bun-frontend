@@ -8,7 +8,7 @@ import JornalList from "../../components/map/JornalList";
 import { useDispatch, useSelector } from "react-redux";
 import { setRegisterStore } from "../../redux/slices/map";
 
-import { fetchStoreDetail } from "../../api/map";
+import { fetchStoreDetail, postStoreLikes } from "../../api/map";
 import { calcaulateDistanceWithUnit } from "../../utils";
 
 import { FaChevronLeft } from "react-icons/fa6";
@@ -27,7 +27,18 @@ const StoreDetailPage = () => {
   const [store, setStore] = useState({});
 
   const toggleBookmark = () => {
-    // TODO: bookmark 추가 api 호출
+    if (id) {
+      postStoreLikes({ storeId: id }).then((response) => {
+        if (response.statusCode === "200") {
+          // update store info
+          fetchStoreDetail(id).then(({ data }) => {
+            setStore(data);
+          });
+        } else {
+          alert("가게 좋아요를 누르는 데 실패했습니다.");
+        }
+      });
+    }
   };
 
   const handleModify = () => {
@@ -65,11 +76,10 @@ const StoreDetailPage = () => {
         <div className="flex justify-between items-start mt-3 w-full p-2.5">
           <div className="flex items-center gap-1 w-4/6">
             <h2 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap max-w-2/3">
-              {store.name || DEFAULT_STORE_NAME}
+              {store?.name || DEFAULT_STORE_NAME}
             </h2>
             <button onClick={toggleBookmark} className="min-w-[24px]">
-              {/* TODO: 즐겨찾기 추가 api 호출 */}
-              {true ? (
+              {store?.likeYn === "Y" ? (
                 <img
                   src="/assets/webp/cal-bun.webp"
                   alt="full-icon"
@@ -93,7 +103,7 @@ const StoreDetailPage = () => {
             수정하기
           </button>
         </div>
-        <p className="text-xs text-gray-800">{store.address}</p>
+        <p className="text-xs text-gray-800">{store?.address}</p>
         <div className="flex justify-between w-full">
           <p className="text-xs text-point-color mb-3">
             탐험까지 거리
@@ -107,13 +117,13 @@ const StoreDetailPage = () => {
             </span>
           </p>
           <div className="bg-point-color text-white rounded-full h-fit text-[0.65rem] leading-3 font-bold px-2 py-1">{`최초 발견자 : ${
-            store.nickname || DEFAULT_NICKNAME
+            store?.nickname || DEFAULT_NICKNAME
           }`}</div>
         </div>
 
         <>
           <div className="border-2 border-dashed border-[#b7d3e4] w-full p-2">
-            {store.lat && store.lng && (
+            {store?.lat && store?.lng && (
               <div className="w-full h-[160px]">
                 <Map
                   setMap={setMap}
@@ -129,7 +139,7 @@ const StoreDetailPage = () => {
               </div>
             )}
             <pre className="text-xs text-gray-800 mt-2 text-start text-wrap break-words">
-              {store.detail}
+              {store?.detail}
             </pre>
           </div>
           <div className="w-full flex gap-5 items-center justify-center p-8">
@@ -149,13 +159,13 @@ const StoreDetailPage = () => {
             <span className="text-sz14 text-gray-800 cursor-pointer">
               일지
               <span className="text-point-color font-bold">
-                {store.journal || 0}
+                {store?.journal || 0}
               </span>
             </span>
             <span className="text-sz14 text-gray-800">
               즐겨찾기
               <span className="text-point-color font-bold">
-                {store.likes || 0}
+                {store?.likes || 0}
               </span>
             </span>
           </div>
@@ -163,7 +173,7 @@ const StoreDetailPage = () => {
 
         {/* TODO: 리뷰 정보 확인 필요 */}
         {/* review */}
-        {store.journal && <JornalList journal={store?.journal} />}
+        {store?.journal && <JornalList journal={store.journal} />}
       </div>
     </div>
   );

@@ -168,7 +168,9 @@ const MapPage = () => {
         handleLocation={handleUserLocation}
         handleRegister={handleRegister}
       />
-      {selectedMarker && <SelectedStore store={selectedMarker} />}
+      {selectedMarker && (
+        <SelectedStore store={selectedMarker} refetch={handleStoreInfo} />
+      )}
     </div>
   );
 };

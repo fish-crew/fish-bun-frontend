@@ -4,11 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setRegisterStore, setSelectedStore } from "../../redux/slices/map";
 
+import { postStoreLikes } from "../../api/map";
 import JornalList from "./JornalList";
 
 import { calcaulateDistanceWithUnit } from "../../utils";
 
-const SelectedStore = ({ store }) => {
+const SelectedStore = ({ store, refetch }) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -21,7 +22,15 @@ const SelectedStore = ({ store }) => {
   };
 
   const toggleBookmark = () => {
-    // TODO: bookmark 추가 api 호출
+    if (store?.id) {
+      postStoreLikes({ storeId: store.id }).then((response) => {
+        if (response.statusCode === "200" && refetch) {
+          refetch();
+        } else {
+          alert("가게 좋아요를 누르는 데 실패했습니다.");
+        }
+      });
+    }
   };
 
   const handleModify = () => {
@@ -56,8 +65,7 @@ const SelectedStore = ({ store }) => {
           <div className="flex items-center gap-1">
             <h2 className="text-lg font-bold">붕어빵</h2>
             <button onClick={toggleBookmark}>
-              {/* TODO: 즐겨찾기 추가 api 호출 */}
-              {true ? (
+              {store?.likeYn === "Y" ? (
                 <img
                   src="/assets/webp/cal-bun.webp"
                   alt="full-icon"
@@ -81,7 +89,7 @@ const SelectedStore = ({ store }) => {
             수정하기
           </button>
         </div>
-        <p className="text-xs text-gray-800">{store.address}</p>
+        <p className="text-xs text-gray-800">{store?.address}</p>
         <div className="flex justify-between w-full">
           <p className="text-xs text-point-color mb-3">
             탐험까지 거리 <span className="font-bold">{distance}</span>
@@ -97,13 +105,13 @@ const SelectedStore = ({ store }) => {
             >
               일지
               <span className="text-point-color font-bold">
-                {store.journal || 0}
+                {store?.journal || 0}
               </span>
             </span>
             <span className="text-sz14 text-gray-800">
               즐겨찾기
               <span className="text-point-color font-bold">
-                {store.likes || 0}
+                {store?.likes || 0}
               </span>
             </span>
           </div>
@@ -111,7 +119,7 @@ const SelectedStore = ({ store }) => {
 
         {/* TODO: 리뷰 정보 확인 필요 */}
         {/* review */}
-        {store.journal && <JornalList journal={store?.journal} />}
+        {store?.journal && <JornalList journal={store.journal} />}
       </div>
     </div>
   );
