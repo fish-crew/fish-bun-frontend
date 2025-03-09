@@ -29,6 +29,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { HelmetProvider } from "react-helmet-async";
 import MetaTags from "./components/MetaTags";
+
+// map
 import MapPage from "./pages/map/MapPage";
 import RegisterPage from "./pages/map/RegisterPage";
 import MapSelectionPage from "./pages/map/MapSelectionPage";
@@ -87,91 +89,33 @@ function AppContent({ isWebPSupported }) {
           element={<LoadingPage isWebPSupported={isWebPSupported} />}
         />
         <Route path="/loginPage" element={<LoginPage />} />
-        <Route
-          path="/main"
-          element={
-            <ProtectedRoute>
-              <MainPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/bookPage"
-          element={
-            <ProtectedRoute>
-              <BookPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/bookDetailPage/:flavorId"
-          element={
-            <ProtectedRoute>
-              <BookDetailPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/calendarPage"
-          element={
-            <ProtectedRoute>
-              <CalendarPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/nicknamePage"
-          element={
-            <ProtectedRoute>
-              <NicknamePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/register/addPage"
-          element={
-            <ProtectedRoute>
-              <AddPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/register/successPage/:id"
-          element={
-            <ProtectedRoute>
-              <SuccessPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/register/reportPage"
-          element={
-            <ProtectedRoute>
-              <ReportPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/detail/:id"
-          element={
-            <ProtectedRoute>
-              <DetailPage />
-            </ProtectedRoute>
-          }
-        />
+
+        <Route path="" element={<ProtectedRoute />}>
+          <Route path="main" element={<MainPage />} />
+          <Route path="bookPage" element={<BookPage />} />
+          <Route path="bookDetailPage/:flavorId" element={<BookDetailPage />} />
+          <Route path="calendarPage" element={<CalendarPage />} />
+          <Route path="nicknamePage" element={<NicknamePage />} />
+          <Route path="register/addPage" element={<AddPage />} />
+          <Route path="register/successPage/:id" element={<SuccessPage />} />
+          <Route path="register/reportPage" element={<ReportPage />} />
+          <Route path="detail/:id" element={<DetailPage />} />
+        </Route>
+
+        {/* GAME */}
         <Route path="/bungBalGamePage" element={<BungBalGamePage />} />
         <Route
           path="/bungBalGamePage/result/:flavorId"
           element={<BungBalResultPage />}
         />
+
         {/* MAP */}
-        <Route path="/map" element={<MapPage />} />
-        <Route path="/map/register" element={<RegisterPage />} />
-        <Route
-          path="/map/register/map-selection"
-          element={<MapSelectionPage />}
-        />
-        <Route path="/map/store/:id" element={<StoreDetailPage />} />
+        <Route path="map" element={<ProtectedRoute />}>
+          <Route index element={<MapPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="register/map-selection" element={<MapSelectionPage />} />
+          <Route path="store/:id" element={<StoreDetailPage />} />
+        </Route>
 
         {/* 잘못된 경로일 때 */}
         <Route path="*" element={<Navigate to="/main" replace />} />
