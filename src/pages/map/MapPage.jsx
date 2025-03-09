@@ -21,8 +21,6 @@ import {
   INITIAL_STORE,
 } from "../../redux/slices/map";
 
-import { calculateDistance } from "../../utils";
-
 const MapPage = () => {
   const navigate = useNavigate();
 

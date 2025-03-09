@@ -5,6 +5,27 @@ import { useDaumPostcodePopup } from "react-daum-postcode";
 const CurrentLocationSearch = ({ setAddress }) => {
   const openPostcode = useDaumPostcodePopup();
 
+  const handleComplete = useCallback(
+    (data) => {
+      let fullAddress = data.address;
+      let extraAddress = "";
+
+      if (data.addressType === "R") {
+        if (data.bname !== "") {
+          extraAddress += data.bname;
+        }
+        if (data.buildingName !== "") {
+          extraAddress +=
+            extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+        }
+        fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+      }
+
+      setAddress(fullAddress);
+    },
+    [setAddress]
+  );
+
   const handleCurrentLocation = useCallback(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -35,25 +56,7 @@ const CurrentLocationSearch = ({ setAddress }) => {
         }
       );
     }
-  }, []);
-
-  const handleComplete = (data) => {
-    let fullAddress = data.address;
-    let extraAddress = "";
-
-    if (data.addressType === "R") {
-      if (data.bname !== "") {
-        extraAddress += data.bname;
-      }
-      if (data.buildingName !== "") {
-        extraAddress +=
-          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
-    }
-
-    setAddress(fullAddress);
-  };
+  }, [handleComplete, openPostcode]);
 
   return (
     <button

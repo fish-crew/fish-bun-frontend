@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -23,6 +23,10 @@ const RegisterPage = () => {
   const { registerStore } = useSelector((state) => state.map);
 
   const [store, setStore] = useState(registerStore || INITIAL_STORE);
+
+  const handleAddress = useCallback((address) => {
+    setStore((prevState) => ({ ...prevState, address }));
+  }, []);
 
   const gocoderCallback = (address) => (result, status) => {
     if (status === "OK") {
@@ -77,9 +81,7 @@ const RegisterPage = () => {
     <div className="w-full md:max-w-[calc(100vh_*_10/19.5)] h-full bg-white">
       <Header handleBack={handleBack} />
       <div className="flex justify-between items-center mt-6 px-4">
-        <CurrentLocationSearch
-          setAddress={(address) => setStore({ ...store, address })}
-        />
+        <CurrentLocationSearch setAddress={handleAddress} />
         <button
           className="flex items-center gap-1 mr-2 text-gray-800 hover:text-black text-sm py-2 px-4 rounded"
           onClick={() => navigate("/map/register/map-selection")}
