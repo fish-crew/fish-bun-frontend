@@ -8,6 +8,7 @@ import {
   Toolbox,
   SelectedStore,
 } from "../../components/map";
+import Header from "../../components/header/Header";
 
 import { fetchStoreInfo } from "../../api/map";
 
@@ -86,6 +87,10 @@ const MapPage = () => {
     navigate("/map/register");
   };
 
+  const handleBack = () => {
+    navigate("/");
+  };
+
   // bounds가 변경될 때마다 가게 정보를 다시 호출하는 로직
   const handleStoreInfo = useCallback(() => {
     if (map) {
@@ -133,47 +138,25 @@ const MapPage = () => {
     };
   }, [map, handleUserLocation, handleStoreInfo, dispatch]);
 
-  // 사용자 위치 50m마다 업데이트
-  useEffect(() => {
-    if (navigator.geolocation && userLocation) {
-      const watchId = navigator.geolocation.watchPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          const distance = calculateDistance(
-            latitude,
-            longitude,
-            userLocation?.lat,
-            userLocation?.lng
-          );
-          if (distance > 0.05) {
-            dispatch(setUserLocation({ lat: latitude, lng: longitude }));
-          }
-        },
-        (error) => {
-          console.error(error);
-        },
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: Infinity }
-      );
-      return () => navigator.geolocation.clearWatch(watchId);
-    }
-  }, [dispatch, userLocation]);
-
   return (
-    <div className="relative overflow-hidden w-full h-[calc(100vh-120px)]">
-      <Map setMap={setMap} location={location} />
-      {userLocation && (
-        <Marker map={map} location={userLocation} markerType="user" />
-      )}
-      <Markers map={map} handleSelectedMarker={handleSelectedMarker} />
-      <Toolbox
-        map={map}
-        handleLocation={handleUserLocation}
-        handleRegister={handleRegister}
-      />
-      {selectedMarker && (
-        <SelectedStore store={selectedMarker} refetch={handleStoreInfo} />
-      )}
-    </div>
+    <>
+      <Header handleBack={handleBack} />
+      <div className="relative overflow-hidden w-full h-[calc(100vh-120px)]">
+        <Map setMap={setMap} location={location} />
+        {userLocation && (
+          <Marker map={map} location={userLocation} markerType="user" />
+        )}
+        <Markers map={map} handleSelectedMarker={handleSelectedMarker} />
+        <Toolbox
+          map={map}
+          handleLocation={handleUserLocation}
+          handleRegister={handleRegister}
+        />
+        {selectedMarker && (
+          <SelectedStore store={selectedMarker} refetch={handleStoreInfo} />
+        )}
+      </div>
+    </>
   );
 };
 
