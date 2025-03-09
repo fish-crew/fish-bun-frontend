@@ -5,6 +5,7 @@ import Map from "../../components/map/Map";
 import Marker from "../../components/map/Marker";
 import Toolbox from "../../components/map/Toolbox";
 import Button from "../../components/Button/Button";
+import Header from "../../components/header/Header";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setRegisterStore } from "../../redux/slices/map";
@@ -98,6 +99,7 @@ const MapSelectionPage = () => {
 
   return (
     <>
+      <Header />
       <div className="relative overflow-hidden w-full h-[calc(100vh-120px)]">
         <Map setMap={setMap} location={debounceLocation} />
         {map && <Marker map={map} location={location} markerType="default" />}

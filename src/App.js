@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import "animate.css";
-import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import BookPage from "./pages/book/BookPage";
 import CalendarPage from "./pages/calendar/CalendarPage";
@@ -81,7 +80,6 @@ function AppContent({ isWebPSupported }) {
     <div className="App flex flex-col h-[100dvh] justify-between">
       {/* {isBungBalGamePage && <MetaTags />} */}
       <MetaTags />
-      <Header />
       <Routes>
         <Route path="/" element={<Navigate to="/loadingPage" replace />} />
         <Route

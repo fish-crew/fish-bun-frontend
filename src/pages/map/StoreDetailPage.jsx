@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Map from "../../components/map/Map";
 import Marker from "../../components/map/Marker";
 import JornalList from "../../components/map/JornalList";
+import Header from "../../components/header/Header";
+import Like from "../../components/map/Like";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setRegisterStore } from "../../redux/slices/map";
 
-import { fetchStoreDetail, postStoreLikes } from "../../api/map";
+import { fetchStoreDetail } from "../../api/map";
 import { calcaulateDistanceWithUnit } from "../../utils";
-
-import { FaChevronLeft } from "react-icons/fa6";
 
 const DEFAULT_STORE_NAME = "붕어빵";
 const DEFAULT_NICKNAME = "팥붕이";
@@ -26,75 +26,33 @@ const StoreDetailPage = () => {
   const [map, setMap] = useState(null);
   const [store, setStore] = useState({});
 
-  const toggleBookmark = () => {
-    if (id) {
-      postStoreLikes({ storeId: id }).then((response) => {
-        if (response.statusCode === "200") {
-          // update store info
-          fetchStoreDetail(id).then(({ data }) => {
-            setStore(data);
-          });
-        } else {
-          alert("가게 좋아요를 누르는 데 실패했습니다.");
-        }
-      });
-    }
-  };
-
   const handleModify = () => {
     dispatch(setRegisterStore(store));
     navigate("/map/register");
   };
 
-  const handleGoBack = () => {
-    navigate(-1);
-  };
+  const handleRefetch = useCallback(() => {
+    fetchStoreDetail(id).then(({ data }) => {
+      setStore(data);
+    });
+  }, [id]);
 
   useEffect(() => {
     if (id) {
-      fetchStoreDetail(id).then(({ data }) => {
-        setStore(data);
-      });
+      handleRefetch();
     }
-  }, [id]);
+  }, [id, handleRefetch]);
 
   return (
     <div className="bg-white overflow-auto h-full">
-      <div className="flex items-center w-full gap-1 border-b border-gray-300 px-4">
-        <button onClick={handleGoBack} className="h-[6dvh]">
-          <FaChevronLeft size={24} />
-        </button>
-        <span className="flex w-full justify-center text-black font-bold">
-          <img
-            className="h-[6dvh] p-2"
-            src="/assets/webp/logoBalck.webp"
-            alt="붕어빵 탐험대"
-          />
-        </span>
-      </div>
+      <Header />
       <div className="flex flex-col items-start mb-1 font-hakgyo py-2 px-4">
         <div className="flex justify-between items-start mt-3 w-full">
           <div className="flex items-center gap-1 w-4/6">
             <h2 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap max-w-2/3">
               {store?.name || DEFAULT_STORE_NAME}
             </h2>
-            <button onClick={toggleBookmark} className="min-w-[24px]">
-              {store?.likeYn === "Y" ? (
-                <img
-                  src="/assets/webp/cal-bun.webp"
-                  alt="full-icon"
-                  width={24}
-                  height={24}
-                />
-              ) : (
-                <img
-                  src="/assets/webp/cal-bun-empty.webp"
-                  alt="empty-icon"
-                  width={24}
-                  height={24}
-                />
-              )}
-            </button>
+            <Like store={store} refetch={handleRefetch} />
           </div>
           <button
             className="text-xs text-gray-400 hover:text-gray-600"
@@ -137,9 +95,11 @@ const StoreDetailPage = () => {
               />
             </div>
           )}
-          <pre className="text-xs text-gray-800 mt-2 text-start text-wrap break-words">
-            {store?.detail}
-          </pre>
+          {store?.detail && (
+            <pre className="text-xs text-gray-800 mt-2 text-start text-wrap break-words">
+              {store.detail}
+            </pre>
+          )}
         </div>
         <div className="w-full flex gap-5 items-center justify-center p-8">
           {[...Array(3)].map((_, index) => (
