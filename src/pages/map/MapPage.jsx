@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Map from "../../components/map/Map";
-import Marker from "../../components/map/Marker";
-import Markers from "../../components/map/Markers";
-import Toolbox from "../../components/map/Toolbox";
-import SelectedStore from "../../components/map/SelectedStore";
+import {
+  Map,
+  Marker,
+  Markers,
+  Toolbox,
+  SelectedStore,
+} from "../../components/map";
 
 import { fetchStoreInfo } from "../../api/map";
 

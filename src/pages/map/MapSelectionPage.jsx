@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import Map from "../../components/map/Map";
-import Marker from "../../components/map/Marker";
-import Toolbox from "../../components/map/Toolbox";
+import { Map, Marker, Toolbox } from "../../components/map";
 import Button from "../../components/Button/Button";
 import Header from "../../components/header/Header";
 

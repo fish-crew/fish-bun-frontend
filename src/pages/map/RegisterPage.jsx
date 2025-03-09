@@ -5,8 +5,7 @@ import { useForm } from "react-hook-form";
 import { FaMap, FaCheck } from "react-icons/fa";
 
 import Header from "../../components/header/Header";
-import AddressSearch from "../../components/map/AddressSearch";
-import CurrentLocationSearch from "../../components/map/CurrentLocationSearch";
+import { AddressSearch, CurrentLocationSearch } from "../../components/map";
 
 import { useSelector, useDispatch } from "react-redux";
 import { INITIAL_STORE, setRegisterStore } from "../../redux/slices/map";

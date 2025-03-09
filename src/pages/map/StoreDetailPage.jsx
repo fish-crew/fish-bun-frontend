@@ -1,11 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import Map from "../../components/map/Map";
-import Marker from "../../components/map/Marker";
-import JornalList from "../../components/map/JornalList";
 import Header from "../../components/header/Header";
-import Like from "../../components/map/Like";
+import { Map, Marker, JornalList, Like } from "../../components/map";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setRegisterStore } from "../../redux/slices/map";
