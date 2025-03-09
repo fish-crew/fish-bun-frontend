@@ -72,7 +72,7 @@ const MapPage = () => {
               );
             }
           },
-          { enableHighAccuracy: true }
+          { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity }
         );
       }
     },
@@ -150,7 +150,7 @@ const MapPage = () => {
         (error) => {
           console.error(error);
         },
-        { enableHighAccuracy: true }
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: Infinity }
       );
       return () => navigator.geolocation.clearWatch(watchId);
     }

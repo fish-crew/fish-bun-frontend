@@ -7,23 +7,33 @@ const CurrentLocationSearch = ({ setAddress }) => {
 
   const handleCurrentLocation = useCallback(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
 
-        const geocoder = new window.kakao.maps.services.Geocoder();
+          const geocoder = new window.kakao.maps.services.Geocoder();
 
-        geocoder.coord2RegionCode(lat, lng, function (result, status) {
-          if (status === window.kakao.maps.services.Status.OK) {
-            const defaultQuery = result[0].formatted_address;
-            openPostcode({
-              onComplete: handleComplete,
-              popupTitle: "붕어빵 가게 주소 찾기",
-              defaultQuery,
-            });
-          }
-        });
-      });
+          geocoder.coord2RegionCode(lat, lng, function (result, status) {
+            if (status === window.kakao.maps.services.Status.OK) {
+              const defaultQuery = result[0].formatted_address;
+              openPostcode({
+                onComplete: handleComplete,
+                popupTitle: "붕어빵 가게 주소 찾기",
+                defaultQuery,
+              });
+            }
+          });
+        },
+        (error) => {
+          console.error(error);
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 5000,
+          maximumAge: Infinity,
+        }
+      );
     }
   }, []);
 

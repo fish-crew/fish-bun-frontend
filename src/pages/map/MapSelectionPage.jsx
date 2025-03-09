@@ -27,12 +27,18 @@ const MapSelectionPage = () => {
 
   const handleLocation = useCallback(() => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error(error);
+        },
+        { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity }
+      );
     }
   }, []);
 
