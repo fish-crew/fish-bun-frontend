@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 import { FaMap, FaCheck } from "react-icons/fa";
-import { FaChevronLeft } from "react-icons/fa6";
 
+import Header from "../../components/header/Header";
 import AddressSearch from "../../components/map/AddressSearch";
 import CurrentLocationSearch from "../../components/map/CurrentLocationSearch";
 
@@ -14,7 +15,11 @@ import { postStoreInfo, patchStoreInfo } from "../../api/map";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onBlur" });
   const dispatch = useDispatch();
   const { registerStore } = useSelector((state) => state.map);
 
@@ -58,35 +63,21 @@ const RegisterPage = () => {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    //주소 정보로 좌표 구하는 로직
-    const geocoder = new window.kakao.maps.services.Geocoder();
-    const address = e.target.address.value + e.target.detailAddress.value;
-    geocoder.addressSearch(address, gocoderCallback(address));
-  };
-
   const handleBack = () => {
     dispatch(setRegisterStore(INITIAL_STORE));
     navigate("/map");
   };
 
+  const onSubmit = (data) => {
+    const address = data.address + data.detailAddress;
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    geocoder.addressSearch(address, gocoderCallback(address));
+  };
+
   return (
-    <div className="fixed top-0 w-full md:max-w-[calc(100vh_*_10/19.5)] h-full bg-white z-10">
-      <div className="flex items-center w-full gap-1 border-b border-gray-300 px-2">
-        <button onClick={handleBack} className="h-[6dvh]">
-          <FaChevronLeft size={24} />
-        </button>
-        <span className="flex w-full justify-center text-black font-bold">
-          <img
-            className="h-[6dvh] p-2"
-            src="/assets/webp/logoBalck.webp"
-            alt="붕어빵 탐험대"
-          />
-        </span>
-      </div>
-      <div className="flex justify-between items-center mt-6 px-2">
+    <div className="w-full md:max-w-[calc(100vh_*_10/19.5)] h-full bg-white">
+      <Header handleBack={handleBack} />
+      <div className="flex justify-between items-center mt-6 px-4">
         <CurrentLocationSearch
           setAddress={(address) => setStore({ ...store, address })}
         />
@@ -99,8 +90,8 @@ const RegisterPage = () => {
         </button>
       </div>
       <form
-        className="flex flex-col gap-2 space-y-4 mt-4 px-2"
-        onSubmit={handleSubmit}
+        className="flex flex-col gap-2 space-y-4 mt-4 px-4"
+        onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col items-start w-full">
           <label htmlFor="address" className="text-sm">
@@ -111,7 +102,7 @@ const RegisterPage = () => {
               type="text"
               placeholder="주소를 검색해주세요"
               className="border-b w-full"
-              name="address"
+              {...register("address", { required: true })}
               value={store.address}
               onChange={(e) => setStore({ ...store, address: e.target.value })}
               readOnly
@@ -120,6 +111,9 @@ const RegisterPage = () => {
               setAddress={(address) => setStore({ ...store, address })}
             />
           </div>
+          {errors.address && (
+            <span className="text-red-500 text-xs">주소를 입력해주세요</span>
+          )}
         </div>
         <div className="flex flex-col items-start gap-2 w-full">
           <label htmlFor="detailAddress" className="text-sm">
@@ -129,7 +123,7 @@ const RegisterPage = () => {
             type="text"
             placeholder="상세주소를 입력해주세요"
             className="border-b w-full"
-            name="detailAddress"
+            {...register("detailAddress")}
           />
         </div>
 
@@ -141,7 +135,7 @@ const RegisterPage = () => {
             type="text"
             placeholder="붕어빵"
             className="border-b w-full"
-            name="name"
+            {...register("name")}
             value={store.name}
             onChange={(e) => setStore({ ...store, name: e.target.value })}
           />
@@ -154,7 +148,7 @@ const RegisterPage = () => {
             type="text"
             placeholder="붕어빵 가게의 정보를 입력해주세요"
             className="border-b w-full"
-            name="detail"
+            {...register("detail")}
             value={store.detail}
             onChange={(e) => setStore({ ...store, detail: e.target.value })}
           />
