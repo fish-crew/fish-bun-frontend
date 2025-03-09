@@ -101,7 +101,7 @@ const MapPage = () => {
 
   useEffect(() => {
     if (map && location) {
-      map.setCenter(new window.kakao.maps.LatLng(location.lat, location.lng));
+      map.panTo(new window.kakao.maps.LatLng(location.lat, location.lng));
     }
   }, [map, location]);
 

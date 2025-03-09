@@ -4,7 +4,7 @@ import { DEFAULT_ZOOM } from "../../redux/slices/map";
 
 const Toolbox = ({ map, handleLocation, handleRegister }) => {
   const handleCurrentLocation = () => {
-    handleLocation();
+    handleLocation(true);
     if (map) {
       map.setLevel(DEFAULT_ZOOM);
     }
