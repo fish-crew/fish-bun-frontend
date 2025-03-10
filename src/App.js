@@ -22,8 +22,6 @@ import DetailPage from "./pages/detail/DetailPage";
 import BungBalGamePage from "./pages/game/bungBalGamePage";
 import BungBalResultPage from "./pages/game/result/resultPage";
 import BookDetailPage from "./pages/bookDetail/BookDetailPage";
-import DebateList from "./pages/debate/DebateList";
-import DebatePost from "./pages/debate/DebatePost";
 import { Provider } from "react-redux";
 import store, { persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
@@ -121,22 +119,6 @@ function AppContent({ isWebPSupported }) {
           <Route path="store/:id" element={<StoreDetailPage />} />
         </Route>
 
-        <Route
-          path="/debateList"
-          element={
-            <ProtectedRoute>
-              <DebateList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/debatePost/:postid"
-          element={
-            <ProtectedRoute>
-              <DebatePost />
-            </ProtectedRoute>
-          }
-        />
         {/* 잘못된 경로일 때 */}
         <Route path="*" element={<Navigate to="/main" replace />} />
       </Routes>
