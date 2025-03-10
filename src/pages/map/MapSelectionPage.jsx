@@ -35,6 +35,15 @@ const MapSelectionPage = () => {
         },
         (error) => {
           console.error(error);
+          if (error.code === 1) {
+            alert(
+              "위치 정보를 가져오는 데 실패했습니다. 위치 공유를 허용해주세요."
+            );
+          } else if (error.code === 2) {
+            alert(
+              "위치 업데이트를 사용할 수 없습니다. 나중에 다시 시도해주세요."
+            );
+          }
         },
         { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity }
       );
@@ -61,6 +70,11 @@ const MapSelectionPage = () => {
   useEffect(() => {
     if (map) {
       window.kakao.maps.load(() => {
+        if (userLocation) {
+          map.panTo(
+            new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng)
+          );
+        }
         window.kakao.maps.event.addListener(map, "center_changed", () => {
           const location = map.getCenter();
           setLocation({ lat: location.getLat(), lng: location.getLng() });
