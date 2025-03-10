@@ -22,15 +22,14 @@ import DetailPage from "./pages/detail/DetailPage";
 import BungBalGamePage from "./pages/game/bungBalGamePage";
 import BungBalResultPage from "./pages/game/result/resultPage";
 import BookDetailPage from "./pages/bookDetail/BookDetailPage";
-import DebateList from "./pages/debate/DebateList";
-import DebatePost from "./pages/debate/DebatePost";
 import { Provider } from "react-redux";
 import store, { persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
 import { HelmetProvider } from "react-helmet-async";
 import MetaTags from "./components/MetaTags";
-
+import DebateList from "./pages/debate/DebateList";
+import DebatePost from "./pages/debate/DebatePost";
 // map
 import MapPage from "./pages/map/MapPage";
 import RegisterPage from "./pages/map/RegisterPage";
@@ -100,6 +99,9 @@ function AppContent({ isWebPSupported }) {
           <Route path="register/successPage/:id" element={<SuccessPage />} />
           <Route path="register/reportPage" element={<ReportPage />} />
           <Route path="detail/:id" element={<DetailPage />} />
+          {/* DEBATE */}
+          <Route path="/debateList" element={<DebateList />} />
+          <Route path="/debatePost/:postid" element={<DebatePost />} />
         </Route>
 
         {/* GAME */}
