@@ -52,7 +52,7 @@ const CurrentLocationSearch = ({ handleAddress }) => {
         }
       );
     }
-  }, [address]);
+  }, [address, handleAddress]);
 
   return (
     <button
