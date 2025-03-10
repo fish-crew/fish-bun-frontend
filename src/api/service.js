@@ -116,6 +116,16 @@ export async function fetchDebateListData() {
   }
 }
 
+export async function fetchDebatePostData(postid) {
+  try {
+    const response = await axiosInstance.get(`/fish-bun/community/${postid}`);
+    return response.data;
+  } catch (error) {
+    console.error("데이터 요청 실패:", error);
+    throw error;
+  }
+}
+
 //post
 export async function postNickNameAddData(nickname) {
   try {
