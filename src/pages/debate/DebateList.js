@@ -5,33 +5,6 @@ import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 export default function DebateList() {
   const navigate = useNavigate();
-
-  // //서버에서 데이터 받아오기
-  // const [debatList, setDebatList] = useState();
-
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await fetchDebateListData;
-
-  //     if (response.result === "success" && response.statusCode === "200") {
-  //       setDebatList(response.data);
-  //     } else {
-  //       console.error("서버 응답 실패:", response);
-  //       // {
-  //       //   showAlert("데이터를 가져오는 데 실패했습니다.");
-  //       // }
-  //     }
-  //   } catch (error) {
-  //     console.error("데이터 가져오기 실패:", error);
-  //     //   {
-  //     //     showAlert("서버로부터 데이터를 가져오는 데 실패했습니다.");
-  //     //   }
-  //   }
-  // };
-
-  // fetchData();
-  // console.log(debatList);
-
   const [debateList, setDebateList] = useState([]);
 
   const fetchData = async () => {
@@ -49,7 +22,7 @@ export default function DebateList() {
     }
   };
 
-  // ✅ useEffect를 사용해 fetchData 실행
+  // useEffect를 사용해 fetchData 실행
   useEffect(() => {
     fetchData();
   }, []);
