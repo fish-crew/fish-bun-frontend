@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { getCookie } from "../../api/cookie";
-import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
+import { showAlert } from "../../components/modals/AlertModal.js";
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = () => {
   const [alertShown, setAlertShown] = useState(false);
   const accessToken = getCookie();
 
@@ -17,8 +17,7 @@ const ProtectedRoute = ({ children }) => {
     }
     return <Navigate to="/loginPage" replace />;
   }
-
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;
