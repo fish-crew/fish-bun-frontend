@@ -12,7 +12,7 @@ import {
   updateFirstLogin,
 } from "../../api/service.js";
 import { useDispatch, useSelector } from "react-redux"; //Redux Store에서 가져오기
-import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져오기
+import { setNickname, setUserId } from "../../redux/slices/user.js"; // Redux 액션 가져오기
 
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
@@ -27,6 +27,7 @@ function FishFrame() {
           // setUserInfoData(data); //이건 일단 뺴고 닉네임만 redux에 저장
           const nickname = response.data.nickname;
           dispatch(setNickname(nickname)); // Redux Store에 닉네임 저장
+          dispatch(setUserId(response.data.id)); // Redux Store에 id 저장
         }
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
