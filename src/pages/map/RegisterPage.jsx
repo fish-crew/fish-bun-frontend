@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
@@ -23,10 +23,9 @@ const RegisterPage = () => {
   const { registerStore } = useSelector((state) => state.map);
 
   const [store, setStore] = useState(registerStore || INITIAL_STORE);
-
-  const handleAddress = useCallback((address) => {
-    setStore((prevState) => ({ ...prevState, address }));
-  }, []);
+  const handleAddress = (address) => {
+    setStore({ ...store, address });
+  };
 
   const gocoderCallback = (address) => (result, status) => {
     if (status === "OK") {
@@ -108,9 +107,7 @@ const RegisterPage = () => {
               onChange={(e) => setStore({ ...store, address: e.target.value })}
               readOnly
             />
-            <AddressSearch
-              setAddress={(address) => setStore({ ...store, address })}
-            />
+            <AddressSearch setAddress={handleAddress} />
           </div>
           {errors.address && (
             <span className="text-red-500 text-xs">주소를 입력해주세요</span>

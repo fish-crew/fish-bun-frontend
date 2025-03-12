@@ -1,30 +1,8 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { MdMyLocation } from "react-icons/md";
-import { useDaumPostcodePopup } from "react-daum-postcode";
 
-const CurrentLocationSearch = ({ setAddress }) => {
-  const openPostcode = useDaumPostcodePopup();
-
-  const handleComplete = useCallback(
-    (data) => {
-      let fullAddress = data.address;
-      let extraAddress = "";
-
-      if (data.addressType === "R") {
-        if (data.bname !== "") {
-          extraAddress += data.bname;
-        }
-        if (data.buildingName !== "") {
-          extraAddress +=
-            extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
-        }
-        fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
-      }
-
-      setAddress(fullAddress);
-    },
-    [setAddress]
-  );
+const CurrentLocationSearch = ({ handleAddress }) => {
+  const [address, setAddress] = useState(null);
 
   const handleCurrentLocation = useCallback(() => {
     if (navigator.geolocation) {
@@ -32,22 +10,19 @@ const CurrentLocationSearch = ({ setAddress }) => {
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-
-          const geocoder = new window.kakao.maps.services.Geocoder();
-
-          geocoder.coord2RegionCode(lat, lng, function (result, status) {
-            if (status === window.kakao.maps.services.Status.OK) {
-              const defaultQuery = result[0].formatted_address;
-              openPostcode({
-                onComplete: handleComplete,
-                popupTitle: "붕어빵 가게 주소 찾기",
-                defaultQuery,
-              });
-            }
-          });
+          setAddress({ lat, lng });
         },
         (error) => {
           console.error(error);
+          if (error.code === 1) {
+            alert(
+              "위치 정보를 가져오는 데 실패했습니다. 위치 공유를 허용해주세요."
+            );
+          } else if (error.code === 2) {
+            alert(
+              "위치 업데이트를 사용할 수 없습니다. 나중에 다시 시도해주세요."
+            );
+          }
         },
         {
           enableHighAccuracy: false,
@@ -56,7 +31,28 @@ const CurrentLocationSearch = ({ setAddress }) => {
         }
       );
     }
-  }, [handleComplete, openPostcode]);
+  }, [setAddress]);
+
+  useEffect(() => {
+    if (address) {
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      geocoder.coord2Address(
+        address.lat,
+        address.lng,
+        function (result, status) {
+          if (status === "OK") {
+            const defaultQuery = result[0].road_address
+              ? result[0].road_address.address_name
+              : result[0].address.address_name;
+
+            if (handleAddress) {
+              handleAddress(defaultQuery);
+            }
+          }
+        }
+      );
+    }
+  }, [address, handleAddress]);
 
   return (
     <button
