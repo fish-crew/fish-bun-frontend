@@ -126,6 +126,18 @@ export async function fetchDebatePostData(postid) {
   }
 }
 
+export async function fetchDebateCommentsData(postid) {
+  try {
+    const response = await axiosInstance.get(
+      `/fish-bun/community/${postid}/comments`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("데이터 요청 실패:", error);
+    throw error;
+  }
+}
+
 //post
 export async function postNickNameAddData(nickname) {
   try {
@@ -205,6 +217,65 @@ export async function updateCalendarDetailContents(calendarId, contents) {
     return response.data;
   } catch (error) {
     console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
+
+export async function postDebateComment(postId, contents) {
+  try {
+    const response = await axiosInstance.post(
+      `/fish-bun/community/${postId}/comment`,
+      { contents }, // 요청 본문에 전달할 데이터
+      {
+        headers: {
+          // Content-Type 설정 생략 가능: Axios가 자동으로 처리
+        },
+      },
+      { withCredentials: true } // 쿠키 포함
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
+
+export async function postCommentLikes(commentId) {
+  try {
+    const response = await axiosInstance.post(
+      `/fish-bun/community/comment-likes/${commentId}`,
+      { commentId }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
+
+//patch
+export async function patchComment(commentId, contents) {
+  try {
+    const response = await axiosInstance.patch(
+      `/fish-bun/community/comments/${commentId}`,
+      { contents }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("PATCH 요청 실패:", error);
+    throw error;
+  }
+}
+
+//DELETE
+export async function deleteComment(commentId) {
+  try {
+    const response = await axiosInstance.delete(
+      `/fish-bun/community/comments/${commentId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("DELETE 요청 실패:", error);
     throw error;
   }
 }

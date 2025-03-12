@@ -1,18 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchDebatePostData } from "../../api/service";
+import {
+  fetchDebatePostData,
+  postDebateComment,
+  fetchDebateCommentsData,
+  postCommentLikes,
+  deleteComment,
+  patchComment,
+} from "../../api/service";
 import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 import VoteComponent from "../../components/Vote/VoteComponent.jsx";
+import { useSelector } from "react-redux";
+import { Client } from "@stomp/stompjs";
 
 const DebatePost = () => {
   const { postid } = useParams(); // URL에서 postid 가져오기
+  const [contents, setContents] = useState(""); // 댓글 저장
+  const [postContent, setPostContent] = useState([]); // 단일 게시글 조회
+  const [commentsList, setCommentsList] = useState([]); // 게시글 댓글 조회
+  const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
+  const userId = useSelector((state) => state.user.id); // Redux 상태에서 닉네임 가져오기
+  const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
+  const [editedContent, setEditedContent] = useState(""); // 편집 내용 상태 추가
+  const [editingId, setEditingId] = useState(""); // 편집 모드 상태 추가
   const navigate = useNavigate();
 
-  const [postContent, setPostContent] = useState([]);
+  const fetchData = useCallback(async () => {
+    if (!postid) {
+      showAlert("등록된 게시물을 찾을 수 없습니다.");
+      return;
+    }
 
-  const fetchData = async () => {
     try {
       const response = await fetchDebatePostData(postid);
+      const commentsInfo = await fetchDebateCommentsData(postid);
 
       if (response.result === "success" && response.statusCode === "200") {
         setPostContent(response.data); // 상태 업데이트
@@ -20,27 +41,125 @@ const DebatePost = () => {
         console.error("서버 응답 실패:", response);
         showAlert("데이터를 가져오는 데 실패했습니다.");
       }
+
+      if (
+        commentsInfo.result === "success" &&
+        commentsInfo.statusCode === "200"
+      ) {
+        setCommentsList(commentsInfo.data); // 상태 업데이트
+        // console.log(commentsInfo.data);
+      } else {
+        console.error("서버 응답 실패:", commentsInfo);
+        showAlert("데이터를 가져오는 데 실패했습니다.");
+      }
     } catch (error) {
       console.error("서버 데이터 가져오기 실패:", error);
     }
-  };
+  }, [postid]); // postid가 변경될 때만 다시 선언
 
   // useEffect를 사용해 fetchData 실행
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [postid]); // postid가 변경될 때마다 실행
 
-  const handleClose = () => {
-    //메인 페이지로 네비게이트
-    navigate(-1);
+  // 저장 버튼 핸들러
+  const handleSave = async () => {
+    if (!postid) {
+      showAlert("등록된 게시물을 찾을 수 없습니다.");
+      return;
+    }
+
+    if (!contents.trim()) {
+      showAlert("내용을 입력하세요.");
+      return;
+    }
+
+    try {
+      const response = await postDebateComment(postid, contents);
+
+      showAlert("댓글이 등록되었습니다.", async () => {
+        setContents(""); // 댓글 입력창 초기화
+        await fetchData();
+      });
+    } catch (error) {
+      console.error("등록 실패", error);
+      showAlert("등록 실패");
+    }
+  };
+
+  const handleLike = async (commentId) => {
+    try {
+      await postCommentLikes(commentId);
+
+      setCommentsList((prevComments) =>
+        prevComments.map((comment) => {
+          if (comment.id === commentId) {
+            const newLikeYN = comment.likeYN === "Y" ? "N" : "Y";
+            const newLikeCount =
+              newLikeYN === "Y" ? comment.likeCount + 1 : comment.likeCount - 1;
+            return { ...comment, likeYN: newLikeYN, likeCount: newLikeCount };
+          }
+          return comment;
+        })
+      );
+    } catch (error) {
+      console.error("좋아요 업데이트 실패:", error);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await deleteComment(commentId);
+
+      showAlert("댓글이 삭제되었습니다.", async () => {
+        await fetchData(); // 최신 댓글 데이터 가져오기
+      });
+    } catch (error) {
+      console.error("댓글 삭제 실패:", error);
+      showAlert("댓글 삭제에 실패했습니다.");
+    }
+  };
+
+  // 편집 모드 핸들러
+  const handleEdit = (id, contents) => {
+    setIsEditing(true);
+    setEditingId(id);
+    setEditedContent(contents);
+  };
+
+  const handleCancleEdit = () => {
+    setIsEditing(false); // 편집 모드 종료
+    setEditingId(null); // 편집 대상 초기화
+    setEditedContent(""); // 입력 필드 초기화
+    fetchData(); // 최신 댓글 데이터 가져오기
+  };
+
+  const handleEditComment = async (commentId) => {
+    if (!editedContent.trim()) {
+      showAlert("수정할 내용을 입력하세요.");
+      return;
+    }
+
+    try {
+      await patchComment(commentId, editedContent); // 수정된 내용 전달
+
+      showAlert("댓글이 수정되었습니다.", async () => {
+        setIsEditing(false); // 편집 모드 종료
+        setEditingId(null); // 편집 대상 초기화
+        setEditedContent(""); // 입력 필드 초기화
+        await fetchData(); // 최신 댓글 데이터 가져오기
+      });
+    } catch (error) {
+      console.error("댓글 수정 실패:", error);
+      showAlert("댓글 수정에 실패했습니다.");
+    }
   };
 
   return (
     <div
-      className="main-area flex flex-grow flex-col w-full bg-repeat-y bg-[length:100%] bg-left-top"
+      className="main-area flex flex-grow flex-col w-full bg-repeat-y bg-[length:100%] bg-left-top bg-[#e9e0dc]"
       style={{
         height: "calc(100vh - 4dvh - 90px)",
-        backgroundImage: "url('/assets/webp/debateWall.webp')",
       }}
     >
       <AlertModal />
@@ -58,7 +177,7 @@ const DebatePost = () => {
             viewBox="0 0 16 16"
           >
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"
             />
           </svg>
@@ -71,15 +190,19 @@ const DebatePost = () => {
         />
         <button className="w-10 h-10 flex items-center justify-center"></button>
       </div>
-      <div className="w-full flex flex-grow flex-col px-5 pt-10 pb-0 items-center ">
+      <div
+        className="w-full flex flex-grow flex-col px-5 pt-8 pb-0 items-center overflow-y-auto"
+        style={{
+          height: "calc(100vh - 4dvh - 90px)",
+        }}
+      >
         <img
           src="/assets/webp/debatePostHeader.webp"
           alt="•"
-          className="text-[#1069b0] w-60 "
+          className="w-60"
         />
-        <div className=" h-full p-5 flex flex-col text-start bg-white w-full ">
+        <div className="rounded-t-xl flex-grow p-5 pt-7 flex flex-col text-start bg-white w-full z-10">
           <div className="w-full text-sz30">{postContent.title}</div>
-          {/* <div className="w-full text-[#aa757e]">{postContent.contents}</div> */}
           <div className="text-sz20 text-[#b4b4b4]">
             1개 선택 가능, 435명 참여
           </div>
@@ -91,24 +214,128 @@ const DebatePost = () => {
               ]}
             />
           )}
-
-          <div className="w-full flex gap-5 items-center justify-center p-8">
-            <img
-              src="/assets/webp/cal-bun-darkPink.webp"
-              alt="•"
-              className="text-[#1069b0] w-4 h-4"
-            />
-            <img
-              src="/assets/webp/cal-bun-darkPink.webp"
-              alt="•"
-              className="text-[#1069b0] w-4 h-4"
-            />
-            <img
-              src="/assets/webp/cal-bun-darkPink.webp"
-              alt="•"
-              className="text-[#1069b0] w-4 h-4"
-            />
+          <div className="w-full flex items-center justify-end text-[#b4b4b4] text-[1.8dvh]">
+            게시 {postContent?.regDate?.split("T")[0] || ""}
           </div>
+
+          <div className="">
+            <span className="text-[#aa757e] font-bold">
+              {commentsList.length}
+            </span>
+            명이 나눈 잡담
+          </div>
+          <div className="border-[0.5px] p-2 mb-5">
+            <div className="pb-1 ps-1 font-bold">{nickname}</div>
+            <textarea
+              value={contents}
+              onChange={(e) => setContents(e.target.value)}
+              className="w-full textarea border-[0.5px] p-2 focus:border-[#b4b4b4]
+              focus:ring-1 focus:ring-[#ffe6e9] focus:outline-none 
+             focus:text-black
+              "
+              placeholder="주제에 대한 의견을 적어보세요."
+            />
+            <div className="w-full flex justify-end">
+              <button
+                onClick={handleSave}
+                className="bg-[#aa757e] active:bg-white active:text-[#aa757e] text-white 
+ py-1 px-2 rounded-md tracking-[.25em] text-sz20
+ "
+              >
+                등록하기
+              </button>
+            </div>
+          </div>
+          {commentsList
+            .slice()
+            .reverse()
+            .map((item) => (
+              <div
+                key={item.id}
+                className="w-full flex flex-col border-t-2 border-dashed py-3 px-1"
+              >
+                <div className="w-full flex flex-col">
+                  <div className="w-full flex justify-between">
+                    <div className="font-bold">{item.userNickname}</div>
+                    {userId === item.userId ? (
+                      <div className="flex gap-x-2 items-center text-sz20 text-[#b4b4b4]">
+                        <button
+                          onClick={() => handleEdit(item.id, item.contents)}
+                          className="active:bg-white active:text-[#aa757e]"
+                        >
+                          수정
+                        </button>
+
+                        <button
+                          onClick={() => handleDeleteComment(item.id)}
+                          className="active:bg-white active:text-[#aa757e]"
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <div className="text-[#b4b4b4] text-[1.8dvh]">
+                    {item.regDate.split(".")[0]}
+                  </div>
+                </div>
+                {isEditing && item.id === editingId ? (
+                  <div className="w-full">
+                    <textarea
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                      className="w-full textarea border-[0.5px] p-2 focus:border-[#b4b4b4]
+                  focus:ring-1 focus:ring-[#ffe6e9] focus:outline-none 
+                 focus:text-black
+                  "
+                    />
+                    <div className="w-full flex justify-end gap-x-2">
+                      <button
+                        onClick={handleCancleEdit}
+                        className="active:bg-[#aa757e] bg-white text-[#aa757e] active:text-white 
+   py-1 px-2 rounded-md tracking-[.25em] text-sz20 border-[0.5px]
+   "
+                      >
+                        취소하기
+                      </button>
+                      <button
+                        onClick={() => handleEditComment(item.id)}
+                        className="bg-[#aa757e] active:bg-white active:text-[#aa757e] text-white 
+   py-1 px-2 rounded-md tracking-[.25em] text-sz20
+   "
+                      >
+                        수정하기
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-full">
+                    <div className="break-all ">{item.contents}</div>
+                    <button
+                      onClick={() => handleLike(item.id)}
+                      className="flex w-full justify-end items-center gap-2 active:bg-white active:text-[#aa757e]"
+                    >
+                      <div>
+                        <img
+                          src={
+                            item.likeYN === "Y"
+                              ? "/assets/webp/heart-bun-pink.webp"
+                              : "/assets/webp/heart-bun-gray.webp"
+                          }
+                          alt="•"
+                          className="text-[#1069b0] w-5"
+                        />
+                      </div>
+                      <div className="text-[1.5dvh] text-[#aa757e] font-bold">
+                        {item.likeCount}
+                      </div>
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
         </div>
       </div>
     </div>

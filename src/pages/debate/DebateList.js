@@ -31,7 +31,6 @@ export default function DebateList() {
     <div
       className="main-area flex flex-grow flex-col w-full bg-repeat-y bg-[length:100%] bg-left-top"
       style={{
-        backgroundImage: "url('/assets/webp/debateWall.webp')",
         height: "calc(100vh - 4dvh - 90px)",
       }}
     >
@@ -63,7 +62,7 @@ export default function DebateList() {
         />
         <button className="w-10 h-10 flex items-center justify-center"></button>
       </div>
-      <div className="w-full z-10 pt-3">
+      <div className="w-full z-10">
         <img
           className=""
           src="/assets/webp/debateHeader.webp"
@@ -74,7 +73,7 @@ export default function DebateList() {
         {debateList.map((item, index) => (
           <div
             key={index}
-            className="rounded-lg shadow-lg border-2 p-3 flex mb-3 active:scale-95 active:bg-[#fceef2] bg-white border-[#aa757e] border-dashed"
+            className="rounded-lg shadow-md border-2 p-3 flex mb-3 active:scale-95 active:bg-[#fceef2] bg-white border-[#aa757e] border-dashed"
             onClick={() => navigate(`/debatePost/${item.id}`)}
           >
             <div className="flex w-80 flex-col items-start pe-3">
@@ -104,8 +103,7 @@ export default function DebateList() {
       <div className="p-3 w-full flex justify-center">
         <button
           className="bg-[#d19198] active:bg-white active:text-[#d19198] text-white 
- py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-72 
- flex items-center gap-2 justify-center"
+ py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-72"
         >
           주제 추천하기
         </button>
