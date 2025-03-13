@@ -253,12 +253,17 @@ export async function postCommentLikes(commentId) {
   }
 }
 
-//patch
 export async function patchComment(commentId, contents) {
   try {
     const response = await axiosInstance.patch(
       `/fish-bun/community/comments/${commentId}`,
-      { contents }
+      { contents }, // 요청 본문
+      {
+        withCredentials: true, // 옵션 객체는 headers와 함께 같은 레벨에서 전달해야 합니다.
+        headers: {
+          // Content-Type 설정 생략 가능: Axios가 자동으로 처리
+        },
+      }
     );
     return response.data;
   } catch (error) {
