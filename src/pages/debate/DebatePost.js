@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   fetchDebatePostData,
@@ -11,18 +11,30 @@ import {
 import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 import VoteComponent from "../../components/Vote/VoteComponent.jsx";
 import { useSelector } from "react-redux";
+import { getCookie } from "../../api/cookie.js";
+
+import SockJS from "sockjs-client";
+import { Stomp } from "@stomp/stompjs";
 import { Client } from "@stomp/stompjs";
 
 const DebatePost = () => {
-  const { postid } = useParams(); // URL에서 postid 가져오기
+  const { postid, postId } = useParams(); // URL에서 postid 가져오기
   const [contents, setContents] = useState(""); // 댓글 저장
   const [postContent, setPostContent] = useState([]); // 단일 게시글 조회
   const [commentsList, setCommentsList] = useState([]); // 게시글 댓글 조회
   const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
+  // 댓글 수정
   const userId = useSelector((state) => state.user.id); // Redux 상태에서 닉네임 가져오기
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
   const [editedContent, setEditedContent] = useState(""); // 편집 내용 상태 추가
   const [editingId, setEditingId] = useState(""); // 편집 모드 상태 추가
+  // 투표
+  const stompClientRef = useRef(null); // STOMP 클라이언트 저장
+  const [agreeCount, setAgreeCount] = useState(0);
+  const [disagreeCount, setDisagreeCount] = useState(0);
+
+  const [votes, setVotes] = useState(0);
+
   const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
@@ -61,6 +73,154 @@ const DebatePost = () => {
   useEffect(() => {
     fetchData();
   }, [postid]); // postid가 변경될 때마다 실행
+
+  // const socket = new WebSocket("ws://localhost:3000/ws");
+  // socket.onopen = () => console.log("✅ WebSocket 연결 성공!");
+  // socket.onerror = (error) => console.error("❌ WebSocket 오류:", error);
+
+  // WebSocket 연결 및 구독 설정
+  const stompClient = useRef(null);
+  useEffect(() => {
+    const socketUrl =
+      window.location.protocol === "https:"
+        ? "wss://bunglog.me/ws"
+        : "ws://localhost:3000/ws";
+
+    const initializeWebSocket = async () => {
+      console.log("🔄 STOMP 클라이언트 활성화 시작...");
+
+      if (stompClient.current) {
+        console.log("🔻 기존 STOMP 클라이언트 비활성화 중...");
+        await stompClient.current.deactivate(); // 완전히 종료될 때까지 대기
+        console.log("✅ 기존 STOMP 클라이언트 종료 완료");
+      }
+
+      stompClient.current = new Client({
+        brokerURL: socketUrl,
+        debug: (str) => console.log(str),
+        reconnectDelay: 5000, // 자동 재연결 (5초 간격)
+        onConnect: (frame) => {
+          console.log("✅ WebSocket 연결 성공!", frame);
+        },
+        onStompError: (frame) => {
+          console.error("❌ STOMP 프로토콜 오류 발생:", frame);
+        },
+        onWebSocketError: (error) => {
+          console.error("❌ WebSocket 자체 오류 발생:", error);
+        },
+        onWebSocketClose: () => {
+          console.log("❌ WebSocket 연결 종료");
+        },
+      });
+
+      stompClient.current.activate();
+    };
+
+    initializeWebSocket();
+
+    return () => {
+      if (stompClient.current) {
+        console.log("🔻 STOMP 클라이언트 완전 종료...");
+        stompClient.current.deactivate();
+        stompClient.current = null;
+      }
+    };
+  }, [postId]);
+
+  // useEffect(() => {
+  //   const socketUrl =
+  //     window.location.protocol === "https:"
+  //       ? "wss://bunglog.me/ws"
+  //       : "ws://localhost:3000/ws";
+
+  //   const stompClient = new Client({
+  //     brokerURL: socketUrl,
+  //     debug: (str) => console.log(str),
+  //     reconnectDelay: 5000,
+  //     heartbeatIncoming: 4000,
+  //     heartbeatOutgoing: 4000,
+  //   });
+
+  //   stompClient.onConnect = () => {
+  //     console.log("✅ WebSocket 연결 성공!");
+  //     stompClient.subscribe(`/topic/vote/${postid}`, (message) => {
+  //       const voteData = JSON.parse(message.body);
+  //       console.log("🔥 실시간 투표 업데이트:", voteData);
+  //       updateVoteCounts(voteData);
+  //     });
+  //   };
+
+  //   stompClient.activate();
+
+  //   return () => {
+  //     stompClient.deactivate();
+  //     console.log("❌ WebSocket 연결 종료");
+  //   };
+  // }, [postId]);
+
+  // useEffect(() => {
+  //   const socketUrl = "https://bunglog.me/ws";
+  //   const socket = new SockJS(socketUrl); // Spring WebSocket 엔드포인트
+  //   const stompClient = Stomp.over(socket);
+
+  //   stompClient.connect(
+  //     {},
+  //     () => {
+  //       console.log("✅ WebSocket 연결 성공!");
+  //       stompClient.subscribe(`/topic/vote/${postId}`, (message) => {
+  //         try {
+  //           const voteData = JSON.parse(message.body);
+  //           console.log("🔥 실시간 투표 업데이트:", voteData);
+  //           updateVoteCounts(voteData);
+  //         } catch (error) {
+  //           console.error(
+  //             "❌ JSON 파싱 오류:",
+  //             error,
+  //             "응답 내용:",
+  //             message.body
+  //           );
+  //         }
+  //       });
+  //     },
+  //     (error) => {
+  //       console.error("❌ WebSocket 연결 실패:", error);
+  //     }
+  //   );
+
+  //   return () => {
+  //     if (stompClient.connected) {
+  //       stompClient.disconnect();
+  //       console.log("❌ WebSocket 연결 종료");
+  //     }
+  //   };
+  // }, [postId]);
+
+  const updateVoteCounts = (voteData) => {
+    let agree = 0;
+    let disagree = 0;
+
+    voteData.forEach((vote) => {
+      if (vote.voteOption === "찬성") {
+        agree = vote.count;
+      } else if (vote.voteOption === "반대") {
+        disagree = vote.count;
+      }
+    });
+
+    setAgreeCount(agree);
+    setDisagreeCount(disagree);
+  };
+
+  const sendVote = (optionName) => {
+    const message = JSON.stringify({ voteOption: optionName });
+
+    if (stompClientRef.current && stompClientRef.current.connected) {
+      stompClientRef.current.publish({
+        destination: `/app/vote/${postId}`, // 백엔드에서 설정한 투표 전송 경로
+        body: message,
+      });
+    }
+  };
 
   // 저장 버튼 핸들러
   const handleSave = async () => {
@@ -202,23 +362,20 @@ const DebatePost = () => {
           className="w-60"
         />
         <div className="rounded-t-xl flex-grow p-5 pt-7 flex flex-col text-start bg-white w-full z-10">
-          <div className="w-full text-sz30">{postContent.title}</div>
-          <div className="text-sz20 text-[#b4b4b4]">
-            1개 선택 가능, 435명 참여
-          </div>
+          <div className="w-full text-sz30 px-1">{postContent.title}</div>
+          <div className="text-sz20 px-1">{postContent.contents}</div>
           {postContent && (
             <VoteComponent
-              options={[
-                postContent.firstOption || "옵션 1",
-                postContent.secondOption || "옵션 2",
-              ]}
+              options={[postContent.firstOption, postContent.secondOption]}
+              onVote={sendVote}
             />
           )}
+
           <div className="w-full flex items-center justify-end text-[#b4b4b4] text-[1.8dvh]">
             게시 {postContent?.regDate?.split("T")[0] || ""}
           </div>
 
-          <div className="">
+          <div className="px-1">
             <span className="text-[#aa757e] font-bold">
               {commentsList.length}
             </span>
