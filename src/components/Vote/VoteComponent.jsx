@@ -48,13 +48,11 @@ const VoteComponent = ({ postId, options, onVote }) => {
 
   // 투표 처리
   const handleVote = (optionName) => {
-    if (voted) return;
-
-    // 선택한 옵션을 서버에 전송
-    onVote(optionName);
-
-    setSelectedOption(optionName);
-    setVoted(true);
+    // if (voted) return;
+    // // 선택한 옵션을 서버에 전송
+    // onVote(optionName);
+    // setSelectedOption(optionName);
+    // setVoted(true);
   };
 
   return (

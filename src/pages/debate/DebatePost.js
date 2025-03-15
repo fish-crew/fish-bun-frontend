@@ -14,8 +14,8 @@ import { useSelector } from "react-redux";
 import { getCookie } from "../../api/cookie.js";
 
 import SockJS from "sockjs-client";
-import { Stomp } from "@stomp/stompjs";
 import { Client } from "@stomp/stompjs";
+import { CompatClient, Stomp } from "@stomp/stompjs";
 
 const DebatePost = () => {
   const { postid, postId } = useParams(); // URL에서 postid 가져오기
@@ -74,126 +74,54 @@ const DebatePost = () => {
     fetchData();
   }, [postid]); // postid가 변경될 때마다 실행
 
-  // const socket = new WebSocket("ws://localhost:3000/ws");
-  // socket.onopen = () => console.log("✅ WebSocket 연결 성공!");
-  // socket.onerror = (error) => console.error("❌ WebSocket 오류:", error);
+  const socketUrl =
+    window.location.protocol === "https:"
+      ? "wss://bunglog.me/ws"
+      : "ws://localhost:3000/ws";
+
+  const socket = new WebSocket(socketUrl);
+  socket.onopen = () => console.log("✅ WebSocket 연결 성공!");
+  socket.onerror = (error) => console.error("❌ WebSocket 오류:", error);
 
   // WebSocket 연결 및 구독 설정
-  const stompClient = useRef(null);
   useEffect(() => {
-    const socketUrl =
-      window.location.protocol === "https:"
-        ? "wss://bunglog.me/ws"
-        : "ws://localhost:3000/ws";
+    const stompClient = new Client({
+      brokerURL: socketUrl,
+      connectHeaders: {
+        "accept-version": "1.1,1.0", // 서버에서 지원하는 버전으로 설정
+      },
+      debug: (str) => console.log(str),
+      reconnectDelay: 5000,
+      heartbeatIncoming: 10000,
+      heartbeatOutgoing: 10000,
+    });
 
-    const initializeWebSocket = async () => {
-      console.log("🔄 STOMP 클라이언트 활성화 시작...");
-
-      if (stompClient.current) {
-        console.log("🔻 기존 STOMP 클라이언트 비활성화 중...");
-        await stompClient.current.deactivate(); // 완전히 종료될 때까지 대기
-        console.log("✅ 기존 STOMP 클라이언트 종료 완료");
-      }
-
-      stompClient.current = new Client({
-        brokerURL: socketUrl,
-        debug: (str) => console.log(str),
-        reconnectDelay: 5000, // 자동 재연결 (5초 간격)
-        onConnect: (frame) => {
-          console.log("✅ WebSocket 연결 성공!", frame);
-        },
-        onStompError: (frame) => {
-          console.error("❌ STOMP 프로토콜 오류 발생:", frame);
-        },
-        onWebSocketError: (error) => {
-          console.error("❌ WebSocket 자체 오류 발생:", error);
-        },
-        onWebSocketClose: () => {
-          console.log("❌ WebSocket 연결 종료");
-        },
+    stompClient.onConnect = (frame) => {
+      console.log("✅ WebSocket 연결 성공!", frame);
+      stompClient.subscribe(`/topic/vote/${postId}`, (message) => {
+        const voteData = JSON.parse(message.body);
+        console.log("🔥 실시간 투표 업데이트:", voteData);
+        updateVoteCounts(voteData);
       });
-
-      stompClient.current.activate();
     };
 
-    initializeWebSocket();
+    stompClient.onStompError = (frame) => {
+      console.error("❌ STOMP 오류 발생:", frame);
+    };
+
+    stompClient.onWebSocketError = (event) => {
+      console.error("❌ WebSocket 오류 발생:", event);
+    };
+
+    stompClient.activate();
 
     return () => {
-      if (stompClient.current) {
-        console.log("🔻 STOMP 클라이언트 완전 종료...");
-        stompClient.current.deactivate();
-        stompClient.current = null;
+      if (stompClient && stompClient.active) {
+        stompClient.deactivate();
+        console.log("❌ WebSocket 연결 종료");
       }
     };
   }, [postId]);
-
-  // useEffect(() => {
-  //   const socketUrl =
-  //     window.location.protocol === "https:"
-  //       ? "wss://bunglog.me/ws"
-  //       : "ws://localhost:3000/ws";
-
-  //   const stompClient = new Client({
-  //     brokerURL: socketUrl,
-  //     debug: (str) => console.log(str),
-  //     reconnectDelay: 5000,
-  //     heartbeatIncoming: 4000,
-  //     heartbeatOutgoing: 4000,
-  //   });
-
-  //   stompClient.onConnect = () => {
-  //     console.log("✅ WebSocket 연결 성공!");
-  //     stompClient.subscribe(`/topic/vote/${postid}`, (message) => {
-  //       const voteData = JSON.parse(message.body);
-  //       console.log("🔥 실시간 투표 업데이트:", voteData);
-  //       updateVoteCounts(voteData);
-  //     });
-  //   };
-
-  //   stompClient.activate();
-
-  //   return () => {
-  //     stompClient.deactivate();
-  //     console.log("❌ WebSocket 연결 종료");
-  //   };
-  // }, [postId]);
-
-  // useEffect(() => {
-  //   const socketUrl = "https://bunglog.me/ws";
-  //   const socket = new SockJS(socketUrl); // Spring WebSocket 엔드포인트
-  //   const stompClient = Stomp.over(socket);
-
-  //   stompClient.connect(
-  //     {},
-  //     () => {
-  //       console.log("✅ WebSocket 연결 성공!");
-  //       stompClient.subscribe(`/topic/vote/${postId}`, (message) => {
-  //         try {
-  //           const voteData = JSON.parse(message.body);
-  //           console.log("🔥 실시간 투표 업데이트:", voteData);
-  //           updateVoteCounts(voteData);
-  //         } catch (error) {
-  //           console.error(
-  //             "❌ JSON 파싱 오류:",
-  //             error,
-  //             "응답 내용:",
-  //             message.body
-  //           );
-  //         }
-  //       });
-  //     },
-  //     (error) => {
-  //       console.error("❌ WebSocket 연결 실패:", error);
-  //     }
-  //   );
-
-  //   return () => {
-  //     if (stompClient.connected) {
-  //       stompClient.disconnect();
-  //       console.log("❌ WebSocket 연결 종료");
-  //     }
-  //   };
-  // }, [postId]);
 
   const updateVoteCounts = (voteData) => {
     let agree = 0;
