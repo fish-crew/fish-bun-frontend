@@ -208,3 +208,16 @@ export async function updateCalendarDetailContents(calendarId, contents) {
     throw error;
   }
 }
+
+export async function postFishBunRating(flavorId, rating) {
+  try {
+    const response = await axiosInstance.post(
+      `/fish-bun/book-rating/${flavorId}`,
+      { rating }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
