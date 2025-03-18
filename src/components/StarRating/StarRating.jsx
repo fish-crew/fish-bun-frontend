@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StarRatings from "react-star-ratings";
 import { postFishBunRating } from "../../api/service.js";
 
@@ -16,6 +16,10 @@ const StarRating = ({ avgRating = 0, flavorId, refreshData, myRating = 0 }) => {
     setTempRating(newRating);
   };
 
+  useEffect(() => {
+    setRating(avgRating ?? 0);
+  }, [avgRating]);
+
   const confirmRating = async () => {
     try {
       if (!tempRating) {
@@ -24,11 +28,11 @@ const StarRating = ({ avgRating = 0, flavorId, refreshData, myRating = 0 }) => {
       }
 
       await postFishBunRating(flavorId, tempRating); // 서버 전송
-      console.log("서버 전송 완료! 선택한 별점:", tempRating);
+      // console.log("서버 전송 완료! 선택한 별점:", tempRating);
 
       refreshData();
     } catch (error) {
-      console.error("별점 전송 실패:", error);
+      // console.error("별점 전송 실패:", error);
     } finally {
       setIsModalOpen(false); // 성공/실패 관계없이 모달 닫기
     }
