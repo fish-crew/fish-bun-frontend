@@ -292,8 +292,6 @@ const DebatePost = () => {
   };
 
   const handleLike = async (commentId) => {
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 1000); // 빠르게 리셋하여 여러 번 실행 가능
     try {
       await postCommentLikes(commentId);
 
@@ -303,6 +301,13 @@ const DebatePost = () => {
             const newLikeYN = comment.likeYN === "Y" ? "N" : "Y";
             const newLikeCount =
               newLikeYN === "Y" ? comment.likeCount + 1 : comment.likeCount - 1;
+
+            // 좋아요가 "Y"로 변경될 때만 confetti 효과 실행
+            if (newLikeYN === "Y") {
+              setShowConfetti(true);
+              setTimeout(() => setShowConfetti(false), 1000);
+            }
+
             return { ...comment, likeYN: newLikeYN, likeCount: newLikeCount };
           }
           return comment;
@@ -371,7 +376,10 @@ const DebatePost = () => {
       <div className="w-full h-full fixed pointer-events-none z-50">
         <ImageConfetti
           isActive={showConfetti}
-          imageUrl="/assets/webp/bunglogLogo.webp"
+          imageUrls={[
+            "/assets/webp/bunglogLogo.webp",
+            "/assets/webp/heart.webp ",
+          ]}
         />
       </div>
       <AlertModal />

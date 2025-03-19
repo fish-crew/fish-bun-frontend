@@ -1,14 +1,15 @@
 import { useEffect, useRef } from "react";
 
-const ImageConfetti = ({ isActive, imageUrl }) => {
+const ImageConfetti = ({ isActive, imageUrls }) => {
   const canvasRef = useRef(null);
   const particles = useRef([]);
-  const animationRef = useRef(null); // 애니메이션 ID 저장
+  const animationRef = useRef(null);
+  const imagesRef = useRef([]);
 
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive || imageUrls.length === 0) return;
 
-    // 기존 canvas 삭제 (중복 실행 방지)
+    // 기존 canvas 제거 (중복 실행 방지)
     if (canvasRef.current && document.body.contains(canvasRef.current)) {
       document.body.removeChild(canvasRef.current);
     }
@@ -30,18 +31,26 @@ const ImageConfetti = ({ isActive, imageUrl }) => {
       cancelAnimationFrame(animationRef.current);
     }
 
-    // 이미지 로드
-    const img = new Image();
-    img.src = imageUrl;
+    // 이미지 미리 로드
+    imagesRef.current = imageUrls.map((url) => {
+      const img = new Image();
+      img.src = url;
+      return img;
+    });
 
-    img.onload = () => {
+    // 이미지 로드 완료 후 실행
+    Promise.all(
+      imagesRef.current.map((img) => new Promise((res) => (img.onload = res)))
+    ).then(() => {
       const centerX = canvas.width / 2;
-      const centerY = canvas.height / 4;
+      const centerY = canvas.height / 2.5;
 
-      // 기존 파티클 배열 초기화 (이전 효과 삭제)
       particles.current = [];
-
-      for (let i = 0; i < 15; i++) {
+      for (let i = 0; i < 20; i++) {
+        const img =
+          imagesRef.current[
+            Math.floor(Math.random() * imagesRef.current.length)
+          ];
         particles.current.push({
           x: centerX,
           y: centerY,
@@ -52,6 +61,7 @@ const ImageConfetti = ({ isActive, imageUrl }) => {
           rotation: Math.random() * 360,
           rotationSpeed: (Math.random() - 0.5) * 5,
           opacity: 1,
+          image: img,
         });
       }
 
@@ -65,15 +75,14 @@ const ImageConfetti = ({ isActive, imageUrl }) => {
         particles.current.forEach((p) => {
           p.x += p.speedX;
           p.y += p.speedY;
-          p.speedY += p.gravity;
           p.rotation += p.rotationSpeed;
           p.opacity = Math.max(0, 1 - elapsedTime / duration);
-
+          // p.speedY += p.gravity;
           ctx.save();
           ctx.globalAlpha = p.opacity;
           ctx.translate(p.x, p.y);
           ctx.rotate((p.rotation * Math.PI) / 180);
-          ctx.drawImage(img, -p.size / 2, -p.size / 2, p.size, p.size);
+          ctx.drawImage(p.image, -p.size / 2, -p.size / 2, p.size, p.size);
           ctx.restore();
         });
 
@@ -89,7 +98,7 @@ const ImageConfetti = ({ isActive, imageUrl }) => {
       };
 
       animationRef.current = requestAnimationFrame(animate);
-    };
+    });
 
     return () => {
       if (animationRef.current) {
@@ -100,7 +109,7 @@ const ImageConfetti = ({ isActive, imageUrl }) => {
       }
       particles.current = [];
     };
-  }, [isActive, imageUrl]);
+  }, [isActive, imageUrls]);
 
   return null;
 };
