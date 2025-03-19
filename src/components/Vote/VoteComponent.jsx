@@ -2,9 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Client } from "@stomp/stompjs"; // WebSocket 라이브러리 필요
 
 const VoteComponent = ({ postId, options, onVote }) => {
-  const [votes, setVotes] = useState([]);
+  const [votes, setVotes] = useState(
+    options.map((option) => ({ name: option, votes: 0 }))
+  );
   const [selectedOption, setSelectedOption] = useState(null);
   const [voted, setVoted] = useState(false);
+
+  // ✅ options 변경 시 votes 상태도 초기화
+  useEffect(() => {
+    setVotes(options.map((option) => ({ name: option, votes: 0 })));
+  }, [options]);
 
   // useEffect(() => {
   //   // 초기 상태 설정 (서버에서 데이터 받아오기)
@@ -53,6 +60,15 @@ const VoteComponent = ({ postId, options, onVote }) => {
     // onVote(optionName);
     // setSelectedOption(optionName);
     // setVoted(true);
+    setVotes((prevVotes) =>
+      prevVotes.map((option) =>
+        option.name === optionName
+          ? { ...option, votes: option.votes + 1 }
+          : option
+      )
+    );
+    setSelectedOption(optionName);
+    setVoted(true);
   };
 
   return (
