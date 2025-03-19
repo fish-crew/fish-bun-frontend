@@ -253,6 +253,20 @@ export async function postCommentLikes(commentId) {
   }
 }
 
+export async function postCommentRecommend(contents) {
+  try {
+    const response = await axiosInstance.post(
+      `/fish-bun/community/post/report`,
+      { contents }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
+
+//PATCH
 export async function patchComment(commentId, contents) {
   try {
     const response = await axiosInstance.patch(

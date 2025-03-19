@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchDebateListData } from "../../api/service";
+import { fetchDebateListData, postCommentRecommend } from "../../api/service";
 import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 import Modal from "../../components/modals/Modal.js";
 
@@ -36,25 +36,28 @@ export default function DebateList() {
       return;
     }
 
-    // try {
-    //   const response = await submitTopic({ topic });
-    //   if (response.result === "success") {
-    //     showAlert("주제가 성공적으로 추천되었습니다.");
-    //     fetchData(); // 데이터 새로고침
-    //     setTopic(""); // 입력 필드 초기화
-    //     setIsModalOpen(false); // 모달 닫기
-    //   } else {
-    //     showAlert("주제 추천에 실패했습니다.");
-    //   }
-    // } catch (error) {
-    //   console.error("주제 추천 실패:", error);
-    //   showAlert("서버와 연결할 수 없습니다.");
-    // }
+    // 추천하기 또는 닫기 클릭 시 textarea 초기화하기
+
+    try {
+      console.log(topic);
+      const response = await postCommentRecommend(topic); // `{ topic }`이 아니라 `topic`만 전달
+      if (response.result === "success") {
+        showAlert("주제가 성공적으로 추천되었습니다.");
+        fetchData(); // 데이터 새로고침
+        setTopic(""); // 입력 필드 초기화
+        setIsModalOpen(false); // 모달 닫기
+      } else {
+        showAlert("주제 추천에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("주제 추천 실패:", error);
+      showAlert("서버와 연결할 수 없습니다.");
+    }
   };
 
   return (
     <div
-      className="main-area flex flex-grow flex-col w-full bg-[#e9e0dc] relative"
+      className="main-area flex flex-grow flex-col w-full bg-[#e9e9e9] relative"
       style={{
         height: "calc(100vh - 4dvh - 90px)",
       }}
