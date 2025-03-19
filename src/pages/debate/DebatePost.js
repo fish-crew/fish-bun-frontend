@@ -74,54 +74,194 @@ const DebatePost = () => {
     fetchData();
   }, [postid]); // postid가 변경될 때마다 실행
 
-  const socketUrl =
-    window.location.protocol === "https:"
-      ? "wss://bunglog.me/ws"
-      : "ws://localhost:3000/ws";
+  // Websocket 연결 테스트 코드
 
-  const socket = new WebSocket(socketUrl);
-  socket.onopen = () => console.log("✅ WebSocket 연결 성공!");
-  socket.onerror = (error) => console.error("❌ WebSocket 오류:", error);
+  const socketUrl = "http://192.168.0.173:8080/ws";
+  // const socketUrl = "https://bunglog.me/api/ws";
 
-  // WebSocket 연결 및 구독 설정
+  // const socket = new WebSocket("ws://localhost:3000/ws");
+  // socket.onopen = () => console.log("✅ WebSocket 연결 성공!");
+  // socket.onerror = (error) => console.error("❌ WebSocket 오류:", error);
+
+  // WebSocket 연결 및 구독 설정  *1번 ***
+  // const stompClient = useRef(null);
+  // useEffect(() => {
+  //   const initializeWebSocket = async () => {
+  //     console.log("🔄 STOMP 클라이언트 활성화 시작...");
+
+  //     if (stompClient.current) {
+  //       console.log("🔻 기존 STOMPSockJS 클라이언트 비활성화 중...");
+  //       await stompClient.current.deactivate(); // 완전히 종료될 때까지 대기
+  //       console.log("✅ 기존 STOMP 클라이언트 종료 완료");
+  //     }
+
+  //     const socket = new SockJS(socketUrl);
+  //     stompClient.current = Stomp.over(socket);
+  //     stompClient.current.debug = console.log; // 디버깅 로그 추가
+
+  //     stompClient.current.connect(
+  //       {},
+  //       (frame) => {
+  //         console.log(" WebSo✅cket 연결 성공!", frame);
+
+  //         stompClient.subscribe(`/topic/vote/${postId}`, function (message) {
+  //           console.log("Received: " + message.body);
+  //         });
+  //       },
+  //       (error) => {
+  //         console.error("❌ WebSocket 연결 실패", error);
+  //       }
+  //     );
+  //   };
+
+  //   initializeWebSocket();
+
+  //   return () => {
+  //     if (stompClient.current) {
+  //       console.log("🔻 STOMP 클라이언트 완전 종료...");
+  //       stompClient.current.disconnect();
+  //       stompClient.current = null;
+  //     }
+  //   };
+  // }, [postId]);
+
+  // WebSocket 연결 및 구독 설정  *2번 안되는 듯
+  // useEffect(() => {
+  //   const socket = new SockJS(socketUrl);
+  //   const stompClient = new Client({
+  //     webSocketFactory: () => socket,
+  //     reconnectDelay: 5000, // 자동 재연결
+  //     onConnect: () => {
+  //       console.log("Connected to WebSocket");
+  //       stompClient.subscribe(`/topic/vote/${postId}`, (message) => {
+  //         if (message.body) {
+  //           // setVoteData(JSON.parse(message.body));
+  //         }
+  //       });
+  //     },
+  //     onStompError: (frame) => {
+  //       console.error("Broker reported error: ", frame.headers["message"]);
+  //       console.error("Additional details: ", frame.body);
+  //     },
+  //   });
+
+  //   stompClient.activate();
+
+  //   return () => {
+  //     stompClient.deactivate();
+  //   };
+  // }, [postId]);
+
+  // WebSocket 연결 및 구독 설정  *3번 *** 최근
+  const client = useRef(null);
   useEffect(() => {
-    const stompClient = new Client({
-      brokerURL: socketUrl,
-      connectHeaders: {
-        "accept-version": "1.1,1.0", // 서버에서 지원하는 버전으로 설정
-      },
-      debug: (str) => console.log(str),
-      reconnectDelay: 5000,
-      heartbeatIncoming: 10000,
-      heartbeatOutgoing: 10000,
-    });
+    console.log("Initializing WebSocket connection...");
 
-    stompClient.onConnect = (frame) => {
-      console.log("✅ WebSocket 연결 성공!", frame);
-      stompClient.subscribe(`/topic/vote/${postId}`, (message) => {
-        const voteData = JSON.parse(message.body);
-        console.log("🔥 실시간 투표 업데이트:", voteData);
-        updateVoteCounts(voteData);
+    if (client.current) {
+      console.warn(
+        "⚠️ Existing WebSocket client found, disconnecting before reconnecting..."
+      );
+      client.current.disconnect(() => {
+        console.log("🛑 Previous WebSocket fully disconnected.");
+        client.current = null;
+        initiateConnection();
       });
-    };
+    } else {
+      initiateConnection();
+    }
 
-    stompClient.onStompError = (frame) => {
-      console.error("❌ STOMP 오류 발생:", frame);
-    };
+    function initiateConnection() {
+      console.log("🔄 Creating new WebSocket connection...");
+      const socket = new SockJS(socketUrl);
+      client.current = Stomp.over(socket);
+      client.current.debug = console.log; // 디버깅 로그 활성화
 
-    stompClient.onWebSocketError = (event) => {
-      console.error("❌ WebSocket 오류 발생:", event);
-    };
+      socket.onopen = () => console.log("🌍 WebSocket connection opened.");
+      socket.onclose = () => console.log("🚪 WebSocket connection closed.");
+      socket.onerror = (error) => console.error("⚠️ WebSocket error:", error);
+      socket.onmessage = (event) =>
+        console.log("📨 Raw WebSocket message:", event.data);
 
-    stompClient.activate();
+      client.current.connect(
+        {},
+        () => {
+          console.log("✅ Connected to WebSocket successfully.");
+          const subscription = client.current.subscribe(
+            `/topic/vote/${postid}`,
+            (message) => {
+              const voteData = JSON.parse(message.body);
+              console.log("📩 Message received:", voteData);
+            }
+          );
+
+          if (subscription) {
+            console.log("📡 Subscribed to:", `/topic/vote/${postid}`);
+          }
+        },
+        (error) => {
+          console.error("❌ Connection failed:", error);
+        }
+      );
+
+      setTimeout(() => {
+        if (!client.current || !client.current.connected) {
+          console.warn(
+            "⏳ WebSocket connection attempt timed out. No CONNECTED frame received."
+          );
+        }
+      }, 5000);
+    }
 
     return () => {
-      if (stompClient && stompClient.active) {
-        stompClient.deactivate();
-        console.log("❌ WebSocket 연결 종료");
+      if (client.current) {
+        console.log("🔌 Disconnecting WebSocket...");
+        client.current.disconnect(() => {
+          console.log("🛑 Disconnected from WebSocket.");
+        });
+        client.current = null;
       }
     };
   }, [postId]);
+
+  const sendVote = () => {
+    console.log("btn clicked");
+
+    const voteRequest = { voteOption: "팥붕" }; // 찬성
+    client.current.send(
+      `/ws-community/vote/${postid}`,
+      {},
+      JSON.stringify(voteRequest)
+    );
+    console.log("찬성 투표 전송");
+  };
+  // WebSocket 연결 및 구독 설정  *4번 stackOverflow ver -> 똑같은 결과
+  // const socketUrl = "http://192.168.0.173:8080/ws";
+
+  // const socket = new SockJS(socketUrl);
+  // const stompClient = Stomp.over(socket);
+  // let isConnected = false;
+
+  // function subscribe() {
+  //   if (stompClient.connected) {
+  //     console.warn("이미 연결되어 있습니다.");
+  //     return;
+  //   }
+
+  //   stompClient.connect(
+  //     {},
+  //     () => {
+  //       console.log("✅ WebSocket 연결 성공");
+  //       stompClient.subscribe(`/topic/vote/${postId}`, (message) => {
+  //         console.log("📩 Message received:", message.body);
+  //         // setVoteData(JSON.parse(message.body));
+  //       });
+  //     },
+  //     (error) => {
+  //       console.error("❌ WebSocket 연결 실패:", error);
+  //     }
+  //   );
+  // }
+  // subscribe();
 
   const updateVoteCounts = (voteData) => {
     let agree = 0;
@@ -139,16 +279,16 @@ const DebatePost = () => {
     setDisagreeCount(disagree);
   };
 
-  const sendVote = (optionName) => {
-    const message = JSON.stringify({ voteOption: optionName });
+  // const sendVote = (optionName) => {
+  //   const message = JSON.stringify({ voteOption: optionName });
 
-    if (stompClientRef.current && stompClientRef.current.connected) {
-      stompClientRef.current.publish({
-        destination: `/app/vote/${postId}`, // 백엔드에서 설정한 투표 전송 경로
-        body: message,
-      });
-    }
-  };
+  //   if (stompClientRef.current && stompClientRef.current.connected) {
+  //     stompClientRef.current.publish({
+  //       destination: `/app/vote/${postId}`, // 백엔드에서 설정한 투표 전송 경로
+  //       body: message,
+  //     });
+  //   }
+  // };
 
   // 저장 버튼 핸들러
   const handleSave = async () => {
@@ -292,6 +432,13 @@ const DebatePost = () => {
         <div className="rounded-t-xl flex-grow p-5 pt-7 flex flex-col text-start bg-white w-full z-10">
           <div className="w-full text-sz30 px-1">{postContent.title}</div>
           <div className="text-sz20 px-1">{postContent.contents}</div>
+
+          <button
+            className="bg-black text-white rounded-full p-3"
+            onClick={sendVote}
+          >
+            테스트 버튼
+          </button>
           {postContent && (
             <VoteComponent
               options={[postContent.firstOption, postContent.secondOption]}
