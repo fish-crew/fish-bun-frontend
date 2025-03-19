@@ -47,7 +47,7 @@ export default function DebateList() {
         setTopic(""); // 입력 필드 초기화
         setIsModalOpen(false); // 모달 닫기
       } else {
-        showAlert("주제 추천에 실패했습니다.");
+        showAlert("데이터를 서버로 전송하지 못했습니다.");
       }
     } catch (error) {
       console.error("주제 추천 실패:", error);
