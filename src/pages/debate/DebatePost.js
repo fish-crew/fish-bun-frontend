@@ -12,6 +12,7 @@ import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 import VoteComponent from "../../components/Vote/VoteComponent.jsx";
 import { useSelector } from "react-redux";
 import { getCookie } from "../../api/cookie.js";
+import ImageConfetti from "../../components/animations/ImageConfetti.jsx";
 
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
@@ -23,6 +24,9 @@ const DebatePost = () => {
   const [postContent, setPostContent] = useState([]); // 단일 게시글 조회
   const [commentsList, setCommentsList] = useState([]); // 게시글 댓글 조회
   const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
+  const fireworkRef = useRef(null);
+  const [showConfetti, setShowConfetti] = useState(false);
+
   // 댓글 수정
   const userId = useSelector((state) => state.user.id); // Redux 상태에서 닉네임 가져오기
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
@@ -234,34 +238,6 @@ const DebatePost = () => {
     );
     console.log("찬성 투표 전송");
   };
-  // WebSocket 연결 및 구독 설정  *4번 stackOverflow ver -> 똑같은 결과
-  // const socketUrl = "http://192.168.0.173:8080/ws";
-
-  // const socket = new SockJS(socketUrl);
-  // const stompClient = Stomp.over(socket);
-  // let isConnected = false;
-
-  // function subscribe() {
-  //   if (stompClient.connected) {
-  //     console.warn("이미 연결되어 있습니다.");
-  //     return;
-  //   }
-
-  //   stompClient.connect(
-  //     {},
-  //     () => {
-  //       console.log("✅ WebSocket 연결 성공");
-  //       stompClient.subscribe(`/topic/vote/${postId}`, (message) => {
-  //         console.log("📩 Message received:", message.body);
-  //         // setVoteData(JSON.parse(message.body));
-  //       });
-  //     },
-  //     (error) => {
-  //       console.error("❌ WebSocket 연결 실패:", error);
-  //     }
-  //   );
-  // }
-  // subscribe();
 
   const updateVoteCounts = (voteData) => {
     let agree = 0;
@@ -316,6 +292,8 @@ const DebatePost = () => {
   };
 
   const handleLike = async (commentId) => {
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 1000); // 빠르게 리셋하여 여러 번 실행 가능
     try {
       await postCommentLikes(commentId);
 
@@ -385,11 +363,17 @@ const DebatePost = () => {
 
   return (
     <div
-      className="main-area flex flex-grow flex-col w-full bg-repeat-y bg-[length:100%] bg-left-top bg-[#e9e0dc]"
+      className="main-area flex flex-grow flex-col w-full bg-repeat-y bg-[length:100%] bg-left-top bg-[#e9e0dc] relative"
       style={{
         height: "calc(100vh - 4dvh - 90px)",
       }}
     >
+      <div className="w-full h-full fixed pointer-events-none z-50">
+        <ImageConfetti
+          isActive={showConfetti}
+          imageUrl="/assets/webp/bunglogLogo.webp"
+        />
+      </div>
       <AlertModal />
       <div className="w-full bg-white h-[6dvh] flex justify-between items-center border-b border-[rgb(211,211,211)]">
         <button
@@ -429,7 +413,7 @@ const DebatePost = () => {
           alt="•"
           className="w-60"
         />
-        <div className="rounded-t-xl flex-grow p-5 pt-7 flex flex-col text-start bg-white w-full z-10">
+        <div className="rounded-t-xl flex-grow p-5 pt-7 flex flex-col text-start bg-white w-full">
           <div className="w-full text-sz30 px-1">{postContent.title}</div>
           <div className="text-sz20 px-1">{postContent.contents}</div>
 
@@ -478,6 +462,7 @@ const DebatePost = () => {
               </button>
             </div>
           </div>
+          <div className="relative w-full h-full"></div>
           {commentsList
             .slice()
             .reverse()
