@@ -207,6 +207,9 @@ function Main() {
     setIsMenuOpen(false); // 메뉴 닫기
   };
 
+  const goToMap = () => {
+    navigate("/map");
+  };
   const goToCalendar = () => {
     navigate("/CalendarPage");
   };
@@ -560,9 +563,9 @@ function Main() {
         {!isMenuOpen && (
           <div className=" w-full p-2">
             <div className="w-full flex items-end justify-end gap-2">
-              <button className="w-[6.7dvh]" onClick={handleCaptureAndDownload}>
+              <button className="w-[6.7dvh]" onClick={goToMap}>
                 <img
-                  src="/assets/webp/captureBtn.webp"
+                  src="/assets/webp/mapBtn.webp"
                   alt="share button"
                   className=""
                 />
@@ -604,6 +607,13 @@ function Main() {
                 <img
                   src="/assets/webp/kakaoBtn.webp"
                   alt="share on kakao button"
+                  className=""
+                />
+              </button>
+              <button className="w-[6.7dvh]" onClick={handleCaptureAndDownload}>
+                <img
+                  src="/assets/webp/captureBtn.webp"
+                  alt="share button"
                   className=""
                 />
               </button>
