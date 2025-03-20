@@ -1,3 +1,11 @@
 export function getCookie() {
-  return "08mNYHqM3-eDMYHgx5uUAHN00TlK2jMbAAAAAQoNIFoAAAGVsqDuBMTTXs9KIG_V";
+  const cookies = document.cookie.split("; ");
+  for (let cookie of cookies) {
+    const [key, value] = cookie.split("=");
+    if (key === "accessToken") {
+      // 고정된 key 값
+      return value;
+    }
+  }
+  return null;
 }
