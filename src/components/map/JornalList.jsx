@@ -2,7 +2,6 @@ import React from "react";
 import { formatDate } from "../../utils";
 
 const JornalList = ({ journal = [] }) => {
-  console.log({ journal });
   return (
     <>
       <div className="flex items-center justify-center text-xs text-point-color">

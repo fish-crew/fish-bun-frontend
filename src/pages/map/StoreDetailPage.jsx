@@ -126,9 +126,6 @@ const StoreDetailPage = () => {
             </span>
           </div>
         </div>
-
-        {/* TODO: 리뷰 정보 확인 필요 */}
-        {/* review */}
         {store?.details && <JornalList journal={store.details} />}
       </div>
     </div>
