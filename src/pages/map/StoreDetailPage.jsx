@@ -41,9 +41,9 @@ const StoreDetailPage = () => {
   }, [id, handleRefetch]);
 
   return (
-    <div className="bg-white overflow-auto h-full">
+    <div className="bg-white overflow-hidden">
       <Header />
-      <div className="flex flex-col items-start mb-1 font-hakgyo py-2 px-4">
+      <div className="flex flex-col items-start font-hakgyo py-2 px-4 overflow-auto h-[calc(100vh-200px)]">
         <div className="flex justify-between items-start mt-3 w-full">
           <div className="flex items-center gap-1 w-4/6">
             <h2 className="text-lg font-bold overflow-hidden text-ellipsis whitespace-nowrap max-w-2/3">
@@ -115,7 +115,7 @@ const StoreDetailPage = () => {
             <span className="text-sz14 text-gray-800 cursor-pointer">
               일지
               <span className="text-point-color font-bold">
-                {store?.journal || 0}
+                {store?.details?.length || 0}
               </span>
             </span>
             <span className="text-sz14 text-gray-800">
@@ -129,7 +129,7 @@ const StoreDetailPage = () => {
 
         {/* TODO: 리뷰 정보 확인 필요 */}
         {/* review */}
-        {store?.journal && <JornalList journal={store.journal} />}
+        {store?.details && <JornalList journal={store.details} />}
       </div>
     </div>
   );
