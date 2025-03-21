@@ -234,31 +234,19 @@ function Main() {
       const element = document.querySelector(".main-area");
       const profileArea = document.querySelector(".profileArea");
       const bunTxtArea = document.querySelector(".bunTxtArea");
-
-      // const bulbTopBlur = document.querySelector(".bulbTopBlur");
-      // const bulbTop = document.querySelector(".bulbTop");
-
       const originalBackgroundImage = element.style.backgroundImage;
-      // element.style.backgroundImage =
-      //   "url(/assets/webp/glitter.webp), url(/assets/webp/checkPatternMerged.webp)";
-
       const btnArea = document.querySelector(".btn-area");
 
       if (btnArea) {
         profileArea.style.justifyContent = "start";
         bunTxtArea.style.top = "-0.2dvh";
       }
-      // if (bulbTop) bulbTop.style.display = "none";
-      // if (bulbTopBlur) bulbTopBlur.style.display = "none";
 
       // html2canvas로 캡처
       const canvas = await html2canvas(element);
 
       element.style.backgroundImage = originalBackgroundImage;
 
-      // if (btnArea) btnArea.style.display = "";
-      // if (bulbTop) bulbTop.style.display = "";
-      // if (bulbTopBlur) bulbTopBlur.style.display = "";
       if (btnArea) {
         profileArea.style.justifyContent = "center";
         bunTxtArea.style.top = "-1dvh"; // top 속성 올바르게 적용
