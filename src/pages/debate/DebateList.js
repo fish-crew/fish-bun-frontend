@@ -1,11 +1,14 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchDebateListData } from "../../api/service";
+import { fetchDebateListData, postCommentRecommend } from "../../api/service";
 import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
+import Modal from "../../components/modals/Modal.js";
 
 export default function DebateList() {
   const navigate = useNavigate();
   const [debateList, setDebateList] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [topic, setTopic] = useState(""); // 주제 입력 상태
 
   const fetchData = async () => {
     try {
@@ -27,11 +30,35 @@ export default function DebateList() {
     fetchData();
   }, []);
 
+  const handleTopicSubmit = async () => {
+    if (topic.trim() === "") {
+      showAlert("주제를 입력하세요.");
+      return;
+    }
+
+    // 추천하기 또는 닫기 클릭 시 textarea 초기화하기
+
+    try {
+      console.log(topic);
+      const response = await postCommentRecommend(topic); // `{ topic }`이 아니라 `topic`만 전달
+      if (response.result === "success") {
+        showAlert("주제가 성공적으로 추천되었습니다.");
+        fetchData(); // 데이터 새로고침
+        setTopic(""); // 입력 필드 초기화
+        setIsModalOpen(false); // 모달 닫기
+      } else {
+        showAlert("데이터를 서버로 전송하지 못했습니다.");
+      }
+    } catch (error) {
+      console.error("주제 추천 실패:", error);
+      showAlert("서버와 연결할 수 없습니다.");
+    }
+  };
+
   return (
     <div
-      className="main-area flex flex-grow flex-col w-full bg-repeat-y bg-[length:100%] bg-left-top"
+      className="main-area flex flex-grow flex-col w-full bg-[#e9e9e9] relative"
       style={{
-        backgroundImage: "url('/assets/webp/debateWall.webp')",
         height: "calc(100vh - 4dvh - 90px)",
       }}
     >
@@ -63,7 +90,7 @@ export default function DebateList() {
         />
         <button className="w-10 h-10 flex items-center justify-center"></button>
       </div>
-      <div className="w-full z-10 pt-3">
+      <div className="w-full z-10">
         <img
           className=""
           src="/assets/webp/debateHeader.webp"
@@ -74,7 +101,7 @@ export default function DebateList() {
         {debateList.map((item, index) => (
           <div
             key={index}
-            className="rounded-lg shadow-lg border-2 p-3 flex mb-3 active:scale-95 active:bg-[#fceef2] bg-white border-[#aa757e] border-dashed"
+            className="rounded-lg shadow-md border-2 p-3 flex mb-3 active:scale-95 active:bg-[#fceef2] bg-white border-[#aa757e] border-dashed"
             onClick={() => navigate(`/debatePost/${item.id}`)}
           >
             <div className="flex w-80 flex-col items-start pe-3">
@@ -103,13 +130,43 @@ export default function DebateList() {
       </div>
       <div className="p-3 w-full flex justify-center">
         <button
+          onClick={() => setIsModalOpen(true)}
           className="bg-[#d19198] active:bg-white active:text-[#d19198] text-white 
- py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-72 
- flex items-center gap-2 justify-center"
+ py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-72"
         >
           주제 추천하기
         </button>
       </div>
+
+      {/* Modal 컴포넌트 활용 */}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <div className="flex  flex-col gap-y-3 items-center">
+          <div className="text-sz25 break-normal px-2">
+            붕어빵 잡담소에서 함께 이야기 나눌 주제를 추천해주세요!
+          </div>
+          <textarea
+            className="w-full textarea border-[0.5px] p-2 focus:border-[#b4b4b4]
+                  focus:ring-1 focus:ring-[#ffe6e9] focus:outline-none 
+                 focus:text-black h-full"
+            placeholder="주제를 입력하세요."
+            value={topic}
+            onChange={(e) => setTopic(e.target.value)}
+            rows="4"
+          />
+          <img
+            className="w-[90%]"
+            src="/assets/webp/debatePostHeader.webp "
+            alt="붕어빵 잡담소 타이틀"
+          />
+          <button
+            className="bg-[#d19198] active:bg-white active:text-[#d19198] text-white 
+ py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-full"
+            onClick={handleTopicSubmit}
+          >
+            추천하기
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 }
