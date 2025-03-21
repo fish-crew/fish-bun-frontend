@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Client } from "@stomp/stompjs"; // WebSocket 라이브러리 필요
 
-const VoteComponent = ({ postId, options, onVote }) => {
+import SockJS from "sockjs-client";
+import { CompatClient, Stomp } from "@stomp/stompjs";
+
+const VoteComponent = ({ postid, options, onVote }) => {
   const [votes, setVotes] = useState(
     options.map((option) => ({ name: option, votes: 0 }))
   );
@@ -13,42 +16,115 @@ const VoteComponent = ({ postId, options, onVote }) => {
     setVotes(options.map((option) => ({ name: option, votes: 0 })));
   }, [options]);
 
-  // useEffect(() => {
-  //   // 초기 상태 설정 (서버에서 데이터 받아오기)
-  //   setVotes(options.map((option) => ({ name: option, votes: 0 })));
-  //   const socketUrl =
-  //     window.location.protocol === "https:"
-  //       ? "wss://bunglog.me/ws"
-  //       : "ws://localhost:3000/ws";
+  // WebSocket 연결 및 구독 설정  *3번 *** 최근
+  const socketUrl = "https://bunglog.me/api/ws";
+  const client = useRef(null);
 
-  //   // WebSocket 연결
-  //   const client = new Client({
-  //     brokerURL: socketUrl, // 백엔드 WebSocket 주소
-  //     onConnect: () => {
-  //       console.log("WebSocket Connected!");
+  useEffect(() => {
+    // console.log("Initializing WebSocket connection...");
 
-  //       // 서버에서 투표 데이터 구독
-  //       client.subscribe(`/topic/vote/${postId}`, (message) => {
-  //         const serverVotes = JSON.parse(message.body);
-  //         setVotes(
-  //           serverVotes.map(({ voteOption, voteCount }) => ({
-  //             name: voteOption,
-  //             votes: voteCount,
-  //           }))
-  //         );
-  //       });
-  //     },
-  //     onStompError: (frame) => {
-  //       console.error("STOMP Error:", frame);
-  //     },
-  //   });
+    if (client.current) {
+      // console.warn(
+      //   "⚠️ Existing WebSocket client found, disconnecting before reconnecting..."
+      // );
+      client.current.disconnect(() => {
+        // console.log("🛑 Previous WebSocket fully disconnected.");
+        client.current = null;
+        initiateConnection();
+      });
+    } else {
+      initiateConnection();
+    }
 
-  //   client.activate();
+    function initiateConnection() {
+      // console.log("🔄 Creating new WebSocket connection...");
+      const socket = new SockJS(socketUrl);
+      client.current = Stomp.over(socket);
+      client.current.debug = console.log; // 디버깅 로그 활성화
 
-  //   return () => {
-  //     client.deactivate(); // WebSocket 연결 해제
-  //   };
-  // }, [postId, options]);
+      // socket.onopen = () => console.log("🌍 WebSocket connection opened.");
+      // socket.onclose = () => console.log("🚪 WebSocket connection closed.");
+      // socket.onerror = (error) => console.error("⚠️ WebSocket error:", error);
+      // socket.onmessage = (event) =>
+      //   console.log("📨 Raw WebSocket message:", event.data);
+
+      client.current.connect(
+        {},
+        () => {
+          console.log("✅ Connected to WebSocket successfully.");
+          const subscription = client.current.subscribe(
+            `/topic/vote/${postid}`,
+            (message) => {
+              const voteData = JSON.parse(message.body);
+              console.log("📩 Message received:", voteData);
+            }
+          );
+
+          if (subscription) {
+            console.log("📡 Subscribed to:", `/topic/vote/${postid}`);
+          }
+        },
+        (error) => {
+          console.error("❌ Connection failed:", error);
+        }
+      );
+
+      setTimeout(() => {
+        if (!client.current || !client.current.connected) {
+          console.warn(
+            "⏳ WebSocket connection attempt timed out. No CONNECTED frame received."
+          );
+        }
+      }, 5000);
+    }
+
+    return () => {
+      if (client.current) {
+        console.log("🔌 Disconnecting WebSocket...");
+        client.current.disconnect(() => {
+          console.log("🛑 Disconnected from WebSocket.");
+        });
+        client.current = null;
+      }
+    };
+  }, [postid]);
+
+  useEffect(() => {
+    // 초기 상태 설정 (서버에서 데이터 받아오기)
+    setVotes(options.map((option) => ({ name: option, votes: 0 })));
+    const socketUrl =
+      window.location.protocol === "https:"
+        ? "wss://bunglog.me/ws"
+        : "ws://localhost:3000/ws";
+
+    // WebSocket 연결
+    const client = new Client({
+      brokerURL: socketUrl, // 백엔드 WebSocket 주소
+      onConnect: () => {
+        console.log("WebSocket Connected!");
+
+        // 서버에서 투표 데이터 구독
+        client.subscribe(`/topic/vote/${postid}`, (message) => {
+          const serverVotes = JSON.parse(message.body);
+          setVotes(
+            serverVotes.map(({ voteOption, voteCount }) => ({
+              name: voteOption,
+              votes: voteCount,
+            }))
+          );
+        });
+      },
+      onStompError: (frame) => {
+        console.error("STOMP Error:", frame);
+      },
+    });
+
+    client.activate();
+
+    return () => {
+      client.deactivate(); // WebSocket 연결 해제
+    };
+  }, [postid, options]);
 
   // 총 투표 수 계산 (서버 데이터 기반)
   const totalVotes = votes.reduce((sum, option) => sum + option.votes, 0);
