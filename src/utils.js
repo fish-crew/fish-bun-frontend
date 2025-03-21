@@ -22,3 +22,14 @@ export const calcaulateDistanceWithUnit = (lat1, lng1, lat2, lng2) => {
 const deg2rad = (deg) => deg * (Math.PI / 180);
 const distanceInKm = (distance) => distance.toFixed(1) + "km";
 const distanceInM = (distance) => Math.round(distance * 1000) + "m";
+
+export const formatDate = (date) => {
+  const formattedDate = new Date(date)
+    .toLocaleDateString("ko-KR", {
+      year: "2-digit",
+      month: "2-digit",
+      day: "2-digit",
+    })
+    .split(".");
+  return `${formattedDate[0]}년 ${formattedDate[1]}월 ${formattedDate[2]}일`;
+};

@@ -25,7 +25,7 @@ function SocialButton({ iconPath, onClick, label }) {
 function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
-
+  const isMainPage = ["/main"].includes(location.pathname);
   const isSpecialPage = ["/main", "/register/addPage"].includes(
     location.pathname
   );
@@ -95,31 +95,37 @@ function Footer() {
           </div>
         ) : (
           <div className="w-full flex items-center">
-            <button
-              className="w-full flex items-center"
-              onClick={goToBungBalGame}
-            >
-              붕어빵 취향 테스트&nbsp;
-              {isSpecialPage ? (
-                <img
-                  src="/assets/webp/cal-bun-white.webp"
-                  alt=""
-                  className="w-4"
-                />
-              ) : (
-                <img
-                  src="/assets/webp/cal-bun-blue.webp"
-                  alt=""
-                  className="w-4"
-                />
-              )}
-            </button>
-            <div className="flex justify-center items-center">
-              <div className="">붕어빵탐험대</div>
-              {snsButtons.map((btn, idx) => (
-                <SocialButton key={idx} {...btn} />
-              ))}
-            </div>
+            {isMainPage ? (
+              <p></p>
+            ) : (
+              <div className="w-full flex">
+                <button
+                  className="w-full flex items-center"
+                  onClick={goToBungBalGame}
+                >
+                  붕어빵 취향 테스트&nbsp;
+                  {isSpecialPage ? (
+                    <img
+                      src="/assets/webp/cal-bun-white.webp"
+                      alt=""
+                      className="w-4"
+                    />
+                  ) : (
+                    <img
+                      src="/assets/webp/cal-bun-blue.webp"
+                      alt=""
+                      className="w-4"
+                    />
+                  )}
+                </button>
+                <div className="flex justify-center items-center">
+                  <div className="">붕어빵탐험대</div>
+                  {snsButtons.map((btn, idx) => (
+                    <SocialButton key={idx} {...btn} />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
