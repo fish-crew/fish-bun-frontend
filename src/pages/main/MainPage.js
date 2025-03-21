@@ -678,7 +678,7 @@ function Main() {
           <img src="/assets/webp/mainObjBtm.webp" alt="mainObj bottom" />
         </div>
 
-        <div className="top-btn-area flex absolute top-0 justify-between items-start w-full px-2 pt-2">
+        <div className="top-btn-area flex absolute top-0 justify-between items-start w-full px-2 pt-3">
           <div
             className="profileArea h-[10dvh] w-[calc(10dvh_*_1277/378)] bg-cover flex flex-col justify-center text-[#9b5d24] nowrap"
             style={{
