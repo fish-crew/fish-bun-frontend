@@ -630,7 +630,7 @@ function Main() {
           </div>
         </div>
       )}
-      <div className="w-full  h-[6dvh] flex justify-between items-center text-white px-1 pt-1">
+      <div className="w-full  h-[6dvh] flex justify-between items-center bg-[#007ada] text-white px-1 pt-1">
         <button
           className="h-[6dvh] w-[6dvh] flex items-center justify-center"
           onClick={openModal}
@@ -647,10 +647,9 @@ function Main() {
           </svg>
         </button>
         <img
-          className="h-[inherit] p-2"
+          className="h-[4dvh]"
           src="/assets/webp/logo.webp"
           alt="붕어빵 탐험대"
-          onClick={() => navigate("/loadingPage")}
         />
         <button
           className="h-[6dvh] w-[6dvh] flex items-center justify-center"
