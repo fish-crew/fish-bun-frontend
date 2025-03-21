@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setRegisterStore, setSelectedStore } from "../../redux/slices/map";
 
 import { postStoreLikes } from "../../api/map";
-import JornalList from "./JornalList";
 
 import { calcaulateDistanceWithUnit } from "../../utils";
 
@@ -105,7 +104,7 @@ const SelectedStore = ({ store, refetch }) => {
             >
               일지
               <span className="text-point-color font-bold">
-                {store?.journal || 0}
+                {store?.details || 0}
               </span>
             </span>
             <span className="text-sz14 text-gray-800">
@@ -116,10 +115,6 @@ const SelectedStore = ({ store, refetch }) => {
             </span>
           </div>
         </div>
-
-        {/* TODO: 리뷰 정보 확인 필요 */}
-        {/* review */}
-        {store?.journal && <JornalList journal={store.journal} />}
       </div>
     </div>
   );
