@@ -30,46 +30,49 @@ const MapSelectionPage = () => {
   const [debounceLocation, setDebounceLocation] = useState(location);
   const [address, setAddress] = useState("");
 
-  const handleLocation = useCallback((withCenter = true) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          dispatch(
-            setUserLocation({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            })
-          );
+  const handleLocation = useCallback(
+    (withCenter = true) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            dispatch(
+              setUserLocation({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              })
+            );
 
-          if (withCenter) {
-            setLocation({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
-            });
-            map?.panTo(
-              new window.kakao.maps.LatLng(
-                position.coords.latitude,
-                position.coords.longitude
-              )
-            );
-          }
-        },
-        (error) => {
-          console.error(error);
-          if (error.code === 1) {
-            showAlert(
-              "위치 정보를 가져오는 데 실패했습니다. 위치 공유를 허용해주세요."
-            );
-          } else if (error.code === 2) {
-            showAlert(
-              "위치 업데이트를 사용할 수 없습니다. 나중에 다시 시도해주세요."
-            );
-          }
-        },
-        { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity }
-      );
-    }
-  }, []);
+            if (withCenter) {
+              setLocation({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+              });
+              map?.panTo(
+                new window.kakao.maps.LatLng(
+                  position.coords.latitude,
+                  position.coords.longitude
+                )
+              );
+            }
+          },
+          (error) => {
+            console.error(error);
+            if (error.code === 1) {
+              showAlert(
+                "위치 정보를 가져오는 데 실패했습니다. 위치 공유를 허용해주세요."
+              );
+            } else if (error.code === 2) {
+              showAlert(
+                "위치 업데이트를 사용할 수 없습니다. 나중에 다시 시도해주세요."
+              );
+            }
+          },
+          { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity }
+        );
+      }
+    },
+    [map, dispatch]
+  );
 
   const handleRegister = () => {
     // address 정보 저장

@@ -80,7 +80,7 @@ const RegisterPage = () => {
       <AlertModal />
       <Header handleBack={handleBack} />
       <div className="flex justify-between items-center mt-6 px-4">
-        <CurrentLocationSearch setAddress={handleAddress} />
+        <CurrentLocationSearch handleAddress={handleAddress} />
         <button
           className="flex items-center gap-1 mr-2 text-gray-800 hover:text-black text-sm py-2 px-4 rounded"
           onClick={() => navigate("/map/register/map-selection")}
