@@ -6,6 +6,7 @@ import { FaMap, FaCheck } from "react-icons/fa";
 
 import Header from "../../components/header/Header";
 import { AddressSearch, CurrentLocationSearch } from "../../components/map";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal";
 
 import { useSelector, useDispatch } from "react-redux";
 import { INITIAL_STORE, setRegisterStore } from "../../redux/slices/map";
@@ -27,7 +28,7 @@ const RegisterPage = () => {
     setStore({ ...store, address });
   };
 
-  const gocoderCallback = (address) => (result, status) => {
+  const geocoderCallback = (address) => (result, status) => {
     if (status === "OK") {
       dispatch(
         setRegisterStore({ ...store, lat: result[0].y, lng: result[0].x })
@@ -44,19 +45,17 @@ const RegisterPage = () => {
       if (registerStore?.id) {
         patchStoreInfo(registerStore.id, updatedStore).then((response) => {
           if (response.statusCode === "200") {
-            alert("가게 정보가 수정되었습니다.");
-            handleBack();
+            showAlert("가게 정보가 수정되었습니다.", handleBack);
           } else {
-            alert("가게 정보 수정에 실패했습니다. 다시 시도해주세요.");
+            showAlert("가게 정보 수정에 실패했습니다. 다시 시도해주세요.");
           }
         });
       } else {
         postStoreInfo(updatedStore).then((response) => {
           if (response.statusCode === "200") {
-            alert("가게 정보가 등록되었습니다.");
-            handleBack();
+            showAlert("가게 정보가 등록되었습니다.", handleBack);
           } else {
-            alert("가게 등록에 실패했습니다. 다시 시도해주세요.");
+            showAlert("가게 등록에 실패했습니다. 다시 시도해주세요.");
           }
         });
       }
@@ -73,11 +72,12 @@ const RegisterPage = () => {
   const onSubmit = (data) => {
     const address = data.address + data.detailAddress;
     const geocoder = new window.kakao.maps.services.Geocoder();
-    geocoder.addressSearch(address, gocoderCallback(address));
+    geocoder.addressSearch(address, geocoderCallback(address));
   };
 
   return (
-    <div className="w-full md:max-w-[calc(100vh_*_10/19.5)] h-full bg-white">
+    <div className="w-full md:max-w-[calc(100vh_*_10/19.5)] h-full bg-white main-area">
+      <AlertModal />
       <Header handleBack={handleBack} />
       <div className="flex justify-between items-center mt-6 px-4">
         <CurrentLocationSearch setAddress={handleAddress} />

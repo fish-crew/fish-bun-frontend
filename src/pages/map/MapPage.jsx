@@ -9,6 +9,7 @@ import {
   SelectedStore,
 } from "../../components/map";
 import Header from "../../components/header/Header";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal";
 
 import { fetchStoreInfo } from "../../api/map";
 
@@ -61,11 +62,11 @@ const MapPage = () => {
           (error) => {
             console.error(error);
             if (error.code === 1) {
-              alert(
+              showAlert(
                 "위치 정보를 가져오는 데 실패했습니다. 위치 공유를 허용해주세요."
               );
             } else if (error.code === 2) {
-              alert(
+              showAlert(
                 "위치 업데이트를 사용할 수 없습니다. 나중에 다시 시도해주세요."
               );
             }
@@ -76,6 +77,11 @@ const MapPage = () => {
     },
     [dispatch]
   );
+
+  const handleLocation = () => {
+    handleUserLocation();
+    dispatch(setSelectedStore(null));
+  };
 
   const handleRegister = () => {
     dispatch(setRegisterStore(INITIAL_STORE));
@@ -136,7 +142,8 @@ const MapPage = () => {
   return (
     <>
       <Header handleBack={handleBack} />
-      <div className="relative overflow-hidden w-full h-[calc(100vh-120px)]">
+      <div className="relative overflow-hidden w-full h-[calc(100vh-120px)] main-area">
+        <AlertModal />
         <Map setMap={setMap} location={location} />
         {userLocation && (
           <Marker map={map} location={userLocation} markerType="user" />
@@ -144,7 +151,7 @@ const MapPage = () => {
         <Markers map={map} handleSelectedMarker={handleSelectedStore} />
         <Toolbox
           map={map}
-          handleLocation={handleUserLocation}
+          handleLocation={handleLocation}
           handleRegister={handleRegister}
         />
         {selectedStore && (

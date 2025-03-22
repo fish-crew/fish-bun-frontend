@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Map, Marker, Toolbox } from "../../components/map";
 import Button from "../../components/Button/Button";
 import Header from "../../components/header/Header";
+import AlertModal, { showAlert } from "../../components/modals/AlertModal";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setRegisterStore } from "../../redux/slices/map";
+import { Fragment } from "react";
 
 const MapSelectionPage = () => {
   const navigate = useNavigate();
@@ -20,8 +22,8 @@ const MapSelectionPage = () => {
       ? { lat: registerStore.lat, lng: registerStore.lng }
       : userLocation
   );
-  const [debounceLocation, setDebounceLocation] = useState(location);
 
+  const [debounceLocation, setDebounceLocation] = useState(location);
   const [address, setAddress] = useState("");
 
   const handleLocation = useCallback(() => {
@@ -36,11 +38,11 @@ const MapSelectionPage = () => {
         (error) => {
           console.error(error);
           if (error.code === 1) {
-            alert(
+            showAlert(
               "위치 정보를 가져오는 데 실패했습니다. 위치 공유를 허용해주세요."
             );
           } else if (error.code === 2) {
-            alert(
+            showAlert(
               "위치 업데이트를 사용할 수 없습니다. 나중에 다시 시도해주세요."
             );
           }
@@ -64,17 +66,8 @@ const MapSelectionPage = () => {
   };
 
   useEffect(() => {
-    handleLocation();
-  }, [handleLocation]);
-
-  useEffect(() => {
     if (map) {
       window.kakao.maps.load(() => {
-        if (userLocation) {
-          map.panTo(
-            new window.kakao.maps.LatLng(userLocation.lat, userLocation.lng)
-          );
-        }
         window.kakao.maps.event.addListener(map, "center_changed", () => {
           const location = map.getCenter();
           setLocation({ lat: location.getLat(), lng: location.getLng() });
@@ -112,10 +105,11 @@ const MapSelectionPage = () => {
   return (
     <>
       <Header />
-      <div className="relative overflow-hidden w-full h-[calc(100vh-120px)]">
+      <div className="relative overflow-hidden w-full h-[calc(100vh-120px)] main-area">
         <Map setMap={setMap} location={debounceLocation} />
         {map && <Marker map={map} location={location} markerType="default" />}
         <Toolbox map={map} handleLocation={handleLocation} />
+        <AlertModal />
       </div>
       <div className="p-4 bg-white shadow w-full text-center">
         <p className="text-center text-sz20">{address}</p>

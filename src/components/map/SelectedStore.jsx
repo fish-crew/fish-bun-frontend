@@ -7,6 +7,7 @@ import { setRegisterStore, setSelectedStore } from "../../redux/slices/map";
 import { postStoreLikes } from "../../api/map";
 
 import { calcaulateDistanceWithUnit } from "../../utils";
+import AlertModal, { showAlert } from "../modals/AlertModal";
 
 const SelectedStore = ({ storeId, refetch }) => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const SelectedStore = ({ storeId, refetch }) => {
         if (response.statusCode === "200" && refetch) {
           refetch();
         } else {
-          alert("가게 좋아요를 누르는 데 실패했습니다.");
+          showAlert("가게 좋아요를 누르는 데 실패했습니다.");
         }
       });
     }
@@ -48,7 +49,14 @@ const SelectedStore = ({ storeId, refetch }) => {
 
   return (
     <div
-      className={`absolute bottom-0 w-full bg-white p-2.5 shadow-t transition-transform duration-300 ease-in-out transform rounded-t-xl drop-shadow-smGray z-10 overflow-auto`}
+      className={`absolute bottom-0 w-full bg-white p-2.5 shadow-t transition-transform duration-300 ease-in-out transform rounded-t-xl drop-shadow-smGray z-10 overflow-auto main-area`}
+      onDrag={(e) => {
+        if (e.clientY < e.target.offsetTop) {
+          handleNavigate();
+        } else {
+          dispatch(setSelectedStore(null));
+        }
+      }}
       onTouchMove={(e) => {
         if (e.touches[0].clientY < e.target.offsetTop) {
           handleNavigate();
@@ -57,6 +65,7 @@ const SelectedStore = ({ storeId, refetch }) => {
         }
       }}
     >
+      <AlertModal />
       <div className="flex flex-col items-start px-2 mb-1 font-hakgyo">
         <hr
           className="w-1/4 mx-auto border-2 rounded-full border-gray-400"
