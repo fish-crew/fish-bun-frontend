@@ -1,16 +1,14 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React from "react";
 import { MdMyLocation } from "react-icons/md";
 
 const CurrentLocationSearch = ({ handleAddress }) => {
-  const [address, setAddress] = useState(null);
-
-  const handleCurrentLocation = useCallback(() => {
+  const handleCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-          setAddress({ lat, lng });
+          getAddressWithGeocoder({ lat, lng });
         },
         (error) => {
           console.error(error);
@@ -31,28 +29,26 @@ const CurrentLocationSearch = ({ handleAddress }) => {
         }
       );
     }
-  }, [setAddress]);
+  };
 
-  useEffect(() => {
-    if (address) {
+  const getAddressWithGeocoder = ({ lat, lng }) => {
+    window.kakao.maps.load(() => {
       const geocoder = new window.kakao.maps.services.Geocoder();
-      geocoder.coord2Address(
-        address.lat,
-        address.lng,
-        function (result, status) {
-          if (status === "OK") {
-            const defaultQuery = result[0].road_address
-              ? result[0].road_address.address_name
-              : result[0].address.address_name;
+      geocoder.coord2Address(lng, lat, function (result, status) {
+        if (status === "OK") {
+          const defaultQuery = result[0].road_address
+            ? result[0].road_address.address_name
+            : result[0].address.address_name;
 
-            if (handleAddress) {
-              handleAddress(defaultQuery);
-            }
+          if (handleAddress) {
+            handleAddress(defaultQuery);
           }
+        } else {
+          console.error({ result, status });
         }
-      );
-    }
-  }, [address, handleAddress]);
+      });
+    });
+  };
 
   return (
     <button
