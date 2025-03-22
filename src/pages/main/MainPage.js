@@ -516,7 +516,7 @@ function Main() {
       {isSideMenuOpen && (
         <div className={`${styles.menuOverlay}`}>
           <div
-            className=" w-full h-full flex justify-end"
+            className=" w-[30%] h-full flex justify-end"
             onClick={closeSideMenu}
           >
             <button
@@ -535,7 +535,7 @@ function Main() {
               </svg>
             </button>
           </div>
-          <div className="sideMenu w-[65%] h-full flex bg-white items-center flex-col pointer-events-none">
+          <div className="sideMenu w-[70%] h-full flex bg-white items-center flex-col ">
             <div className="w-full p-3 text-sz30">전체메뉴</div>
             <div className="border-b-[0.05px] w-full"></div>
             <img
