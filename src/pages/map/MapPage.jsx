@@ -29,13 +29,10 @@ const MapPage = () => {
 
   const [map, setMap] = useState(null);
 
-  const [selectedMarker, setSelectedMarker] = useState(selectedStore);
-  const handleSelectedMarker = (store) => {
-    if (selectedMarker?.id === store.id) {
-      setSelectedMarker(null);
+  const handleSelectedStore = (store) => {
+    if (selectedStore?.id === store.id) {
       dispatch(setSelectedStore(null));
     } else {
-      setSelectedMarker(store);
       dispatch(setSelectedStore(store));
     }
   };
@@ -144,14 +141,14 @@ const MapPage = () => {
         {userLocation && (
           <Marker map={map} location={userLocation} markerType="user" />
         )}
-        <Markers map={map} handleSelectedMarker={handleSelectedMarker} />
+        <Markers map={map} handleSelectedMarker={handleSelectedStore} />
         <Toolbox
           map={map}
           handleLocation={handleUserLocation}
           handleRegister={handleRegister}
         />
-        {selectedMarker && (
-          <SelectedStore store={selectedMarker} refetch={handleStoreInfo} />
+        {selectedStore && (
+          <SelectedStore storeId={selectedStore.id} refetch={handleStoreInfo} />
         )}
       </div>
     </>

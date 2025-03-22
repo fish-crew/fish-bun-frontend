@@ -8,11 +8,13 @@ import { postStoreLikes } from "../../api/map";
 
 import { calcaulateDistanceWithUnit } from "../../utils";
 
-const SelectedStore = ({ store, refetch }) => {
+const SelectedStore = ({ storeId, refetch }) => {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const userLocation = useSelector((state) => state.map.userLocation);
+  const { userLocation, stores } = useSelector((state) => state.map);
+
+  const store = stores.find(({ id }) => id === storeId);
 
   const handleNavigate = () => {
     if (store?.id) {
@@ -104,7 +106,7 @@ const SelectedStore = ({ store, refetch }) => {
             >
               일지
               <span className="text-point-color font-bold">
-                {store?.details || 0}
+                {store?.diaryCount || 0}
               </span>
             </span>
             <span className="text-sz14 text-gray-800">
