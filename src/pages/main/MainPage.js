@@ -207,11 +207,15 @@ function Main() {
 
   const toggleShareMenu = () => {
     setIsShareMenuOpen((prev) => !prev);
+    setIsSideMenuOpen(false); // 사이드 메뉴 닫기
   };
   const closeShareMenu = () => {
     setIsShareMenuOpen(false); // 공유 메뉴 닫기
   };
-  const toggleSideMenu = () => setIsSideMenuOpen((prev) => !prev);
+  const toggleSideMenu = () => {
+    setIsSideMenuOpen((prev) => !prev);
+    setIsShareMenuOpen(false); // 공유 메뉴 닫기
+  };
   const closeSideMenu = () => {
     setIsSideMenuOpen(false); // 사이드 메뉴 닫기
   };
@@ -234,31 +238,19 @@ function Main() {
       const element = document.querySelector(".main-area");
       const profileArea = document.querySelector(".profileArea");
       const bunTxtArea = document.querySelector(".bunTxtArea");
-
-      // const bulbTopBlur = document.querySelector(".bulbTopBlur");
-      // const bulbTop = document.querySelector(".bulbTop");
-
       const originalBackgroundImage = element.style.backgroundImage;
-      // element.style.backgroundImage =
-      //   "url(/assets/webp/glitter.webp), url(/assets/webp/checkPatternMerged.webp)";
-
       const btnArea = document.querySelector(".btn-area");
 
       if (btnArea) {
         profileArea.style.justifyContent = "start";
         bunTxtArea.style.top = "-0.2dvh";
       }
-      // if (bulbTop) bulbTop.style.display = "none";
-      // if (bulbTopBlur) bulbTopBlur.style.display = "none";
 
       // html2canvas로 캡처
       const canvas = await html2canvas(element);
 
       element.style.backgroundImage = originalBackgroundImage;
 
-      // if (btnArea) btnArea.style.display = "";
-      // if (bulbTop) bulbTop.style.display = "";
-      // if (bulbTopBlur) bulbTopBlur.style.display = "";
       if (btnArea) {
         profileArea.style.justifyContent = "center";
         bunTxtArea.style.top = "-1dvh"; // top 속성 올바르게 적용
@@ -523,22 +515,27 @@ function Main() {
 
       {isSideMenuOpen && (
         <div className={`${styles.menuOverlay}`}>
-          <button
-            className="h-[5dvh] w-[5dvh] flex items-center justify-center text-white p-2 m-2 "
+          <div
+            className=" w-full h-full flex justify-end"
             onClick={closeSideMenu}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-x-lg w-6 h-6 stroke-white"
-              viewBox="0 0 16 16"
+            <button
+              className="h-[5dvh] w-[5dvh] flex items-center justify-center text-white p-2 m-2 "
+              onClick={closeSideMenu}
             >
-              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-            </svg>
-          </button>
-          <div className="sideMenu w-[65%] h-full flex bg-white items-center flex-col">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-x-lg w-6 h-6 stroke-white"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+            </button>
+          </div>
+          <div className="sideMenu w-[65%] h-full flex bg-white items-center flex-col pointer-events-none">
             <div className="w-full p-3 text-sz30">전체메뉴</div>
             <div className="border-b-[0.05px] w-full"></div>
             <img
@@ -642,7 +639,7 @@ function Main() {
           </div>
         </div>
       )}
-      <div className="w-full  h-[6dvh] flex justify-between items-center text-white px-1 pt-1">
+      <div className="w-full  h-[6dvh] flex justify-between items-center bg-[#007ada] text-white px-1 pt-1">
         <button
           className="h-[6dvh] w-[6dvh] flex items-center justify-center"
           onClick={openModal}
@@ -659,10 +656,9 @@ function Main() {
           </svg>
         </button>
         <img
-          className="h-[inherit] p-2"
+          className="h-[4dvh]"
           src="/assets/webp/logo.webp"
           alt="붕어빵 탐험대"
-          onClick={() => navigate("/loadingPage")}
         />
         <button
           className="h-[6dvh] w-[6dvh] flex items-center justify-center"
@@ -691,7 +687,7 @@ function Main() {
           <img src="/assets/webp/mainObjBtm.webp" alt="mainObj bottom" />
         </div>
 
-        <div className="top-btn-area flex absolute top-0 justify-between items-start w-full px-2 pt-2">
+        <div className="top-btn-area flex absolute top-0 justify-between items-start w-full px-2 pt-3">
           <div
             className="profileArea h-[10dvh] w-[calc(10dvh_*_1277/378)] bg-cover flex flex-col justify-center text-[#9b5d24] nowrap"
             style={{
