@@ -207,11 +207,15 @@ function Main() {
 
   const toggleShareMenu = () => {
     setIsShareMenuOpen((prev) => !prev);
+    setIsSideMenuOpen(false); // 사이드 메뉴 닫기
   };
   const closeShareMenu = () => {
     setIsShareMenuOpen(false); // 공유 메뉴 닫기
   };
-  const toggleSideMenu = () => setIsSideMenuOpen((prev) => !prev);
+  const toggleSideMenu = () => {
+    setIsSideMenuOpen((prev) => !prev);
+    setIsShareMenuOpen(false); // 공유 메뉴 닫기
+  };
   const closeSideMenu = () => {
     setIsSideMenuOpen(false); // 사이드 메뉴 닫기
   };
@@ -511,22 +515,27 @@ function Main() {
 
       {isSideMenuOpen && (
         <div className={`${styles.menuOverlay}`}>
-          <button
-            className="h-[5dvh] w-[5dvh] flex items-center justify-center text-white p-2 m-2 "
+          <div
+            className=" w-full h-full flex justify-end"
             onClick={closeSideMenu}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-x-lg w-6 h-6 stroke-white"
-              viewBox="0 0 16 16"
+            <button
+              className="h-[5dvh] w-[5dvh] flex items-center justify-center text-white p-2 m-2 "
+              onClick={closeSideMenu}
             >
-              <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
-            </svg>
-          </button>
-          <div className="sideMenu w-[65%] h-full flex bg-white items-center flex-col">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-x-lg w-6 h-6 stroke-white"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+            </button>
+          </div>
+          <div className="sideMenu w-[65%] h-full flex bg-white items-center flex-col pointer-events-none">
             <div className="w-full p-3 text-sz30">전체메뉴</div>
             <div className="border-b-[0.05px] w-full"></div>
             <img
