@@ -221,6 +221,20 @@ export async function updateCalendarDetailContents(calendarId, contents) {
   }
 }
 
+
+export async function postFishBunRating(flavorId, rating) {
+  try {
+    const response = await axiosInstance.patch(
+      `/fish-bun/book-rating/${flavorId}`,
+      { rating }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("PATCH 요청 실패:", error);
+    throw error;
+  }
+}
+
 export async function postDebateComment(postId, contents) {
   try {
     const response = await axiosInstance.post(
