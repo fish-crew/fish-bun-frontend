@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import StarRatings from "react-star-ratings";
 import { postFishBunRating } from "../../api/service.js";
 
-const StarRating = ({ avgRating = 0, flavorId, refreshData, myRating = 0 }) => {
-  const [rating, setRating] = useState(avgRating ?? 0); // 현재 별점
+const StarRating = ({ avgRating, flavorId, refreshData, myRating }) => {
+  const [rating, setRating] = useState(0);
   const [tempRating, setTempRating] = useState(avgRating ?? 0); // 임시 별점 (모달 내 변경값)
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
 
@@ -17,8 +17,12 @@ const StarRating = ({ avgRating = 0, flavorId, refreshData, myRating = 0 }) => {
   };
 
   useEffect(() => {
-    setRating(avgRating ?? 0);
-  }, [avgRating]);
+    if (myRating === null || myRating === undefined) {
+      setRating(0); // 별점 안 줬을 때는 0점
+    } else {
+      setRating(avgRating ?? 0); // 별점 준 이후엔 평균 별점 보여줌
+    }
+  }, [myRating, avgRating]);
 
   const confirmRating = async () => {
     try {
