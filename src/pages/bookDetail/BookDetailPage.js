@@ -4,39 +4,45 @@ import { useParams, useNavigate } from "react-router-dom";
 import CloseButton from "../../components/Button/CloseButton.js";
 import styles from "./bookDetailPage.module.css";
 import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
+import StarRating from '../../components/StarRating/StarRating.jsx'
 
 const BookDetailPage = () => {
   const { flavorId } = useParams(); // URL에서 flavorId 가져오기
   const [dateList, setDateList] = useState([]); // 날짜별 데이터 저장
   const [fishBunFlavor, setFishBunFlavor] = useState(null); // 붕어빵 맛 데이터 저장
+  const [avgRating, setAvgRating] = useState(null);
+  const [myRating, setMyRating] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetchBookDetailData(flavorId);
+  const fetchData = async () => {
+    try {
+      const response = await fetchBookDetailData(flavorId);
 
-        if (response.result === "success" && response.statusCode === "200") {
-          setDateList(response.data.dateList); // 날짜별 데이터 저장
-          setFishBunFlavor(response.data.fishBunFlavorEntity); // 붕어빵 맛 데이터 저장
-        } else {
-          console.error("서버 응답 실패:", response);
-          {
-            showAlert("데이터를 가져오는 데 실패했습니다.");
-          }
-        }
-      } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
-        {
-          showAlert("서버로부터 데이터를 가져오는 데 실패했습니다.");
-        }
+      if (response.result === "success" && response.statusCode === "200") {
+        setDateList(response.data.dateList);
+        setFishBunFlavor(response.data.fishBunFlavorEntity);
+        setAvgRating(response.data.fishBunFlavorEntity.avgRating);
+        setMyRating(response.data.fishBunFlavorEntity.myRating);
+      } else {
+        console.error("서버 응답 실패:", response);
+        showAlert("데이터를 가져오는 데 실패했습니다.");
       }
-    };
+    } catch (error) {
+      console.error("데이터 가져오기 실패:", error);
+      showAlert("서버로부터 데이터를 가져오는 데 실패했습니다.");
+    }
+  };
 
+  useEffect(() => {
     if (flavorId) {
       fetchData();
     }
-  }, [flavorId]); // flavorId가 변경될 때마다 실행
+  }, [flavorId]);
+
+
+  const refreshData = () => {
+    fetchData(); // 별점이 업데이트되었을 때 다시 서버에서 데이터를 불러옴
+  };
 
   const handleClose = () => {
     //메인 페이지로 네비게이트
@@ -65,7 +71,6 @@ const BookDetailPage = () => {
             <div className="text-center text-sz22 text-yellow-600 px-6">
               {fishBunFlavor.highlight}
             </div>
-
             <div className="w-full px-6 py-2">
               {/* 이미지 */}
               <div className="flex justify-center pt-4">
@@ -78,7 +83,7 @@ const BookDetailPage = () => {
                   }}
                 />
               </div>
-
+              <StarRating avgRating={avgRating} flavorId={flavorId} refreshData={refreshData} myRating={myRating} />
               {/* 설명 */}
               <div className="px-5 pt-2 text-gray-700 text-justify text-sz22 whitespace-pre-line break-all">
                 {fishBunFlavor.description}
