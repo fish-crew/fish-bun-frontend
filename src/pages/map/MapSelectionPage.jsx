@@ -7,8 +7,12 @@ import Header from "../../components/header/Header";
 import AlertModal, { showAlert } from "../../components/modals/AlertModal";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setRegisterStore } from "../../redux/slices/map";
-import { Fragment } from "react";
+import {
+  DEFAULT_LAT,
+  DEFAULT_LNG,
+  setRegisterStore,
+  setUserLocation,
+} from "../../redux/slices/map";
 
 const MapSelectionPage = () => {
   const navigate = useNavigate();
@@ -17,23 +21,38 @@ const MapSelectionPage = () => {
   const { registerStore, userLocation } = useSelector((state) => state.map);
 
   const [map, setMap] = useState(null);
-  const [location, setLocation] = useState(
+  const [location, setLocation] = useState(() =>
     registerStore.lat && registerStore.lng
       ? { lat: registerStore.lat, lng: registerStore.lng }
-      : userLocation
+      : userLocation || { lat: DEFAULT_LAT, lng: DEFAULT_LNG }
   );
 
   const [debounceLocation, setDebounceLocation] = useState(location);
   const [address, setAddress] = useState("");
 
-  const handleLocation = useCallback(() => {
+  const handleLocation = useCallback((withCenter = true) => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
+          dispatch(
+            setUserLocation({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            })
+          );
+
+          if (withCenter) {
+            setLocation({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
+            map?.panTo(
+              new window.kakao.maps.LatLng(
+                position.coords.latitude,
+                position.coords.longitude
+              )
+            );
+          }
         },
         (error) => {
           console.error(error);
