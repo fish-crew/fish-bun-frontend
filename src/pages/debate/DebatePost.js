@@ -11,12 +11,7 @@ import {
 import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 import VoteComponent from "../../components/Vote/VoteComponent.jsx";
 import { useSelector } from "react-redux";
-import { getCookie } from "../../api/cookie.js";
 import ImageConfetti from "../../components/animations/ImageConfetti.jsx";
-
-import SockJS from "sockjs-client";
-import { Client } from "@stomp/stompjs";
-import { CompatClient, Stomp } from "@stomp/stompjs";
 
 const DebatePost = () => {
   const { postid, postId } = useParams(); // URL에서 postid 가져오기
@@ -24,7 +19,6 @@ const DebatePost = () => {
   const [postContent, setPostContent] = useState([]); // 단일 게시글 조회
   const [commentsList, setCommentsList] = useState([]); // 게시글 댓글 조회
   const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
-  const fireworkRef = useRef(null);
   const [showConfetti, setShowConfetti] = useState(false);
 
   // 댓글 수정
@@ -32,12 +26,6 @@ const DebatePost = () => {
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
   const [editedContent, setEditedContent] = useState(""); // 편집 내용 상태 추가
   const [editingId, setEditingId] = useState(""); // 편집 모드 상태 추가
-  // 투표
-  const stompClientRef = useRef(null); // STOMP 클라이언트 저장
-  const [agreeCount, setAgreeCount] = useState(0);
-  const [disagreeCount, setDisagreeCount] = useState(0);
-
-  const [votes, setVotes] = useState(0);
 
   const navigate = useNavigate();
 
@@ -71,200 +59,12 @@ const DebatePost = () => {
     } catch (error) {
       console.error("서버 데이터 가져오기 실패:", error);
     }
-  }, [postid]); // postid가 변경될 때만 다시 선언
+  }, [postid]);
 
   // useEffect를 사용해 fetchData 실행
   useEffect(() => {
     fetchData();
-  }, [postid]); // postid가 변경될 때마다 실행
-
-  // Websocket 연결 테스트 코드
-
-  // const socketUrl = "http://192.168.0.173:8080/ws";
-  const socketUrl = "https://bunglog.me/api/ws";
-
-  // const socket = new WebSocket("ws://localhost:3000/ws");
-  // socket.onopen = () => console.log("✅ WebSocket 연결 성공!");
-  // socket.onerror = (error) => console.error("❌ WebSocket 오류:", error);
-
-  // WebSocket 연결 및 구독 설정  *1번 ***
-  // const stompClient = useRef(null);
-  // useEffect(() => {
-  //   const initializeWebSocket = async () => {
-  //     console.log("🔄 STOMP 클라이언트 활성화 시작...");
-
-  //     if (stompClient.current) {
-  //       console.log("🔻 기존 STOMPSockJS 클라이언트 비활성화 중...");
-  //       await stompClient.current.deactivate(); // 완전히 종료될 때까지 대기
-  //       console.log("✅ 기존 STOMP 클라이언트 종료 완료");
-  //     }
-
-  //     const socket = new SockJS(socketUrl);
-  //     stompClient.current = Stomp.over(socket);
-  //     stompClient.current.debug = console.log; // 디버깅 로그 추가
-
-  //     stompClient.current.connect(
-  //       {},
-  //       (frame) => {
-  //         console.log(" WebSo✅cket 연결 성공!", frame);
-
-  //         stompClient.subscribe(`/topic/vote/${postId}`, function (message) {
-  //           console.log("Received: " + message.body);
-  //         });
-  //       },
-  //       (error) => {
-  //         console.error("❌ WebSocket 연결 실패", error);
-  //       }
-  //     );
-  //   };
-
-  //   initializeWebSocket();
-
-  //   return () => {
-  //     if (stompClient.current) {
-  //       console.log("🔻 STOMP 클라이언트 완전 종료...");
-  //       stompClient.current.disconnect();
-  //       stompClient.current = null;
-  //     }
-  //   };
-  // }, [postId]);
-
-  // WebSocket 연결 및 구독 설정  *2번 안되는 듯
-  // useEffect(() => {
-  //   const socket = new SockJS(socketUrl);
-  //   const stompClient = new Client({
-  //     webSocketFactory: () => socket,
-  //     reconnectDelay: 5000, // 자동 재연결
-  //     onConnect: () => {
-  //       console.log("Connected to WebSocket");
-  //       stompClient.subscribe(`/topic/vote/${postId}`, (message) => {
-  //         if (message.body) {
-  //           // setVoteData(JSON.parse(message.body));
-  //         }
-  //       });
-  //     },
-  //     onStompError: (frame) => {
-  //       console.error("Broker reported error: ", frame.headers["message"]);
-  //       console.error("Additional details: ", frame.body);
-  //     },
-  //   });
-
-  //   stompClient.activate();
-
-  //   return () => {
-  //     stompClient.deactivate();
-  //   };
-  // }, [postId]);
-
-  // WebSocket 연결 및 구독 설정  *3번 *** 최근
-  // const client = useRef(null);
-  // useEffect(() => {
-  //   console.log("Initializing WebSocket connection...");
-
-  //   if (client.current) {
-  //     console.warn(
-  //       "⚠️ Existing WebSocket client found, disconnecting before reconnecting..."
-  //     );
-  //     client.current.disconnect(() => {
-  //       console.log("🛑 Previous WebSocket fully disconnected.");
-  //       client.current = null;
-  //       initiateConnection();
-  //     });
-  //   } else {
-  //     initiateConnection();
-  //   }
-
-  //   function initiateConnection() {
-  //     console.log("🔄 Creating new WebSocket connection...");
-  //     const socket = new SockJS(socketUrl);
-  //     client.current = Stomp.over(socket);
-  //     client.current.debug = console.log; // 디버깅 로그 활성화
-
-  //     socket.onopen = () => console.log("🌍 WebSocket connection opened.");
-  //     socket.onclose = () => console.log("🚪 WebSocket connection closed.");
-  //     socket.onerror = (error) => console.error("⚠️ WebSocket error:", error);
-  //     socket.onmessage = (event) =>
-  //       console.log("📨 Raw WebSocket message:", event.data);
-
-  //     client.current.connect(
-  //       {},
-  //       () => {
-  //         console.log("✅ Connected to WebSocket successfully.");
-  //         const subscription = client.current.subscribe(
-  //           `/topic/vote/${postid}`,
-  //           (message) => {
-  //             const voteData = JSON.parse(message.body);
-  //             console.log("📩 Message received:", voteData);
-  //           }
-  //         );
-
-  //         if (subscription) {
-  //           console.log("📡 Subscribed to:", `/topic/vote/${postid}`);
-  //         }
-  //       },
-  //       (error) => {
-  //         console.error("❌ Connection failed:", error);
-  //       }
-  //     );
-
-  //     setTimeout(() => {
-  //       if (!client.current || !client.current.connected) {
-  //         console.warn(
-  //           "⏳ WebSocket connection attempt timed out. No CONNECTED frame received."
-  //         );
-  //       }
-  //     }, 5000);
-  //   }
-
-  //   return () => {
-  //     if (client.current) {
-  //       console.log("🔌 Disconnecting WebSocket...");
-  //       client.current.disconnect(() => {
-  //         console.log("🛑 Disconnected from WebSocket.");
-  //       });
-  //       client.current = null;
-  //     }
-  //   };
-  // }, [postId]);
-
-  // const sendVote = () => {
-  //   console.log("btn clicked");
-
-  //   const voteRequest = { voteOption: "팥붕" }; // 찬성
-  //   client.current.send(
-  //     `/ws-community/vote/${postid}`,
-  //     {},
-  //     JSON.stringify(voteRequest)
-  //   );
-  //   console.log("찬성 투표 전송");
-  // };
-
-  const updateVoteCounts = (voteData) => {
-    let agree = 0;
-    let disagree = 0;
-
-    voteData.forEach((vote) => {
-      if (vote.voteOption === "찬성") {
-        agree = vote.count;
-      } else if (vote.voteOption === "반대") {
-        disagree = vote.count;
-      }
-    });
-
-    setAgreeCount(agree);
-    setDisagreeCount(disagree);
-  };
-
-  // const sendVote = (optionName) => {
-  //   const message = JSON.stringify({ voteOption: optionName });
-
-  //   if (stompClientRef.current && stompClientRef.current.connected) {
-  //     stompClientRef.current.publish({
-  //       destination: `/app/vote/${postId}`, // 백엔드에서 설정한 투표 전송 경로
-  //       body: message,
-  //     });
-  //   }
-  // };
+  }, [postid]);
 
   // 저장 버튼 핸들러
   const handleSave = async () => {
