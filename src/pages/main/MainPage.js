@@ -575,7 +575,7 @@ function Main() {
             <div className="border-b-[0.05px] w-full"></div>
             <div className="flex px-3 flex-col text-sz25 w-full py-4 gap-y-3">
               <button
-                className="flex gap-x-3 w-full items-center"
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
                 onClick={() => navigate("/calendarPage")}
               >
                 <img
@@ -585,28 +585,28 @@ function Main() {
                 붕어일지
               </button>
               <button
-                className="flex gap-x-3 w-full items-center"
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
                 onClick={() => navigate("/bookPage")}
               >
                 <img src="/assets/webp/bookBtnIcon.webp" className="w-8 h-8" />
                 붕어도감
               </button>
               <button
-                className="flex gap-x-3 w-full items-center"
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
                 onClick={() => navigate("/map")}
               >
                 <img src="/assets/webp/mapBtnIcon.webp" className="w-8 h-8" />
                 붕어지도
               </button>
               <button
-                className="flex gap-x-3 w-full whitespace-nowrap"
+                className="flex gap-x-3 w-full active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
                 onClick={() => navigate("/bungBalGamePage")}
               >
                 <img src="/assets/webp/bungbalIcon.webp" className="w-8 h-8" />
                 붕어빵 취향 테스트
               </button>
               <button
-                className="flex gap-x-3 w-full items-center"
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
                 onClick={() => navigate("/debateList")}
               >
                 <img src="/assets/webp/debateIcon.webp" className="w-8 h-8" />
@@ -616,7 +616,7 @@ function Main() {
             <div className="border-b-[0.05px] w-full"></div>
             <div className="flex px-3 flex-col text-sz25 w-full py-4 gap-y-3">
               <button
-                className="flex gap-x-3 w-full items-center "
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]] "
                 onClick={openModal}
               >
                 <img
@@ -626,7 +626,7 @@ function Main() {
                 튜토리얼
               </button>
               <button
-                className="flex gap-x-3 w-full items-center"
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
                 onClick={showNotice}
               >
                 <img
