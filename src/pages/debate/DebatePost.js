@@ -28,6 +28,7 @@ const DebatePost = () => {
   const [editingId, setEditingId] = useState(""); // 편집 모드 상태 추가
   const contentsRef = useRef(""); // 댓글 입력값을 상태가 아닌 ref로 관리
   const editedContentRef = useRef(""); // 댓글 수정 입력값을 관리할 ref
+  const [inputKey, setInputKey] = useState(0); // textarea를 강제 리렌더링하기 위한 키 값
 
   const navigate = useNavigate();
 
@@ -76,13 +77,11 @@ const DebatePost = () => {
       return;
     }
 
-    setContents(newContents); // 저장 버튼 클릭 시 상태 업데이트
-
     try {
       await postDebateComment(postid, newContents);
       showAlert("댓글이 등록되었습니다.", async () => {
-        contentsRef.current = ""; // 입력값 초기화
-        setContents(""); // 상태 초기화
+        contentsRef.current = ""; // ref 값 초기화
+        setInputKey((prev) => prev + 1); // key 값 변경하여 textarea 강제 리렌더링
         fetchData(); // 최신 데이터 가져오기
       });
     } catch (error) {
@@ -267,6 +266,7 @@ const DebatePost = () => {
           <div className="border-[0.5px] p-2 mb-5">
             <div className="pb-1 ps-1 font-bold">{nickname}</div>
             <textarea
+              key={inputKey} // key 값 변경 시 textarea가 리렌더링됨
               defaultValue={contentsRef.current}
               onChange={(e) => (contentsRef.current = e.target.value)}
               className="w-full textarea border-[0.5px] p-2 focus:border-[#b4b4b4]
