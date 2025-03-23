@@ -14,7 +14,7 @@ const MetaTags = () => {
       break;
 
     default:
-      title = "붕어빵 탐험";
+      title = "붕어빵 탐험대";
       description = "팥냥이와 함께 떠나는 탐험";
       image = "https://bunglog.me/assets/png/bunglogMetaImg.png";
       url = "https://bunglog.me/";
