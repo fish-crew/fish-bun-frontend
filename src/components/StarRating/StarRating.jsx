@@ -8,7 +8,7 @@ const StarRating = ({ avgRating, flavorId, refreshData, myRating }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
 
   const openModal = () => {
-    setTempRating(rating); // 기존 별점 유지
+    setTempRating(myRating ?? 0); // 기존 별점 유지
     setIsModalOpen(true);
   };
 
@@ -53,7 +53,11 @@ const StarRating = ({ avgRating, flavorId, refreshData, myRating }) => {
           starDimension="25px"
           starSpacing="5px"
         />
-        <div className="text-sz22 font-semibold pt-1">{rating.toFixed(1)}점</div>
+        <div className="text-sz22 font-semibold pt-1">
+          {(avgRating === null || avgRating === 0)
+            ? "평점 없음"
+            : `${rating.toFixed(1)}점`}
+        </div>
       </div>
 
       {isModalOpen && (
