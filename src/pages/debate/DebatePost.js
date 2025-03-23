@@ -157,87 +157,87 @@ const DebatePost = () => {
   // }, [postId]);
 
   // WebSocket 연결 및 구독 설정  *3번 *** 최근
-  const client = useRef(null);
-  useEffect(() => {
-    console.log("Initializing WebSocket connection...");
+  // const client = useRef(null);
+  // useEffect(() => {
+  //   console.log("Initializing WebSocket connection...");
 
-    if (client.current) {
-      console.warn(
-        "⚠️ Existing WebSocket client found, disconnecting before reconnecting..."
-      );
-      client.current.disconnect(() => {
-        console.log("🛑 Previous WebSocket fully disconnected.");
-        client.current = null;
-        initiateConnection();
-      });
-    } else {
-      initiateConnection();
-    }
+  //   if (client.current) {
+  //     console.warn(
+  //       "⚠️ Existing WebSocket client found, disconnecting before reconnecting..."
+  //     );
+  //     client.current.disconnect(() => {
+  //       console.log("🛑 Previous WebSocket fully disconnected.");
+  //       client.current = null;
+  //       initiateConnection();
+  //     });
+  //   } else {
+  //     initiateConnection();
+  //   }
 
-    function initiateConnection() {
-      console.log("🔄 Creating new WebSocket connection...");
-      const socket = new SockJS(socketUrl);
-      client.current = Stomp.over(socket);
-      client.current.debug = console.log; // 디버깅 로그 활성화
+  //   function initiateConnection() {
+  //     console.log("🔄 Creating new WebSocket connection...");
+  //     const socket = new SockJS(socketUrl);
+  //     client.current = Stomp.over(socket);
+  //     client.current.debug = console.log; // 디버깅 로그 활성화
 
-      socket.onopen = () => console.log("🌍 WebSocket connection opened.");
-      socket.onclose = () => console.log("🚪 WebSocket connection closed.");
-      socket.onerror = (error) => console.error("⚠️ WebSocket error:", error);
-      socket.onmessage = (event) =>
-        console.log("📨 Raw WebSocket message:", event.data);
+  //     socket.onopen = () => console.log("🌍 WebSocket connection opened.");
+  //     socket.onclose = () => console.log("🚪 WebSocket connection closed.");
+  //     socket.onerror = (error) => console.error("⚠️ WebSocket error:", error);
+  //     socket.onmessage = (event) =>
+  //       console.log("📨 Raw WebSocket message:", event.data);
 
-      client.current.connect(
-        {},
-        () => {
-          console.log("✅ Connected to WebSocket successfully.");
-          const subscription = client.current.subscribe(
-            `/topic/vote/${postid}`,
-            (message) => {
-              const voteData = JSON.parse(message.body);
-              console.log("📩 Message received:", voteData);
-            }
-          );
+  //     client.current.connect(
+  //       {},
+  //       () => {
+  //         console.log("✅ Connected to WebSocket successfully.");
+  //         const subscription = client.current.subscribe(
+  //           `/topic/vote/${postid}`,
+  //           (message) => {
+  //             const voteData = JSON.parse(message.body);
+  //             console.log("📩 Message received:", voteData);
+  //           }
+  //         );
 
-          if (subscription) {
-            console.log("📡 Subscribed to:", `/topic/vote/${postid}`);
-          }
-        },
-        (error) => {
-          console.error("❌ Connection failed:", error);
-        }
-      );
+  //         if (subscription) {
+  //           console.log("📡 Subscribed to:", `/topic/vote/${postid}`);
+  //         }
+  //       },
+  //       (error) => {
+  //         console.error("❌ Connection failed:", error);
+  //       }
+  //     );
 
-      setTimeout(() => {
-        if (!client.current || !client.current.connected) {
-          console.warn(
-            "⏳ WebSocket connection attempt timed out. No CONNECTED frame received."
-          );
-        }
-      }, 5000);
-    }
+  //     setTimeout(() => {
+  //       if (!client.current || !client.current.connected) {
+  //         console.warn(
+  //           "⏳ WebSocket connection attempt timed out. No CONNECTED frame received."
+  //         );
+  //       }
+  //     }, 5000);
+  //   }
 
-    return () => {
-      if (client.current) {
-        console.log("🔌 Disconnecting WebSocket...");
-        client.current.disconnect(() => {
-          console.log("🛑 Disconnected from WebSocket.");
-        });
-        client.current = null;
-      }
-    };
-  }, [postId]);
+  //   return () => {
+  //     if (client.current) {
+  //       console.log("🔌 Disconnecting WebSocket...");
+  //       client.current.disconnect(() => {
+  //         console.log("🛑 Disconnected from WebSocket.");
+  //       });
+  //       client.current = null;
+  //     }
+  //   };
+  // }, [postId]);
 
-  const sendVote = () => {
-    console.log("btn clicked");
+  // const sendVote = () => {
+  //   console.log("btn clicked");
 
-    const voteRequest = { voteOption: "팥붕" }; // 찬성
-    client.current.send(
-      `/ws-community/vote/${postid}`,
-      {},
-      JSON.stringify(voteRequest)
-    );
-    console.log("찬성 투표 전송");
-  };
+  //   const voteRequest = { voteOption: "팥붕" }; // 찬성
+  //   client.current.send(
+  //     `/ws-community/vote/${postid}`,
+  //     {},
+  //     JSON.stringify(voteRequest)
+  //   );
+  //   console.log("찬성 투표 전송");
+  // };
 
   const updateVoteCounts = (voteData) => {
     let agree = 0;
@@ -422,19 +422,20 @@ const DebatePost = () => {
           className="w-60"
         />
         <div className="rounded-t-xl flex-grow p-5 pt-7 flex flex-col text-start bg-white w-full">
-          <button
+          {/* <button
             className="bg-black text-white rounded-full p-3 mb-5"
             onClick={sendVote}
           >
             소켓 전송 테스트 버튼
-          </button>
+          </button> */}
           <div className="w-full text-sz30 px-1">{postContent.title}</div>
           <div className="text-sz20 px-1">{postContent.contents}</div>
 
           {postContent && (
             <VoteComponent
               options={[postContent.firstOption, postContent.secondOption]}
-              onVote={sendVote}
+              postid={postid}
+              // onVote={sendVote}
             />
           )}
 
