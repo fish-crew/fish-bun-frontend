@@ -26,6 +26,8 @@ const DebatePost = () => {
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
   const [editedContent, setEditedContent] = useState(""); // 편집 내용 상태 추가
   const [editingId, setEditingId] = useState(""); // 편집 모드 상태 추가
+  const contentsRef = useRef(""); // 댓글 입력값을 상태가 아닌 ref로 관리
+  const editedContentRef = useRef(""); // 댓글 수정 입력값을 관리할 ref
 
   const navigate = useNavigate();
 
@@ -68,22 +70,20 @@ const DebatePost = () => {
 
   // 저장 버튼 핸들러
   const handleSave = async () => {
-    if (!postid) {
-      showAlert("등록된 게시물을 찾을 수 없습니다.");
-      return;
-    }
-
-    if (!contents.trim()) {
+    const newContents = contentsRef.current.trim();
+    if (!newContents) {
       showAlert("내용을 입력하세요.");
       return;
     }
 
-    try {
-      const response = await postDebateComment(postid, contents);
+    setContents(newContents); // 저장 버튼 클릭 시 상태 업데이트
 
+    try {
+      await postDebateComment(postid, newContents);
       showAlert("댓글이 등록되었습니다.", async () => {
-        setContents(""); // 댓글 입력창 초기화
-        await fetchData();
+        contentsRef.current = ""; // 입력값 초기화
+        setContents(""); // 상태 초기화
+        fetchData(); // 최신 데이터 가져오기
       });
     } catch (error) {
       console.error("등록 실패", error);
@@ -145,27 +145,24 @@ const DebatePost = () => {
     fetchData(); // 최신 댓글 데이터 가져오기
   };
 
-  const handleEditComment = async (commentId) => {
-    if (!editedContent.trim()) {
+  const handleEditSave = async (commentId) => {
+    const newEditedContent = editedContentRef.current.trim();
+    if (!newEditedContent) {
       showAlert("수정할 내용을 입력하세요.");
       return;
     }
 
     try {
-      await patchComment(commentId, editedContent); // 수정된 내용 전달
-
+      await patchComment(commentId, newEditedContent);
       showAlert("댓글이 수정되었습니다.", async () => {
-        setIsEditing(false); // 편집 모드 종료
-        setEditingId(null); // 편집 대상 초기화
-        setEditedContent(""); // 입력 필드 초기화
-        await fetchData(); // 최신 댓글 데이터 가져오기
+        editedContentRef.current = ""; // 수정 입력값 초기화
+        fetchData(); // 최신 데이터 가져오기
       });
     } catch (error) {
-      console.error("댓글 수정 실패:", error);
+      console.error("댓글 수정 실패", error);
       showAlert("댓글 수정에 실패했습니다.");
     }
   };
-
   return (
     <div
       className="main-area flex flex-grow flex-col w-full bg-repeat-y bg-[length:100%] bg-left-top bg-[#e9e0dc] relative"
@@ -270,8 +267,8 @@ const DebatePost = () => {
           <div className="border-[0.5px] p-2 mb-5">
             <div className="pb-1 ps-1 font-bold">{nickname}</div>
             <textarea
-              value={contents}
-              onChange={(e) => setContents(e.target.value)}
+              defaultValue={contentsRef.current}
+              onChange={(e) => (contentsRef.current = e.target.value)}
               className="w-full textarea border-[0.5px] p-2 focus:border-[#b4b4b4]
               focus:ring-1 focus:ring-[#ffe6e9] focus:outline-none 
              focus:text-black
@@ -328,8 +325,10 @@ const DebatePost = () => {
                 {isEditing && item.id === editingId ? (
                   <div className="w-full">
                     <textarea
-                      value={editedContent}
-                      onChange={(e) => setEditedContent(e.target.value)}
+                      defaultValue={editedContentRef.current}
+                      onChange={(e) =>
+                        (editedContentRef.current = e.target.value)
+                      }
                       className="w-full textarea border-[0.5px] p-2 focus:border-[#b4b4b4]
                   focus:ring-1 focus:ring-[#ffe6e9] focus:outline-none 
                  focus:text-black
@@ -345,7 +344,7 @@ const DebatePost = () => {
                         취소하기
                       </button>
                       <button
-                        onClick={() => handleEditComment(item.id)}
+                        onClick={() => handleEditSave(item.id)}
                         className="bg-[#aa757e] active:bg-white active:text-[#aa757e] text-white 
    py-1 px-2 rounded-md tracking-[.25em] text-sz20
    "
