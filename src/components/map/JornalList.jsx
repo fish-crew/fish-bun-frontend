@@ -49,66 +49,6 @@ const JornalList = ({ journal = [] }) => {
           </div>
         </div>
       ))}
-      {journal.map((item) => (
-        <div
-          key={item.id}
-          className="border-2 border-dashed border-[#b7d3e4] w-full p-2 my-1 flex items-center"
-        >
-          <img
-            src={item.fileUrl || "/assets/webp/bun.webp"}
-            alt="일지 이미지"
-            width={116}
-            height={113}
-            className="rounded mr-2"
-            onError={(event) =>
-              (event.target.src = "/assets/webp/flavorIcons/cheese.webp")
-            }
-          />
-          <div className="flex flex-col justify-between text-start w-[calc(100%-80px)] gap-2">
-            <div className="flex justify-between items-end">
-              <span className="font-bold text-point-color text-[20px]">
-                {item.nickname || "팥냥이"}
-              </span>
-              <span className="text-[0.65rem] text-gray-400">
-                {formatDate(item.date)}
-              </span>
-            </div>
-            <p className="text-xs text-gray-800 text-wrap w-full">
-              {item.contents}
-            </p>
-          </div>
-        </div>
-      ))}
-      {journal.map((item) => (
-        <div
-          key={item.id}
-          className="border-2 border-dashed border-[#b7d3e4] w-full p-2 my-1 flex items-center"
-        >
-          <img
-            src={item.fileUrl || "/assets/webp/bun.webp"}
-            alt="일지 이미지"
-            width={116}
-            height={113}
-            className="rounded mr-2"
-            onError={(event) =>
-              (event.target.src = "/assets/webp/flavorIcons/cheese.webp")
-            }
-          />
-          <div className="flex flex-col justify-between text-start w-[calc(100%-80px)] gap-2">
-            <div className="flex justify-between items-end">
-              <span className="font-bold text-point-color text-[20px]">
-                {item.nickname || "팥냥이"}
-              </span>
-              <span className="text-[0.65rem] text-gray-400">
-                {formatDate(item.date)}
-              </span>
-            </div>
-            <p className="text-xs text-gray-800 text-wrap w-full">
-              {item.contents}
-            </p>
-          </div>
-        </div>
-      ))}
     </>
   );
 };
