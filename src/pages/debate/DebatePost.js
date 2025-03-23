@@ -430,6 +430,10 @@ const DebatePost = () => {
           </button> */}
           <div className="w-full text-sz30 px-1">{postContent.title}</div>
           <div className="text-sz20 px-1">{postContent.contents}</div>
+
+          <div className="w-full flex items-center text-[#b4b4b4] text-[1.8dvh]">
+            게시 {postContent?.regDate?.split(/\s|&nbsp;/)[0] || ""}
+          </div>
           {postContent.fileUrls && postContent.fileUrls.length > 0 && (
             <div className="whitespace-nowrap flex gap-2 py-2 scrollbar-hide items-center">
               {postContent.fileUrls && postContent.fileUrls.length > 0 && (
@@ -450,15 +454,14 @@ const DebatePost = () => {
             <VoteComponent
               options={[postContent.firstOption, postContent.secondOption]}
               postid={postid}
+              selectedVote={postContent.selectedOption}
+              firstOptionCount={postContent.firstOptionCount}
+              secondOptionCount={postContent.secondOptionCount}
               // onVote={sendVote}
             />
           )}
 
-          <div className="w-full flex items-center justify-end text-[#b4b4b4] text-[1.8dvh]">
-            게시 {postContent?.regDate?.split("T")[0] || ""}
-          </div>
-
-          <div className="px-1">
+          <div className="px-1 pt-10">
             <span className="text-[#aa757e] font-bold">
               {commentsList.length}
             </span>
