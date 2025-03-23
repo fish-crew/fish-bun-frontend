@@ -430,7 +430,22 @@ const DebatePost = () => {
           </button> */}
           <div className="w-full text-sz30 px-1">{postContent.title}</div>
           <div className="text-sz20 px-1">{postContent.contents}</div>
-
+          {postContent.fileUrls && postContent.fileUrls.length > 0 && (
+            <div className="whitespace-nowrap flex gap-2 py-2 scrollbar-hide items-center">
+              {postContent.fileUrls && postContent.fileUrls.length > 0 && (
+                <div className="overflow-x-auto whitespace-nowrap flex gap-2 p-2 scrollbar-hide">
+                  {postContent.fileUrls.map((url, index) => (
+                    <img
+                      key={index}
+                      src={url}
+                      alt={`첨부 이미지 ${index + 1}`}
+                      className="h-40 rounded-lg object-cover flex-shrink-0"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
           {postContent && (
             <VoteComponent
               options={[postContent.firstOption, postContent.secondOption]}
