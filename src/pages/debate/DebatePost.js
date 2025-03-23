@@ -218,12 +218,6 @@ const DebatePost = () => {
           className="w-60"
         />
         <div className="rounded-t-xl flex-grow p-5 pt-7 flex flex-col text-start bg-white w-full">
-          {/* <button
-            className="bg-black text-white rounded-full p-3 mb-5"
-            onClick={sendVote}
-          >
-            소켓 전송 테스트 버튼
-          </button> */}
           <div className="w-full text-sz30 px-1">{postContent.title}</div>
           <div className="text-sz20 px-1">{postContent.contents}</div>
 
