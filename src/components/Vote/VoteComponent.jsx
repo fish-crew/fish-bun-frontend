@@ -154,71 +154,60 @@ const VoteComponent = ({ postid, options, onVote }) => {
     );
 
     setVotes((prevVotes) =>
-      prevVotes.map((option) =>
-        option.name === optionName
-          ? { ...option, votes: option.votes + 1 }
-          : option
-      )
+      prevVotes.map((option) => {
+        if (option.name === optionName) {
+          return {
+            ...option,
+            votes:
+              option.name === selectedOption
+                ? option.votes - 1
+                : option.votes + 1,
+          };
+        }
+        if (option.name === selectedOption) {
+          return { ...option, votes: option.votes - 1 };
+        }
+        return option;
+      })
     );
-    setSelectedOption(optionName);
-    setVoted(true);
+
+    // 선택한 옵션 업데이트
+    setSelectedOption((prevSelected) =>
+      prevSelected === optionName ? null : optionName
+    );
+    // setVoted(true);
   };
 
   return (
     <div className="w-full py-2">
-      <button
-        className="bg-black text-white rounded-full p-3 mb-5"
-        onClick={sendVote}
-      >
-        소켓 전송 테스트 버튼
-      </button>
+      <div className="space-y-2">
+        {votes.map(({ name, votes }) => {
+          const percentage = totalVotes
+            ? Math.round((votes / totalVotes) * 100)
+            : 0;
+          return (
+            <button
+              key={name}
+              onClick={() => handleVote(name)}
+              className="relative w-full border rounded-lg overflow-hidden"
+            >
+              <div
+                className={`h-10 flex items-center p-3 transition-all duration-300 ${
+                  name === selectedOption ? "bg-[#aa757e]" : "bg-[#d4d4d4]"
+                }`}
+                style={{ width: `${percentage}%` }}
+              >
+                <div className="whitespace-nowrap">
+                  {name} {percentage}%
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
       <div className="pb-1 pe-1 text-right text-[1.8dvh] text-[#b4b4b4]">
         1개 선택 가능, 총 {totalVotes}명 참여
       </div>
-
-      {!voted ? (
-        // ✅ 투표 전 UI
-        <div className="space-y-2">
-          {options.map((option) => (
-            <button
-              key={option}
-              onClick={() => handleVote(option)}
-              className="h-10 w-full p-3 border rounded-lg text-left flex items-center bg-[#eaecef]"
-            >
-              <div className="w-full flex justify-between">
-                {option}
-                <span className="text-[#eaecef]">○</span>
-              </div>
-            </button>
-          ))}
-        </div>
-      ) : (
-        // ✅ 투표 후 UI (가로형 막대 그래프)
-        <div className="space-y-2">
-          {votes.map(({ name, votes }) => {
-            const percentage = totalVotes
-              ? Math.round((votes / totalVotes) * 100)
-              : 0;
-            return (
-              <div
-                key={name}
-                className="relative w-full border rounded-lg overflow-hidden"
-              >
-                <div
-                  className={`h-10 flex items-center p-3 transition-all duration-300 ${
-                    name === selectedOption ? "bg-[#aa757e]" : "bg-[#d4d4d4]"
-                  }`}
-                  style={{ width: `${percentage}%` }}
-                >
-                  <div className="whitespace-nowrap">
-                    {name} {percentage}%
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 };
