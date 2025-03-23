@@ -53,7 +53,11 @@ const StarRating = ({ avgRating, flavorId, refreshData, myRating }) => {
           starDimension="25px"
           starSpacing="5px"
         />
-        <div className="text-sz22 font-semibold pt-1">{rating.toFixed(1)}점</div>
+        <div className="text-sz22 font-semibold pt-1">
+          {(avgRating === null || avgRating === 0)
+            ? "평점 없음"
+            : `${rating.toFixed(1)}점`}
+        </div>
       </div>
 
       {isModalOpen && (
