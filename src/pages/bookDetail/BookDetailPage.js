@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import CloseButton from "../../components/Button/CloseButton.js";
 import styles from "./bookDetailPage.module.css";
 import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
-import StarRating from '../../components/StarRating/StarRating.jsx'
+import StarRating from "../../components/StarRating/StarRating.jsx";
 
 const BookDetailPage = () => {
   const { flavorId } = useParams(); // URL에서 flavorId 가져오기
@@ -39,7 +39,6 @@ const BookDetailPage = () => {
     }
   }, [flavorId]);
 
-
   const refreshData = () => {
     fetchData(); // 별점이 업데이트되었을 때 다시 서버에서 데이터를 불러옴
   };
@@ -51,7 +50,7 @@ const BookDetailPage = () => {
 
   return (
     <div
-      className={`w-full flex-grow flex flex-col overflow-y-auto main-area ${styles.scrollArea}`}
+      className={`w-full flex-grow flex flex-col overflow-y-auto main-area ${styles.scrollArea} relative`}
     >
       <AlertModal />
       <div className="w-full h-max">
@@ -83,7 +82,12 @@ const BookDetailPage = () => {
                   }}
                 />
               </div>
-              <StarRating avgRating={avgRating} flavorId={flavorId} refreshData={refreshData} myRating={myRating} />
+              <StarRating
+                avgRating={avgRating}
+                flavorId={flavorId}
+                refreshData={refreshData}
+                myRating={myRating}
+              />
               {/* 설명 */}
               <div className="px-5 pt-2 text-gray-700 text-justify text-sz22 whitespace-pre-line break-all">
                 {fishBunFlavor.description}
