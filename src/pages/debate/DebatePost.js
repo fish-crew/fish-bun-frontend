@@ -29,6 +29,7 @@ const DebatePost = () => {
   const contentsRef = useRef(""); // 댓글 입력값을 상태가 아닌 ref로 관리
   const editedContentRef = useRef(""); // 댓글 수정 입력값을 관리할 ref
   const [inputKey, setInputKey] = useState(0); // textarea를 강제 리렌더링하기 위한 키 값
+  const [inputEditKey, setInputEditKey] = useState(0); // 댓글 수정 textarea를 강제 리렌더링하기 위한 키 값
 
   const navigate = useNavigate();
 
@@ -155,6 +156,7 @@ const DebatePost = () => {
       await patchComment(commentId, newEditedContent);
       showAlert("댓글이 수정되었습니다.", async () => {
         editedContentRef.current = ""; // 수정 입력값 초기화
+        setInputEditKey((prev) => prev + 1); // key 값 변경하여 textarea 강제 리렌더링
         fetchData(); // 최신 데이터 가져오기
       });
     } catch (error) {
@@ -320,6 +322,7 @@ const DebatePost = () => {
                   <div className="w-full">
                     <textarea
                       defaultValue={editedContentRef.current}
+                      key={inputEditKey} // key 값 변경 시 textarea가 리렌더링됨
                       onChange={(e) =>
                         (editedContentRef.current = e.target.value)
                       }
