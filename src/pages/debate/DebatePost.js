@@ -26,10 +26,8 @@ const DebatePost = () => {
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 상태 추가
   const [editedContent, setEditedContent] = useState(""); // 편집 내용 상태 추가
   const [editingId, setEditingId] = useState(""); // 편집 모드 상태 추가
-  const contentsRef = useRef(""); // 댓글 입력값을 상태가 아닌 ref로 관리
-  const editedContentRef = useRef(""); // 댓글 수정 입력값을 관리할 ref
-  const [inputKey, setInputKey] = useState(0); // textarea를 강제 리렌더링하기 위한 키 값
-  const [inputEditKey, setInputEditKey] = useState(0); // 댓글 수정 textarea를 강제 리렌더링하기 위한 키 값
+  const inputRef = useRef(null); // useRef로 textarea 참조 생성
+  const editedContentRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -72,18 +70,19 @@ const DebatePost = () => {
 
   // 저장 버튼 핸들러
   const handleSave = async () => {
-    const newContents = contentsRef.current.trim();
-    if (!newContents) {
+    const inputValue = inputRef.current?.value || ""; // ref를 이용해 값 가져오기
+    if (!inputValue.trim()) {
       showAlert("내용을 입력하세요.");
       return;
     }
 
     try {
-      await postDebateComment(postid, newContents);
+      await postDebateComment(postid, inputValue);
       showAlert("댓글이 등록되었습니다.", async () => {
-        contentsRef.current = ""; // ref 값 초기화
-        setInputKey((prev) => prev + 1); // key 값 변경하여 textarea 강제 리렌더링
-        fetchData(); // 최신 데이터 가져오기
+        if (inputRef.current) {
+          inputRef.current.value = ""; // 입력값 초기화
+        }
+        await fetchData();
       });
     } catch (error) {
       console.error("등록 실패", error);
@@ -135,7 +134,12 @@ const DebatePost = () => {
   const handleEdit = (id, contents) => {
     setIsEditing(true);
     setEditingId(id);
-    setEditedContent(contents);
+
+    setTimeout(() => {
+      if (editedContentRef.current) {
+        editedContentRef.current.value = contents; // 기존 댓글 내용 채우기
+      }
+    }, 0);
   };
 
   const handleCancleEdit = () => {
@@ -145,25 +149,31 @@ const DebatePost = () => {
     fetchData(); // 최신 댓글 데이터 가져오기
   };
 
-  const handleEditSave = async (commentId) => {
-    const newEditedContent = editedContentRef.current.trim();
-    if (!newEditedContent) {
+  const handleEditComment = async (commentId) => {
+    const editedContent = editedContentRef.current?.value || ""; // ref를 이용해 값 가져오기
+
+    if (!editedContent.trim()) {
       showAlert("수정할 내용을 입력하세요.");
       return;
     }
 
     try {
-      await patchComment(commentId, newEditedContent);
+      await patchComment(commentId, editedContent);
+
       showAlert("댓글이 수정되었습니다.", async () => {
-        editedContentRef.current = ""; // 수정 입력값 초기화
-        setInputEditKey((prev) => prev + 1); // key 값 변경하여 textarea 강제 리렌더링
-        fetchData(); // 최신 데이터 가져오기
+        setIsEditing(false);
+        setEditingId(null);
+        if (editedContentRef.current) {
+          editedContentRef.current.value = ""; // 입력 필드 초기화
+        }
+        await fetchData();
       });
     } catch (error) {
-      console.error("댓글 수정 실패", error);
+      console.error("댓글 수정 실패:", error);
       showAlert("댓글 수정에 실패했습니다.");
     }
   };
+
   return (
     <div
       className="main-area flex flex-grow flex-col w-full bg-repeat-y bg-[length:100%] bg-left-top bg-[#e9e0dc] relative"
@@ -220,6 +230,12 @@ const DebatePost = () => {
           className="w-60"
         />
         <div className="rounded-t-xl flex-grow p-5 pt-7 flex flex-col text-start bg-white w-full">
+          {/* <button
+            className="bg-black text-white rounded-full p-3 mb-5"
+            onClick={sendVote}
+          >
+            소켓 전송 테스트 버튼
+          </button> */}
           <div className="w-full text-sz30 px-1">{postContent.title}</div>
           <div className="text-sz20 px-1">{postContent.contents}</div>
 
@@ -234,7 +250,6 @@ const DebatePost = () => {
                     <img
                       key={index}
                       src={url}
-                      alt={`첨부 이미지 ${index + 1}`}
                       className="h-40 rounded-lg object-cover flex-shrink-0"
                     />
                   ))}
@@ -262,9 +277,7 @@ const DebatePost = () => {
           <div className="border-[0.5px] p-2 mb-5">
             <div className="pb-1 ps-1 font-bold">{nickname}</div>
             <textarea
-              key={inputKey} // key 값 변경 시 textarea가 리렌더링됨
-              defaultValue={contentsRef.current}
-              onChange={(e) => (contentsRef.current = e.target.value)}
+              ref={inputRef}
               className="w-full textarea border-[0.5px] p-2 focus:border-[#b4b4b4]
               focus:ring-1 focus:ring-[#ffe6e9] focus:outline-none 
              focus:text-black
@@ -321,15 +334,11 @@ const DebatePost = () => {
                 {isEditing && item.id === editingId ? (
                   <div className="w-full">
                     <textarea
-                      defaultValue={editedContentRef.current}
-                      key={inputEditKey} // key 값 변경 시 textarea가 리렌더링됨
-                      onChange={(e) =>
-                        (editedContentRef.current = e.target.value)
-                      }
+                      ref={editedContentRef} // ref로 연결
                       className="w-full textarea border-[0.5px] p-2 focus:border-[#b4b4b4]
-                  focus:ring-1 focus:ring-[#ffe6e9] focus:outline-none 
-                 focus:text-black
-                  "
+  focus:ring-1 focus:ring-[#ffe6e9] focus:outline-none 
+  focus:text-black"
+                      placeholder="수정할 내용을 입력하세요."
                     />
                     <div className="w-full flex justify-end gap-x-2">
                       <button
@@ -341,7 +350,7 @@ const DebatePost = () => {
                         취소하기
                       </button>
                       <button
-                        onClick={() => handleEditSave(item.id)}
+                        onClick={() => handleEditComment(item.id)}
                         className="bg-[#aa757e] active:bg-white active:text-[#aa757e] text-white 
    py-1 px-2 rounded-md tracking-[.25em] text-sz20
    "
