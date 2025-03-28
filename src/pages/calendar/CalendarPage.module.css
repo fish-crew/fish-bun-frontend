@@ -16,12 +16,24 @@
   @apply flex justify-start items-end px-4 mb-3;
 }
 
+:global(.react-calendar__navigation:hover) {
+  @apply !bg-none;
+}
+
 :global(.react-calendar__navigation__label) {
   @apply flex items-center justify-center grow-0 pointer-events-none;
 }
 
+:global(.react-calendar__navigation__label:hover) {
+  @apply !bg-none;
+}
+
 :global(.react-calendar__navigation__arrow) {
-  @apply pb-1 text-sz35;
+  @apply pb-1 text-sz35 !bg-none;
+}
+
+:global(.react-calendar__navigation__arrow:hover) {
+  @apply !bg-none;
 }
 
 /* :global(.react-calendar__navigation__label__labelText) {
@@ -50,4 +62,8 @@
 
 :global(.overflow-y-auto) {
   @apply scroll-smooth scrollbar-none;
+}
+
+:global(.react-calendar__navigation button:enabled:hover) {
+  @apply !bg-none;
 }

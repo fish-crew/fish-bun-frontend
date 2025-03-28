@@ -40,7 +40,7 @@ const AlertModal = () => {
           mt-4 bg-[#1069b0] hover:bg-white hover:text-[#1069b0] text-white 
           border-4 py-2 px-6 rounded-full text-sz25 tracking-[.25em] w-72 
           flex items-center gap-2 justify-center w-full"
-          onClick={handleClose} //
+          onClick={handleClose}
         >
           확인
         </button>

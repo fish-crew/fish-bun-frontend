@@ -106,6 +106,38 @@ export async function fetchMbtiData() {
   }
 }
 
+export async function fetchDebateListData() {
+  try {
+    const response = await axiosInstance.get("/fish-bun/community");
+    return response.data;
+  } catch (error) {
+    console.error("데이터 요청 실패:", error);
+    throw error;
+  }
+}
+
+export async function fetchDebatePostData(postid) {
+  try {
+    const response = await axiosInstance.get(`/fish-bun/community/${postid}`);
+    return response.data;
+  } catch (error) {
+    console.error("데이터 요청 실패:", error);
+    throw error;
+  }
+}
+
+export async function fetchDebateCommentsData(postid) {
+  try {
+    const response = await axiosInstance.get(
+      `/fish-bun/community/${postid}/comments`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("데이터 요청 실패:", error);
+    throw error;
+  }
+}
+
 //post
 export async function postNickNameAddData(nickname) {
   try {
@@ -185,6 +217,98 @@ export async function updateCalendarDetailContents(calendarId, contents) {
     return response.data;
   } catch (error) {
     console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
+
+
+export async function postFishBunRating(flavorId, rating) {
+  try {
+    const response = await axiosInstance.patch(
+      `/fish-bun/book-rating/${flavorId}`,
+      { rating }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("PATCH 요청 실패:", error);
+    throw error;
+  }
+}
+
+export async function postDebateComment(postId, contents) {
+  try {
+    const response = await axiosInstance.post(
+      `/fish-bun/community/${postId}/comment`,
+      { contents }, // 요청 본문에 전달할 데이터
+      {
+        headers: {
+          // Content-Type 설정 생략 가능: Axios가 자동으로 처리
+        },
+      },
+      { withCredentials: true } // 쿠키 포함
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
+
+export async function postCommentLikes(commentId) {
+  try {
+    const response = await axiosInstance.post(
+      `/fish-bun/community/comment-likes/${commentId}`,
+      { commentId }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
+
+export async function postCommentRecommend(contents) {
+  try {
+    const response = await axiosInstance.post(
+      `/fish-bun/community/post/report`,
+      { contents }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("POST 요청 실패:", error);
+    throw error;
+  }
+}
+
+//PATCH
+export async function patchComment(commentId, contents) {
+  try {
+    const response = await axiosInstance.patch(
+      `/fish-bun/community/comments/${commentId}`,
+      { contents }, // 요청 본문
+      {
+        withCredentials: true, // 옵션 객체는 headers와 함께 같은 레벨에서 전달해야 합니다.
+        headers: {
+          // Content-Type 설정 생략 가능: Axios가 자동으로 처리
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("PATCH 요청 실패:", error);
+    throw error;
+  }
+}
+
+//DELETE
+export async function deleteComment(commentId) {
+  try {
+    const response = await axiosInstance.delete(
+      `/fish-bun/community/comments/${commentId}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("DELETE 요청 실패:", error);
     throw error;
   }
 }

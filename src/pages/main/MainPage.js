@@ -12,7 +12,7 @@ import {
   updateFirstLogin,
 } from "../../api/service.js";
 import { useDispatch, useSelector } from "react-redux"; //Redux Store에서 가져오기
-import { setNickname } from "../../redux/slices/user.js"; // Redux 액션 가져오기
+import { setNickname, setUserId } from "../../redux/slices/user.js"; // Redux 액션 가져오기
 
 function FishFrame() {
   // 서버에서 userInfo 데이터 받아오기
@@ -27,6 +27,7 @@ function FishFrame() {
           // setUserInfoData(data); //이건 일단 뺴고 닉네임만 redux에 저장
           const nickname = response.data.nickname;
           dispatch(setNickname(nickname)); // Redux Store에 닉네임 저장
+          dispatch(setUserId(response.data.id)); // Redux Store에 id 저장
         }
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
@@ -199,14 +200,29 @@ function FishFrame() {
 function Main() {
   const nickname = useSelector((state) => state.user.nickname); // Redux 상태에서 닉네임 가져오기
   const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 메뉴 상태
+  const [isShareMenuOpen, setIsShareMenuOpen] = useState(false); // 공유하기 메뉴 상태
+  const [isSideMenuOpen, setIsSideMenuOpen] = useState(false); // 사이드 메뉴 상태
+
   const dispatch = useDispatch(); // Redux 디스패치
 
-  const toggleMenu = () => setIsMenuOpen((prev) => !prev);
-  const closeMenu = () => {
-    setIsMenuOpen(false); // 메뉴 닫기
+  const toggleShareMenu = () => {
+    setIsShareMenuOpen((prev) => !prev);
+    setIsSideMenuOpen(false); // 사이드 메뉴 닫기
+  };
+  const closeShareMenu = () => {
+    setIsShareMenuOpen(false); // 공유 메뉴 닫기
+  };
+  const toggleSideMenu = () => {
+    setIsSideMenuOpen((prev) => !prev);
+    setIsShareMenuOpen(false); // 공유 메뉴 닫기
+  };
+  const closeSideMenu = () => {
+    setIsSideMenuOpen(false); // 사이드 메뉴 닫기
   };
 
+  const goToMap = () => {
+    navigate("/map");
+  };
   const goToCalendar = () => {
     navigate("/CalendarPage");
   };
@@ -216,37 +232,25 @@ function Main() {
 
   const handleCaptureAndDownload = async () => {
     try {
-      setIsMenuOpen(false); // 메뉴 닫기
+      setIsShareMenuOpen(false); // 메뉴 닫기
 
       // 캡처 대상 설정
       const element = document.querySelector(".main-area");
       const profileArea = document.querySelector(".profileArea");
       const bunTxtArea = document.querySelector(".bunTxtArea");
-
-      // const bulbTopBlur = document.querySelector(".bulbTopBlur");
-      // const bulbTop = document.querySelector(".bulbTop");
-
       const originalBackgroundImage = element.style.backgroundImage;
-      // element.style.backgroundImage =
-      //   "url(/assets/webp/glitter.webp), url(/assets/webp/checkPatternMerged.webp)";
-
       const btnArea = document.querySelector(".btn-area");
 
       if (btnArea) {
         profileArea.style.justifyContent = "start";
         bunTxtArea.style.top = "-0.2dvh";
       }
-      // if (bulbTop) bulbTop.style.display = "none";
-      // if (bulbTopBlur) bulbTopBlur.style.display = "none";
 
       // html2canvas로 캡처
       const canvas = await html2canvas(element);
 
       element.style.backgroundImage = originalBackgroundImage;
 
-      // if (btnArea) btnArea.style.display = "";
-      // if (bulbTop) bulbTop.style.display = "";
-      // if (bulbTopBlur) bulbTopBlur.style.display = "";
       if (btnArea) {
         profileArea.style.justifyContent = "center";
         bunTxtArea.style.top = "-1dvh"; // top 속성 올바르게 적용
@@ -307,6 +311,7 @@ function Main() {
   const openModal = () => {
     setModalOpen(true);
     setCurrentPage(0);
+    setIsSideMenuOpen(false); // 사이드 메뉴 닫기
   };
 
   const handleNext = () => {
@@ -369,25 +374,6 @@ function Main() {
 
   const closeModal = () => setModalOpen(false);
 
-  const SocialButton = ({ iconPath, onClick, label }) => (
-    <button
-      className="flex justify-center items-center p-2  hover:bg-gray-300 rounded"
-      onClick={onClick}
-      aria-label={label}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        className="bi"
-        viewBox="0 0 16 16"
-      >
-        <path d={iconPath} />
-      </svg>
-    </button>
-  );
-
   useEffect(() => {
     const Kakao = typeof window !== "undefined" ? window.Kakao : null;
     if (Kakao && !Kakao.isInitialized()) {
@@ -441,13 +427,20 @@ function Main() {
     }
   };
 
+  const showNotice = () => {
+    {
+      showAlert("등록된 공지사항이 없습니다.");
+    }
+  };
+
   return (
     <div
-      className="main-area flex flex-grow flex-col justify-center relative w-full h-full bg-cover"
+      className="main-area w-full flex flex-grow flex-col bg-cover relative"
       style={{
         backgroundImage: `url(/assets/webp/mainBg.webp)`,
       }}
     >
+      <AlertModal />
       {/* Modal 컴포넌트 */}
       <Modal
         isOpen={isModalOpen}
@@ -519,111 +512,288 @@ function Main() {
           </div>
         </div>
       </Modal>
-      <AlertModal />
 
-      <div className="w-full absolute top-0 bulbTop">
-        <img src="/assets/webp/mainObjTop.webp" alt="mainObj top" />
-      </div>
-      <div className="w-full absolute bottom-0 bulbBtm">
-        <img src="/assets/webp/mainObjBtm.webp" alt="mainObj bottom" />
-      </div>
-
-      <div className="top-btn-area flex absolute top-0 justify-between items-start w-full px-2 pt-4">
-        <div
-          className="profileArea h-[10dvh] w-[calc(10dvh_*_1277/378)] bg-cover flex flex-col justify-center text-[#9b5d24] nowrap"
-          style={{
-            backgroundImage: `url(/assets/webp/profile.webp)`,
-          }}
-        >
-          <div className="text-sz35 font-bold w-full text-center">
-            <span>{nickname}</span>&nbsp;님
+      {isSideMenuOpen && (
+        <div className={`${styles.menuOverlay}`}>
+          <div
+            className=" w-[30%] h-full flex justify-end"
+            onClick={closeSideMenu}
+          >
+            <button
+              className="h-[5dvh] w-[5dvh] flex items-center justify-center text-white p-2 m-2 "
+              onClick={closeSideMenu}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-x-lg w-6 h-6 stroke-white"
+                viewBox="0 0 16 16"
+              >
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z" />
+              </svg>
+            </button>
           </div>
-          <div className="relative w-full h-[2dvh]">
-            <div className="bunTxtArea text-sz20 w-full text-center nowrap absolute top-[-1dvh]">
-              이번달은 붕어빵을{" "}
-              <span className="font-semibold">{monthlyCount}</span>번 먹었어요!
+          <div className="sideMenu w-[70%] h-full flex bg-white items-center flex-col ">
+            <div className="w-full p-3 text-sz30">전체메뉴</div>
+            <div className="border-b-[0.05px] w-full"></div>
+            <img
+              src="/assets/webp/logoBalck.webp"
+              className="w-[60%] p-3 m-2"
+              alt="붕어빵 탐험대 로고"
+            />
+            <div className="w-full flex gap-x-4 items-center justify-center pb-5">
+              <button
+                className=""
+                onClick={() =>
+                  window.open(
+                    "https://www.instagram.com/bung_crew?igsh=MTVuOTRteGhrMm1jYw==",
+                    "_blank"
+                  )
+                }
+              >
+                <img
+                  src="/assets/webp/instaIcon.webp"
+                  className="w-8 h-8"
+                  alt="붕어빵 탐험대 인스타"
+                />
+              </button>
+              <button
+                className=""
+                onClick={() =>
+                  window.open("https://x.com/bung_crew?s=09", "_blank")
+                }
+              >
+                <img
+                  src="/assets/webp/XIcon.webp"
+                  className="w-8 h-8"
+                  alt="붕어빵 탐험대 X"
+                />
+              </button>
+            </div>
+            <div className="border-b-[0.05px] w-full"></div>
+            <div className="flex px-3 flex-col text-sz25 w-full py-4 gap-y-3">
+              <button
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
+                onClick={() => navigate("/calendarPage")}
+              >
+                <img
+                  src="/assets/webp/calendarBtnIcon.webp"
+                  className="w-8 h-8"
+                />
+                붕어일지
+              </button>
+              <button
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
+                onClick={() => navigate("/bookPage")}
+              >
+                <img src="/assets/webp/bookBtnIcon.webp" className="w-8 h-8" />
+                붕어도감
+              </button>
+              <button
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
+                onClick={() => navigate("/map")}
+              >
+                <img src="/assets/webp/mapBtnIcon.webp" className="w-8 h-8" />
+                붕어지도
+              </button>
+              <button
+                className="flex gap-x-3 w-full active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
+                onClick={() => navigate("/bungBalGamePage")}
+              >
+                <img src="/assets/webp/bungbalIcon.webp" className="w-8 h-8" />
+                붕어빵 취향 테스트
+              </button>
+              <button
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
+                onClick={() => navigate("/debateList")}
+              >
+                <img src="/assets/webp/debateIcon.webp" className="w-8 h-8" />
+                붕어빵 잡담소
+              </button>
+            </div>
+            <div className="border-b-[0.05px] w-full"></div>
+            <div className="flex px-3 flex-col text-sz25 w-full py-4 gap-y-3">
+              <button
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]] "
+                onClick={openModal}
+              >
+                <img
+                  src="/assets/webp/modalIconBlack.webp"
+                  className="w-8 h-8 p-1 "
+                />
+                튜토리얼
+              </button>
+              <button
+                className="flex gap-x-3 w-full items-center active:scale-95 active:bg-[#fceef2] hover:bg-[#c5e7ff]"
+                onClick={showNotice}
+              >
+                <img
+                  src="/assets/webp/noticeIcon.webp"
+                  className="w-8 h-8 p-1"
+                />
+                공지사항
+              </button>
             </div>
           </div>
         </div>
-        <button className="w-[5dvh] rounded-full z-10" onClick={openModal}>
-          <img
-            src="/assets/webp/modalIcon.webp"
-            alt="show modal button"
-            className=""
-          />
+      )}
+      <div className="w-full  h-[6dvh] flex justify-between items-center bg-[#007ada] text-white px-1 pt-1">
+        <button
+          className="h-[6dvh] w-[6dvh] flex items-center justify-center"
+          onClick={openModal}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-question-circle-fill w-7 h-7"
+            viewBox="0 0 16 16"
+          >
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247m2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+          </svg>
+        </button>
+        <img
+          className="h-[4dvh]"
+          src="/assets/webp/logo.webp"
+          alt="붕어빵 탐험대"
+        />
+        <button
+          className="h-[6dvh] w-[6dvh] flex items-center justify-center"
+          onClick={toggleSideMenu}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-list w-7 h-7 stroke-white"
+            viewBox="0 0 16 16"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"
+            />
+          </svg>
         </button>
       </div>
-      <div className="mid-area mb-8 px-3">
-        <FishFrame />
-      </div>
-      <div className="btn-area w-full flex items-end absolute bottom-0 h-full justify-end">
-        {!isMenuOpen && (
-          <div className=" w-full p-2">
-            <div className="w-full flex items-end justify-end gap-2">
-              <button className="w-[6.7dvh]" onClick={handleCaptureAndDownload}>
-                <img
-                  src="/assets/webp/captureBtn.webp"
-                  alt="share button"
-                  className=""
-                />
-              </button>
-              <button className="w-[6.7dvh]" onClick={goToCalendar}>
-                <img
-                  src="/assets/webp/calendarBtn.webp"
-                  alt="calendar button"
-                  className=""
-                />
-              </button>
-              <button className="w-[6.7dvh]" onClick={goToBook}>
-                <img
-                  src="/assets/webp/bookBtn.webp"
-                  alt="book button"
-                  className=""
-                />
-              </button>
-              <button className="w-[6.7dvh]" onClick={toggleMenu}>
-                <img
-                  src="/assets/webp/shareBtn.webp"
-                  alt="share button"
-                  className=""
-                />
-              </button>
-            </div>
-          </div>
-        )}
-        {isMenuOpen && (
+      <div className=" flex flex-grow flex-col justify-center relative w-full h-full">
+        <div className="w-full absolute top-0 bulbTop">
+          <img src="/assets/webp/mainObjTop.webp" alt="mainObj top" />
+        </div>
+        <div className="w-full absolute bottom-0 bulbBtm">
+          <img src="/assets/webp/mainObjBtm.webp" alt="mainObj bottom" />
+        </div>
+
+        <div className="top-btn-area flex absolute top-0 justify-between items-start w-full px-2 pt-3">
           <div
-            className="w-full flex flex-col items-end justify-end bg-black bg-opacity-50 h-full z-20"
-            onClick={closeMenu}
+            className="profileArea h-[10dvh] w-[calc(10dvh_*_1277/378)] bg-cover flex flex-col justify-center text-[#9b5d24] nowrap"
+            style={{
+              backgroundImage: `url(/assets/webp/profile.webp)`,
+            }}
           >
-            <div
-              className="flex flex-col space-y-4 justify-end m-2"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <button className="w-[6.7dvh] mx-auto " onClick={shareKakao}>
-                <img
-                  src="/assets/webp/kakaoBtn.webp"
-                  alt="share on kakao button"
-                  className=""
-                />
-              </button>
-              <button className="w-[6.7dvh] mx-auto " onClick={handleCopyLink}>
-                <img
-                  src="/assets/webp/linkBtn.webp"
-                  alt="copy link button"
-                  className=""
-                />
-              </button>
-              <button className="w-[6.7dvh] mx-auto " onClick={closeMenu}>
-                <img
-                  src="/assets/webp/returnBtn.webp"
-                  alt="copy link button"
-                  className=""
-                />
-              </button>
+            <div className="text-sz35 font-bold w-full text-center">
+              <span>{nickname}</span>&nbsp;님
+            </div>
+            <div className="relative w-full h-[2dvh]">
+              <div className="bunTxtArea text-sz20 w-full text-center nowrap absolute top-[-1dvh]">
+                이번달은 붕어빵을
+                <span className="font-semibold">{monthlyCount}</span>번
+                먹었어요!
+              </div>
             </div>
           </div>
-        )}
+        </div>
+        <div className="mid-area mb-8 px-3">
+          <FishFrame />
+        </div>
+        <div className="btn-area w-full flex items-end absolute bottom-0 h-full justify-end">
+          {!isShareMenuOpen && (
+            <div className=" w-full p-3">
+              <div className="w-full flex items-end justify-end gap-2">
+                <button className="w-[6.7dvh]" onClick={goToMap}>
+                  <img
+                    src="/assets/webp/mapBtn.webp"
+                    alt="share button"
+                    className=""
+                  />
+                </button>
+                <button className="w-[6.7dvh]" onClick={goToCalendar}>
+                  <img
+                    src="/assets/webp/calendarBtn.webp"
+                    alt="calendar button"
+                    className=""
+                  />
+                </button>
+                <button className="w-[6.7dvh]" onClick={goToBook}>
+                  <img
+                    src="/assets/webp/bookBtn.webp"
+                    alt="book button"
+                    className=""
+                  />
+                </button>
+                <button className="w-[6.7dvh]" onClick={toggleShareMenu}>
+                  <img
+                    src="/assets/webp/shareBtn.webp"
+                    alt="share button"
+                    className=""
+                  />
+                </button>
+              </div>
+            </div>
+          )}
+          {isShareMenuOpen && (
+            <div
+              className="w-full flex flex-col items-end justify-end bg-black bg-opacity-50 h-full z-20"
+              onClick={closeShareMenu}
+            >
+              <div
+                className="flex flex-col space-y-4 justify-end m-3"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button className="w-[6.7dvh] mx-auto " onClick={shareKakao}>
+                  <img
+                    src="/assets/webp/kakaoBtn.webp"
+                    alt="share on kakao button"
+                    className=""
+                  />
+                </button>
+                <button
+                  className="w-[6.7dvh]"
+                  onClick={handleCaptureAndDownload}
+                >
+                  <img
+                    src="/assets/webp/captureBtn.webp"
+                    alt="share button"
+                    className=""
+                  />
+                </button>
+                <button
+                  className="w-[6.7dvh] mx-auto "
+                  onClick={handleCopyLink}
+                >
+                  <img
+                    src="/assets/webp/linkBtn.webp"
+                    alt="copy link button"
+                    className=""
+                  />
+                </button>
+                <button
+                  className="w-[6.7dvh] mx-auto "
+                  onClick={closeShareMenu}
+                >
+                  <img
+                    src="/assets/webp/returnBtn.webp"
+                    alt="copy link button"
+                    className=""
+                  />
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

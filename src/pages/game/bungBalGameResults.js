@@ -3,6 +3,7 @@ import AlertModal, { showAlert } from "../../components/modals/AlertModal.js";
 
 const bungBalGameResults = [
   {
+    flavorType: "redbean",
     type: "팥 붕어빵",
     mbti: "ISTJ",
     slogan: "근본은 영원하다!",
@@ -20,6 +21,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/redbean.webp",
   },
   {
+    flavorType: "custard",
     type: "슈크림 붕어빵",
     mbti: "ESFP",
     slogan: "달콤함이 인생의 묘미!",
@@ -37,6 +39,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/custard.webp",
   },
   {
+    flavorType: "choco",
     type: "초코 붕어빵",
     mbti: "ENFP",
     slogan: "언제나 새롭고 짜릿하게!",
@@ -54,6 +57,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/choco.webp",
   },
   {
+    flavorType: "guma",
     type: "고구마 붕어빵",
     mbti: "INFJ",
     slogan: "속 깊은 따뜻함!",
@@ -71,6 +75,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/guma.webp",
   },
   {
+    flavorType: "mini",
     type: "미니 붕어빵",
     mbti: "ISFP",
     slogan: "소소하지만 확실한 행복!",
@@ -88,6 +93,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/mini.webp",
   },
   {
+    flavorType: "kimchi",
     type: "김치 붕어빵",
     mbti: "ESTP",
     slogan: "매력 폭발! 어디서든 주인공",
@@ -105,6 +111,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/kimchi.webp",
   },
   {
+    flavorType: "pizza",
     type: "피자 붕어빵",
     mbti: "INTP",
     slogan: "이론과 분석, 그게 나야!",
@@ -122,6 +129,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/pizza.webp",
   },
   {
+    flavorType: "redbean-cream-cheese",
     type: "팥 크림치즈 붕어빵",
     mbti: "INFP",
     slogan: "감성 충만, 따뜻한 위로!",
@@ -139,6 +147,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
   },
   {
+    flavorType: "cheese",
     type: "치즈 붕어빵",
     mbti: "ISFJ",
     slogan: "포근함과 안정감의 대명사!",
@@ -156,6 +165,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/cheese.webp",
   },
   {
+    flavorType: "corn-cheese",
     type: "콘치즈 붕어빵",
     mbti: "ESFJ",
     slogan: "함께할 때 더 빛나는!",
@@ -173,6 +183,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/corn-cheese.webp",
   },
   {
+    flavorType: "maecom",
     type: "매콤이 붕어빵",
     mbti: "ESTJ",
     slogan: "원칙과 카리스마!",
@@ -190,13 +201,14 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/maecom.webp",
   },
   {
+    flavorType: "king",
     type: "대왕 붕어빵",
     mbti: "ENTJ",
     slogan: "크게 보고, 크게 이끌다!",
     bestMatch: "팥 크림치즈 붕어빵",
-    bestMatchImg: "/assets/webp/flavorIcons/maecom.webp",
+    bestMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
     worstMatch: "미니 붕어빵",
-    worstMatchImg: "/assets/webp/flavorIcons/redbean-cream-cheese.webp",
+    worstMatchImg: "/assets/webp/flavorIcons/mini.webp",
     description: [
       "스케일이 크고, 강한 추진력을 가진 대왕 붕어빵 같은 성격이에요.",
       "야망이 크고, 목표를 향해 체계적으로 나아가요.",
@@ -207,6 +219,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/king.webp",
   },
   {
+    flavorType: "tako",
     type: "타코야끼 붕어빵",
     mbti: "ENTP",
     slogan: "엉뚱한데 매력적인!",
@@ -224,6 +237,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/tako.webp",
   },
   {
+    flavorType: "bburing",
     type: "뿌링클 붕어빵",
     mbti: "ISTP",
     slogan: "한 입 베어 물면 중독!",
@@ -241,6 +255,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/bburing.webp",
   },
   {
+    flavorType: "apple-cinnamon",
     type: "애플시나몬 붕어빵",
     mbti: "ENFJ",
     slogan: "따뜻한 리더, 달콤한 향기!",
@@ -258,6 +273,7 @@ const bungBalGameResults = [
     image: "/assets/webp/flavorIcons/apple-cinnamon.webp",
   },
   {
+    flavorType: "black-sesame",
     type: "흑임자 붕어빵",
     mbti: "INTJ",
     slogan: "고요하지만 강렬하게!",
@@ -313,7 +329,8 @@ export function matchBungBalType(userAnswers) {
     resolveTie("T", "F") +
     resolveTie("J", "P");
 
-  // console.log("User MBTI Type:", mbtiType);
+  // flavorType:"",console.log("User MBTI
+  // Type:", mbtiType);
 
   // 서버로 보내기
   const handleSubmit = async () => {
