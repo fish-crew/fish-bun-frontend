@@ -1,23 +1,37 @@
-import axios from 'axios';
-import { getCookie } from './cookie'; // 쿠키 읽기 유틸리티 함수
+import axios from "axios";
+import { clearAccessTokenCookie, getCookie } from "./cookie";
+import { API_BASE_URL } from "../config/env";
 
-// Axios 인스턴스 생성
 const axiosInstance = axios.create({
-    baseURL: 'https://bunglog.me/api', // API 기본 URL
-    timeout: 10000, // 요청 제한 시간
-    withCredentials: true, // 쿠키를 포함한 요청 허용
+  baseURL: API_BASE_URL,
+  timeout: 10000,
+  withCredentials: true,
 });
 
-// 요청 인터셉터
 axiosInstance.interceptors.request.use(
-    (config) => {
-        const token = getCookie(); // 쿠키에서 accessToken 읽기
-        if (token) {
-            config.headers['Authorization'] = `Bearer ${token}`; // Authorization 헤더에 추가
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
+  (config) => {
+    const token = getCookie();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401 && typeof window !== "undefined") {
+      clearAccessTokenCookie();
+      if (window.location.pathname !== "/loginPage") {
+        window.location.replace("/loginPage");
+      }
+      return new Promise(() => {});
+    }
+
+    return Promise.reject(error);
+  }
 );
 
 export default axiosInstance;
